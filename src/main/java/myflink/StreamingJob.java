@@ -26,8 +26,10 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer011;
 import org.apache.flink.streaming.util.serialization.SimpleStringSchema;
 import org.apache.flink.api.java.utils.ParameterTool;
-import scala.util.parsing.json.JSONArray;
-import scala.util.parsing.json.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 
 import java.util.Properties;
 
@@ -95,21 +97,21 @@ public class StreamingJob {
 		env.execute("Flink Streaming Java API Skeleton");
 	}
 
-	private void parseJSONWithJSONObject(String jsonData) {
-		try
-		{
-			JSONArray jsonArray = new JSONArray(jsonData);
-			for (int i=0; i < jsonArray.; i++)    {
-				JSONObject jsonObject = jsonArray.getJSONObject(i);
-				String id = jsonObject.getString("id");
-				String name = jsonObject.getString("name");
-				String version = jsonObect.getString("version");
+	private  static void strToJSONObj(String jsonstr){
+		JSONObject jsonObject=JSON.parseObject(jsonstr);
+		Object jsonarray = jsonObject.get("key");
 
-				System.out.println("id" + id + ";name" + name + ";version" + version);
+		String str=	jsonarray+"";
+		JSONArray array=JSON.parseArray(str);
+		for (int i = 0; i < array.size(); i++) {
+			JSONObject obj = JSON.parseObject(array.get(i)+"");
+			System.out.println(obj.get("name"));
 			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+	}
+
+
+
+
 }
+
+
