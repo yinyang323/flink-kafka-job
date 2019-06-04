@@ -101,10 +101,12 @@ public class StreamingJob {
 		JSONObject jsonObject=JSON.parseObject(jsonstr);
 		Object jsonarray = jsonObject.get("key");
 
+		//JSONArray中的数据转换为String类型需要在外边加"";不然会报出类型强转异常！
 		String str=	jsonarray+"";
 		JSONArray array=JSON.parseArray(str);
 		for (int i = 0; i < array.size(); i++) {
-			JSONObject obj = JSON.parseObject(array.get(i)+"");
+			String str1= array.get(i)+"";
+			JSONObject obj = JSON.parseObject(str1);
 			System.out.println(obj.get("name"));
 			}
 	}
