@@ -19,6 +19,7 @@
 package myflink;
 
 
+import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -29,9 +30,10 @@ import org.apache.flink.api.java.utils.ParameterTool;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.flink.util.Collector;
 
 
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Skeleton for a Flink Streaming Job.
@@ -52,26 +54,35 @@ public class StreamingJob {
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 		ParameterTool parameterTool = ParameterTool.fromArgs(args);
 
-		Properties properties = new Properties();
-		properties.setProperty("bootstrap.servers", parameterTool.getRequired("recv.servers"));
-		properties.setProperty("group.id", "flink_consumer");
+		Properties prop1 = new Properties();
+		prop1.setProperty("bootstrap.servers", parameterTool.getRequired("recv.servers"));
+		prop1.setProperty("group.id", "flink_consumer");
 
+        Properties prop2 = new Properties();
+        prop2.setProperty("bootstrap.servers", parameterTool.getRequired("send.servers"));
 
 		DataStream<String> stream = env
-				.addSource(new FlinkKafkaConsumer011<>(parameterTool.getRequired("source_topic"), new SimpleStringSchema(), properties));
+				.addSource(new FlinkKafkaConsumer011<>("topic", new SimpleStringSchema(), prop1));
 
-		stream.addSink(new FlinkKafkaProducer011<>(parameterTool.getRequired("send.servers"),
-				parameterTool.getRequired("sink_topic"),
-				new SimpleStringSchema()));
+        stream.map(new MapFunction<String, String>() {
+            private static final long serialVersionUID = -6867736771747690202L;
 
-		stream.map(new MapFunction<String, String>() {
-			private static final long serialVersionUID = -6867736771747690202L;
+            @Override
+            public String map(String value) throws Exception {
+                return strToJSONObj(value);
+            }
+        }).print();
 
-			@Override
-			public String map(String value) throws Exception {
-				return "Stream Value: " + value;
-			}
-		}).print();
+//        stream.flatMap(new FlatMapFunction<String, String>() {
+//            @Override
+//            public void flatMap(String value, Collector<String> out)
+//            throws Exception {
+//                out = strToJSONObj(value);
+//            }
+//        });
+
+		stream.addSink(new FlinkKafkaProducer011<>("topic", new SimpleStringSchema(),prop2));
+
 
 		/*
 		 * Here, you can start creating your execution plan for Flink.
@@ -97,16 +108,21 @@ public class StreamingJob {
 		env.execute("Flink Streaming Java API Skeleton");
 	}
 
-	private  static void strToJSONObj(String jsonstr){
+	private static Collection<String> strToJSONObj(String jsonstr){
 		JSONObject jsonObject=JSON.parseObject(jsonstr);
-		Object jsonarray = jsonObject.get("key");
+		Object jsonarray = jsonObject.get("FlightDepInfos");
 
 		String str=	jsonarray+"";
 		JSONArray array=JSON.parseArray(str);
+
+		String outstr="";
+        ArrayList<String> collection=new ArrayList<>();
 		for (int i = 0; i < array.size(); i++) {
 			JSONObject obj = JSON.parseObject(array.get(i)+"");
-			System.out.println(obj.get("name"));
+            collection.add(obj.getString("Depinfo"));
+			//System.out.println(obj.get("name"));
 			}
+			return collection;
 	}
 
 
