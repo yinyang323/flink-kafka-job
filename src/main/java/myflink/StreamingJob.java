@@ -64,18 +64,18 @@ public class StreamingJob {
 		DataStream<String> stream = env
 				.addSource(new FlinkKafkaConsumer011<>("test", new SimpleStringSchema(), prop1));
 
-        stream.map(new MapFunction<String,  Collection<String>>() {
+        DataStream<String> Datastream=stream.map(new MapFunction<String, String>() {
             private static final long serialVersionUID = -6867736771747690202L;
 
             @Override
-            public  Collection<String> map(String value) throws Exception {
+            public String map(String value) throws Exception {
             	if(value==null||value.isEmpty())
             		return null;
             	else
                 	return strToJSONObj(value);
             }
 
-        }).print();
+        });
 
 //        stream.flatMap(new FlatMapFunction<String, String>() {
 //            @Override
@@ -85,7 +85,7 @@ public class StreamingJob {
 //            }
 //        });
 
-		stream.addSink(new FlinkKafkaProducer011<>("topic.quick.tran", new SimpleStringSchema(),prop2));
+        Datastream.addSink(new FlinkKafkaProducer011<>("topic.quick.tran", new SimpleStringSchema(),prop2));
 
 
 		/*
@@ -112,7 +112,7 @@ public class StreamingJob {
 		env.execute("Flink Streaming Java API Skeleton");
 	}
 
-	private static Collection<String> strToJSONObj(String jsonstr){
+	private static String strToJSONObj(String jsonstr){
 		JSONObject jsonObject=JSON.parseObject(jsonstr);
 		Object jsonarray = jsonObject.get("FlightDepInfos");
 
@@ -120,14 +120,15 @@ public class StreamingJob {
 		JSONArray array=JSON.parseArray(str);
 
 		String outstr="";
-        Collection<String> collection=new ArrayList<>();
+        //Collection<String> collection=new ArrayList<>();
 
 		for (int i = 0; i < array.size(); i++) {
 			JSONObject obj = JSON.parseObject(array.get(i)+"");
-            collection.add(obj.getString("DepInfo"));
+			outstr=outstr.concat(obj.getString("DepInfo")+",");
+            //collection.add(obj.getString("DepInfo"));
 			//System.out.println(obj.get("name"));
 			}
-			return collection;
+			return outstr;
 	}
 
 
