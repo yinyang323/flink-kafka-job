@@ -62,15 +62,19 @@ public class StreamingJob {
         prop2.setProperty("bootstrap.servers", parameterTool.getRequired("send.servers"));
 
 		DataStream<String> stream = env
-				.addSource(new FlinkKafkaConsumer011<>("topic", new SimpleStringSchema(), prop1));
+				.addSource(new FlinkKafkaConsumer011<>("test", new SimpleStringSchema(), prop1));
 
-        stream.map(new MapFunction<String, String>() {
+        stream.map(new MapFunction<String,  Collection<String>>() {
             private static final long serialVersionUID = -6867736771747690202L;
 
             @Override
-            public String map(String value) throws Exception {
-                return strToJSONObj(value);
+            public  Collection<String> map(String value) throws Exception {
+            	if(value==null||value.isEmpty())
+            		return null;
+            	else
+                	return strToJSONObj(value);
             }
+
         }).print();
 
 //        stream.flatMap(new FlatMapFunction<String, String>() {
@@ -81,7 +85,7 @@ public class StreamingJob {
 //            }
 //        });
 
-		stream.addSink(new FlinkKafkaProducer011<>("topic", new SimpleStringSchema(),prop2));
+		stream.addSink(new FlinkKafkaProducer011<>("topic.quick.tran", new SimpleStringSchema(),prop2));
 
 
 		/*
@@ -116,10 +120,11 @@ public class StreamingJob {
 		JSONArray array=JSON.parseArray(str);
 
 		String outstr="";
-        ArrayList<String> collection=new ArrayList<>();
+        Collection<String> collection=new ArrayList<>();
+
 		for (int i = 0; i < array.size(); i++) {
 			JSONObject obj = JSON.parseObject(array.get(i)+"");
-            collection.add(obj.getString("Depinfo"));
+            collection.add(obj.getString("DepInfo"));
 			//System.out.println(obj.get("name"));
 			}
 			return collection;
