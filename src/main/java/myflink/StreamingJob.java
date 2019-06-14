@@ -18,10 +18,11 @@
 
 package myflink;
 
-
-import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer011;
@@ -30,7 +31,11 @@ import org.apache.flink.api.java.utils.ParameterTool;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.flink.util.Collector;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import scala.Tuple2;
 
 
 import java.util.*;
@@ -64,18 +69,28 @@ public class StreamingJob {
 		DataStream<String> stream = env
 				.addSource(new FlinkKafkaConsumer011<>("test", new SimpleStringSchema(), prop1));
 
-        DataStream<String> Datastream=stream.map(new MapFunction<String, String>() {
+        DataStream<Tuple2<String,String>> Datastream=stream.map(new MapFunction<String, Tuple2<String,String>>() {
             private static final long serialVersionUID = -6867736771747690202L;
 
             @Override
-            public String map(String value) throws Exception {
+            public Tuple2<String,String> map(String value) throws Exception {
             	if(value==null||value.isEmpty())
             		return null;
             	else
-                	return strToJSONObj(value);
+                	return strToXmltuple(value);
             }
 
+
         });
+
+        KeyedStream<String,Tuple> keyedStream1= (Datastream.map(new MapFunction<Tuple2<String,String>, String>() {
+            private static final long serialVersionUID = -6867736771747690202L;
+
+            @Override
+            public String map(Tuple2<String,String> tuple2) throws Exception {
+                return tuple2._2;
+            }
+        }).keyBy("FlightDepInfo"));
 
 //        stream.flatMap(new FlatMapFunction<String, String>() {
 //            @Override
@@ -85,7 +100,7 @@ public class StreamingJob {
 //            }
 //        });
 
-        Datastream.addSink(new FlinkKafkaProducer011<>("topic.quick.tran", new SimpleStringSchema(),prop2));
+        keyedStream1.addSink(new FlinkKafkaProducer011<>("topic.quick.tran", new SimpleStringSchema(),prop2));
 
 
 		/*
@@ -129,6 +144,16 @@ public class StreamingJob {
 			//System.out.println(obj.get("name"));
 			}
 			return outstr;
+	}
+
+	private static Tuple2<String,String> strToXmltuple(String xmlstr) throws DocumentException {
+		Document document=DocumentHelper.parseText(xmlstr);
+		Element type= (Element)document.selectSingleNode("/MSG/HEADINFO/TYPE");
+		String msgtype=type.getText();
+
+        Tuple2<String,String> tuple2=new Tuple2<>(msgtype,xmlstr);
+        return  tuple2;
+
 	}
 
 
