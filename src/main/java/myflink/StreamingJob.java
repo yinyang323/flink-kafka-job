@@ -18,10 +18,10 @@
 
 package myflink;
 
-import org.apache.flink.streaming.api.collector.selector.OutputSelector;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.SplitStream;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer011;
 import org.apache.flink.streaming.util.serialization.SimpleStringSchema;
@@ -29,6 +29,8 @@ import org.apache.flink.api.java.utils.ParameterTool;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.flink.util.Collector;
+import org.apache.flink.util.OutputTag;
 import org.dom4j.*;
 
 
@@ -55,6 +57,8 @@ public class StreamingJob {
 
 		final String FlightDepInfo="FlightDepInfo";//拆分后，子流的名称
 		final String FlightPlan="FlightPlan";
+        final OutputTag<String> outputTag1 = new OutputTag<String>(FlightDepInfo){};
+        final OutputTag<String> outputTag2 = new OutputTag<String>(FlightPlan){};
 
 		// set up the streaming execution environment
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -70,44 +74,63 @@ public class StreamingJob {
 		DataStream<String> stream = env
 				.addSource(new FlinkKafkaConsumer011<>("test", new SimpleStringSchema(), prop1));
 
-//        KeyedStream<String,String> stream1= stream.keyBy(new KeySelector<String, String>() {
-//            @Override
-//            public String getKey(String s) throws Exception {
-//                String key="";
-//                key=strToXmltuple(s);
-//                return key;
-//            }
-//        });
+//        SplitStream<String> stringSplitStream = stream.split(
+//                new OutputSelector<String>() {
+//                    @Override
+//                    public Iterable<String> select(String s) {
+//                        List<String> output=new ArrayList<>();
+//                        try {
+//                            String key=strToXmltuple(s);
+//                            switch (key){
+//                                case FlightDepInfo:
+//                                    output.add(FlightDepInfo);
+//                                    break;
+//                                case FlightPlan:
+//                                    output.add(FlightPlan);
+//                                    break;
+//                                    default:
+//                                        break;
+//                            }
+//                        } catch (DocumentException e) {
+//                            e.printStackTrace();
+//                        }
+//                        return output;
+//                    }
+//                }
+//        );
 
-        SplitStream<String> stringSplitStream = stream.split(
-                new OutputSelector<String>() {
-                    @Override
-                    public Iterable<String> select(String s) {
-                        List<String> output=new ArrayList<>();
-                        try {
-                            String key=strToXmltuple(s);
-                            switch (key){
-                                case FlightDepInfo:
-                                    output.add(FlightDepInfo);
-                                    break;
-                                case FlightPlan:
-                                    output.add(FlightPlan);
-                                    break;
-                                    default:
-                                        break;
-                            }
-                        } catch (DocumentException e) {
-                            e.printStackTrace();
-                        }
-                        return output;
+        SingleOutputStreamOperator<String> streamOperator= stream.process(new ProcessFunction<String, String>() {
+            @Override
+            public void processElement(String s, Context context, Collector<String> out) throws Exception {
+                out.collect(s);
+
+                String key=strToXmltuple(s);
+                try {
+                    switch (key) {
+                        case FlightDepInfo:
+                            context.output(outputTag1, s);
+                            break;
+                        case FlightPlan:
+                            context.output(outputTag2, s);
+                            break;
+                        default:
+                            break;
                     }
                 }
-        );
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-        DataStream<String> dataStream1=stringSplitStream.select(FlightDepInfo);
+            }
+
+        });
+
+        //DataStream<String> dataStream1=stringSplitStream.select(FlightDepInfo);
+        DataStream<String> dataStream1=streamOperator.getSideOutput(outputTag1);
         dataStream1.addSink(new FlinkKafkaProducer011<>("topic.quick.tran", new SimpleStringSchema(),prop2));
 
-        DataStream<String> dataStream2=stringSplitStream.select(FlightPlan);
+        //DataStream<String> dataStream2=stringSplitStream.select(FlightPlan);
+        DataStream<String> dataStream2=streamOperator.getSideOutput(outputTag2);
         dataStream2.addSink(new FlinkKafkaProducer011<>("topic.quick.ack", new SimpleStringSchema(),prop2));
 
 
