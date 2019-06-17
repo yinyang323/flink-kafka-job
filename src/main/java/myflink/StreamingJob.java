@@ -53,7 +53,7 @@ public class StreamingJob {
 	public static void main(String[] args) throws Exception {
 
 
-		final String FlightDepInfo="FlightDepInfo";
+		final String FlightDepInfo="FlightDepInfo";//拆分后，子流的名称
 		final String FlightPlan="FlightPlan";
 
 		// set up the streaming execution environment
