@@ -19,38 +19,11 @@
       <file leaf-file-name="StreamingJob.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="102" column="20" selection-start-line="102" selection-start-column="20" selection-end-line="102" selection-end-column="20" />
+            <state relative-caret-position="290">
+              <caret line="110" column="17" lean-forward="true" selection-start-line="110" selection-start-column="17" selection-end-line="110" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="KeyedStream.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-streaming-java_2.11/1.8.0/flink-streaming-java_2.11-1.8.0.jar!/org/apache/flink/streaming/api/datastream/KeyedStream.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1349">
-              <caret line="66" column="13" selection-start-line="66" selection-start-column="13" selection-end-line="66" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1900">
-              <caret line="100" column="40" selection-start-line="100" selection-start-column="40" selection-end-line="100" selection-end-column="40" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DataStreamSink.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-streaming-java_2.11/1.8.0/flink-streaming-java_2.11-1.8.0.jar!/org/apache/flink/streaming/api/datastream/DataStreamSink.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="494">
-              <caret line="26" column="34" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -112,6 +85,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -154,9 +128,8 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
       <pane id="Scope" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -244,7 +217,9 @@
       <workItem from="1560129175481" duration="7046000" />
       <workItem from="1560214166904" duration="8547000" />
       <workItem from="1560405601868" duration="4173000" />
-      <workItem from="1560479270055" duration="2740000" />
+      <workItem from="1560479270055" duration="2854000" />
+      <workItem from="1560699278301" duration="516000" />
+      <workItem from="1560732618946" duration="13561000" />
     </task>
     <task id="LOCAL-00001" summary="Merge branch 'master' of https://github.com/yinyang323/flink-kafka-job&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/myflink/StreamingJob.java">
       <created>1560222974656</created>
@@ -267,11 +242,18 @@
       <option name="project" value="LOCAL" />
       <updated>1560243232253</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Add key value">
+      <created>1560505536077</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1560505536077</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="22506000" />
+    <option name="totallyTimeSpent" value="36697000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -279,6 +261,7 @@
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Messages" order="7" weight="0.32838285" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
@@ -290,7 +273,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26096824" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2677761" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -300,7 +283,6 @@
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Messages" order="7" weight="0.32838285" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -317,7 +299,8 @@
     <MESSAGE value="Merge branch 'master' of https://github.com/yinyang323/flink-kafka-job&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/myflink/StreamingJob.java" />
     <MESSAGE value="Add stream" />
     <MESSAGE value="can process json currently" />
-    <option name="LAST_COMMIT_MESSAGE" value="can process json currently" />
+    <MESSAGE value="Add key value" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add key value" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -329,10 +312,72 @@
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="3" />
+      <option name="time" value="4" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1444">
+          <caret line="76" column="48" lean-forward="true" selection-start-line="76" selection-start-column="48" selection-end-line="76" selection-end-column="48" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-streaming-java_2.11/1.8.0/flink-streaming-java_2.11-1.8.0.jar!/org/apache/flink/streaming/api/datastream/KeyedStream.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1254">
+          <caret line="66" column="13" selection-start-line="66" selection-start-column="13" selection-end-line="66" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1900">
+          <caret line="100" column="40" selection-start-line="100" selection-start-column="40" selection-end-line="100" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-streaming-java_2.11/1.8.0/flink-streaming-java_2.11-1.8.0.jar!/org/apache/flink/streaming/api/datastream/DataStreamSink.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="26" column="34" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1539">
+          <caret line="81" lean-forward="true" selection-start-line="81" selection-end-line="81" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-streaming-java_2.11/1.8.0/flink-streaming-java_2.11-1.8.0.jar!/org/apache/flink/streaming/api/datastream/KeyedStream.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1254">
+          <caret line="66" column="13" selection-start-line="66" selection-start-column="13" selection-end-line="66" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1900">
+          <caret line="100" column="40" selection-start-line="100" selection-start-column="40" selection-end-line="100" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-streaming-java_2.11/1.8.0/flink-streaming-java_2.11-1.8.0.jar!/org/apache/flink/streaming/api/datastream/DataStreamSink.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="26" column="34" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2679">
@@ -399,23 +444,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="514" selection-start-line="514" selection-end-line="514" />
-          <folding>
-            <element signature="e#18834#18835#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-streaming-java_2.11/1.8.0/flink-streaming-java_2.11-1.8.0.jar!/org/apache/flink/streaming/api/datastream/DataStreamSink.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
+        <state relative-caret-position="285">
           <caret line="26" column="34" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1900">
-          <caret line="100" column="40" selection-start-line="100" selection-start-column="40" selection-end-line="100" selection-end-column="40" />
         </state>
       </provider>
     </entry>
@@ -426,17 +461,38 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-core/1.8.0/flink-core-1.8.0.jar!/org/apache/flink/api/common/operators/Keys.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="127">
+          <caret line="214" selection-start-line="214" selection-end-line="214" />
+        </state>
+      </provider>
+    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-streaming-java_2.11/1.8.0/flink-streaming-java_2.11-1.8.0.jar!/org/apache/flink/streaming/api/datastream/KeyedStream.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1349">
+        <state relative-caret-position="19">
           <caret line="66" column="13" selection-start-line="66" selection-start-column="13" selection-end-line="66" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1787">
+          <caret line="107" column="41" selection-start-line="107" selection-start-column="41" selection-end-line="107" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/dom4j/dom4j/2.1.1/dom4j-2.1.1.jar!/org/dom4j/DocumentFactory.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-792">
+          <caret line="159" selection-start-line="159" selection-end-line="159" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="102" column="20" selection-start-line="102" selection-start-column="20" selection-end-line="102" selection-end-column="20" />
+        <state relative-caret-position="290">
+          <caret line="110" column="17" lean-forward="true" selection-start-line="110" selection-start-column="17" selection-end-line="110" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
