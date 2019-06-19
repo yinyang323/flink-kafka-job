@@ -128,10 +128,12 @@ public class StreamingJob {
         //DataStream<String> dataStream1=stringSplitStream.select(FlightDepInfo);
         DataStream<String> dataStream1=streamOperator.getSideOutput(outputTag1);
         dataStream1.addSink(new FlinkKafkaProducer011<>("topic.quick.tran", new SimpleStringSchema(),prop2));
+        dataStream1.print();
 
         //DataStream<String> dataStream2=stringSplitStream.select(FlightPlan);
         DataStream<String> dataStream2=streamOperator.getSideOutput(outputTag2);
         dataStream2.addSink(new FlinkKafkaProducer011<>("topic.quick.ack", new SimpleStringSchema(),prop2));
+        dataStream2.print();
 
 
 //        KeyedStream<String,Tuple> keyedStream1= (Datastream.map(new MapFunction<Tuple2<String,String>, String>() {
