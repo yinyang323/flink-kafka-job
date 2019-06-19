@@ -18,6 +18,8 @@
 
 package myflink;
 
+import com.ctrip.framework.apollo.Config;
+import com.ctrip.framework.apollo.ConfigService;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -50,15 +52,48 @@ import java.util.*;
  */
 public class StreamingJob {
 
+    Config config = ConfigService.getAppConfig();
+
+    String key1="key1";
+    String defaultValue1="ZGGG,ZHHH,CSN,ZGGGACC/ZGHAACC/ZHHHACC";//default value if not set
+    String value1=config.getProperty(key1,defaultValue1);
+
+    String key2="key2";
+    String defaultValue2="ZGGG,ZGHA,CSN,ZGGGACC/ZGHAACC";
+    String value2=config.getProperty(key2,defaultValue2);
+
+    String key3="key2";
+    String defaultValue3="ZGGG,ZHCC,CSN,ZGGGACC/ZGHAACC/ZHCCACC/ZHHHACC";
+    String value3=config.getProperty(key2,defaultValue3);
+
+    String[] tunnels={value1,value2,value3};
+
+    String SrcTopic="SrcTopic";
+    String defaultValue4="fixm";
+    String srcTopic=config.getProperty(SrcTopic,defaultValue4);
+
+    String TarTopic1="TarTopic1";
+    String defaultValue5="zgha_fimx";
+    String tarTopic1=config.getProperty(TarTopic1,defaultValue5);
+
+    String TarTopic2="TarTopic2";
+    String defaultValue6="zhhh_fimx";
+    String tarTopic2=config.getProperty(TarTopic2,defaultValue6);
+
+    String TarTopic3="TarTopic3";
+    String defaultValue7="zhcc_fimx";
+    String tarTopic3=config.getProperty(TarTopic3,defaultValue7);
 
 
-	public static void main(String[] args) throws Exception {
 
 
-		final String FlightDepInfo="FlightDepInfo";//拆分后，子流的名称
-		final String FlightPlan="FlightPlan";
-        final OutputTag<String> outputTag1 = new OutputTag<String>(FlightDepInfo){};
-        final OutputTag<String> outputTag2 = new OutputTag<String>(FlightPlan){};
+
+    public void main(String[] args) throws Exception {
+
+
+        final OutputTag<String> outputTag1 = new OutputTag<String>("output1"){};
+        final OutputTag<String> outputTag2 = new OutputTag<String>("output2"){};
+		final OutputTag<String> outputTag3 = new OutputTag<String>("output3"){};
 
 		// set up the streaming execution environment
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -72,7 +107,7 @@ public class StreamingJob {
         prop2.setProperty("bootstrap.servers", parameterTool.getRequired("send.servers"));
 
 		DataStream<String> stream = env
-				.addSource(new FlinkKafkaConsumer011<>("test", new SimpleStringSchema(), prop1));
+				.addSource(new FlinkKafkaConsumer011<>(srcTopic, new SimpleStringSchema(), prop1));
 
 //        SplitStream<String> stringSplitStream = stream.split(
 //                new OutputSelector<String>() {
@@ -104,21 +139,27 @@ public class StreamingJob {
             public void processElement(String s, Context context, Collector<String> out) throws Exception {
                 out.collect(s);
 
-                String key=strToXmltuple(s);
+
                 try {
-                    switch (key) {
-                        case FlightDepInfo:
+                    switch (SelectTunnel(s)) {
+                        case 0:
                             context.output(outputTag1, s);
                             break;
-                        case FlightPlan:
+                        case 1:
                             context.output(outputTag2, s);
+                            break;
+                        case 2:
+                            context.output(outputTag3, s);
                             break;
                         default:
                             break;
                     }
                 }
-                catch (Exception e) {
+                catch (DocumentException e) {
                     e.printStackTrace();
+                }
+                catch (Exception ex){
+                    throw ex;
                 }
 
             }
@@ -127,13 +168,17 @@ public class StreamingJob {
 
         //DataStream<String> dataStream1=stringSplitStream.select(FlightDepInfo);
         DataStream<String> dataStream1=streamOperator.getSideOutput(outputTag1);
-        dataStream1.addSink(new FlinkKafkaProducer011<>("topic.quick.tran", new SimpleStringSchema(),prop2));
+        dataStream1.addSink(new FlinkKafkaProducer011<>(tarTopic1, new SimpleStringSchema(),prop2));
         dataStream1.print();
 
         //DataStream<String> dataStream2=stringSplitStream.select(FlightPlan);
         DataStream<String> dataStream2=streamOperator.getSideOutput(outputTag2);
-        dataStream2.addSink(new FlinkKafkaProducer011<>("topic.quick.ack", new SimpleStringSchema(),prop2));
+        dataStream2.addSink(new FlinkKafkaProducer011<>(tarTopic2, new SimpleStringSchema(),prop2));
         dataStream2.print();
+
+        DataStream<String> dataStream3=streamOperator.getSideOutput(outputTag3);
+        dataStream3.addSink(new FlinkKafkaProducer011<>(tarTopic3, new SimpleStringSchema(),prop2));
+        dataStream3.print();
 
 
 //        KeyedStream<String,Tuple> keyedStream1= (Datastream.map(new MapFunction<Tuple2<String,String>, String>() {
@@ -185,6 +230,15 @@ public class StreamingJob {
 		env.execute("Flink Streaming Java API Skeleton");
 	}
 
+	/*compare input and return tag num*/
+	private int SelectTunnel(String input) throws DocumentException {
+        for(int i=0;i!=tunnels.length;i++){
+            if(compareMessage(input,tunnels[i]))
+                return i;
+        }
+        return -1;
+    }
+
 	private static String strToJSONObj(String jsonstr){
 		JSONObject jsonObject=JSON.parseObject(jsonstr);
 		Object jsonarray = jsonObject.get("FlightDepInfos");
@@ -204,18 +258,35 @@ public class StreamingJob {
 			return outstr;
 	}
 
-	private static String strToXmltuple(String xmlstr) throws DocumentException {
+	private static String strToXmltuple(String xmlstr,String Xpath) throws DocumentException {
 		Document document=DocumentHelper.parseText(xmlstr);
-		Node type= document.selectSingleNode("//MSG/HEADINFO/TYPE");
+		Node type= document.selectSingleNode(Xpath);
 		String msgtype=type.getText();
-
         //Tuple2<String,String> tuple2=new Tuple2<>(msgtype,xmlstr);
-
         return  msgtype;
 
 	}
 
+	/*compare input message with config value*/
+	private boolean compareMessage(String input, String config) throws DocumentException {
 
+        String ADEP=strToXmltuple(input,"");
+        String ADES=strToXmltuple(input,"");
+        String Company=strToXmltuple(input,"");
+        String ControlArea=strToXmltuple(input,"");
+
+        String[] strings={ADEP,ADES,Company,ControlArea};
+        String[] configs=config.split(",");
+
+        for(int i=0;i!=configs.length;i++){
+            if(strings[i].isEmpty())
+                continue;
+
+            if(!strings[i].equals(configs[i]))
+                return false;
+        }
+        return true;
+    }
 
 
 }
