@@ -18,6 +18,8 @@
 
 package myflink;
 
+import com.ctrip.framework.apollo.Config;
+import com.ctrip.framework.apollo.ConfigService;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -49,8 +51,42 @@ public class StreamingJob {
 
     public static void main(String[] args) throws Exception {
 
+        //Config config = ConfigService.getAppConfig();
+
+        String key1="key1";
+        String defaultValue1="ZGGG,ZHHH,CSN,ZGGGACC/ZGHAACC/ZHHHACC";//default value if not set
+        //String value1=config.getProperty(key1,defaultValue1);
+
+        String key2="key2";
+        String defaultValue2="ZGGG,ZGHA,CSN,ZGGGACC/ZGHAACC";
+        //String value2=config.getProperty(key2,defaultValue2);
+
+        String key3="key3";
+        String defaultValue3="KDTW,EGLL,DAL,";
+        //String value3=config.getProperty(key3,defaultValue3);
+
+        String SrcTopic="SrcTopic";
+        String defaultValue4="test";
+        //String srcTopic=config.getProperty(SrcTopic,defaultValue4);
+
+        String TarTopic1="TarTopic1";
+        String defaultValue5="topic.quick.tran";
+        //String tarTopic1=config.getProperty(TarTopic1,defaultValue5);
+
+        String TarTopic2="TarTopic2";
+        String defaultValue6="topic.quick.ack";
+        //String tarTopic2=config.getProperty(TarTopic2,defaultValue6);
+
+        String TarTopic3="TarTopic3";
+        String defaultValue7="test111";
+        //String tarTopic3=config.getProperty(TarTopic3,defaultValue7);
 
         Distribute distribute=new Distribute();
+        distribute.setSrcTopic(defaultValue4);
+        distribute.setTarTopic1(defaultValue5);
+        distribute.setTarTopic2(defaultValue6);
+        distribute.setTarTopic3(defaultValue7);
+        distribute.setTunnels(new String[]{defaultValue1,defaultValue2,defaultValue3});
 
         final OutputTag<String> outputTag1 = new OutputTag<String>("output1"){};
         final OutputTag<String> outputTag2 = new OutputTag<String>("output2"){};
@@ -68,7 +104,7 @@ public class StreamingJob {
         prop2.setProperty("bootstrap.servers", parameterTool.getRequired("send.servers"));
 
 		DataStream<String> stream = env
-				.addSource(new FlinkKafkaConsumer011<>(distribute.srcTopic, new SimpleStringSchema(), prop1));
+				.addSource(new FlinkKafkaConsumer011<>(distribute.getSrcTopic(), new SimpleStringSchema(), prop1));
 
 //        SplitStream<String> stringSplitStream = stream.split(
 //                new OutputSelector<String>() {
@@ -100,7 +136,6 @@ public class StreamingJob {
             public void processElement(String s, Context context, Collector<String> out) throws Exception {
                 out.collect(s);
 
-
                 try {
                     switch (distribute.SelectTunnel(s)) {
                         case 0:
@@ -129,16 +164,16 @@ public class StreamingJob {
 
         //DataStream<String> dataStream1=stringSplitStream.select(FlightDepInfo);
         DataStream<String> dataStream1=streamOperator.getSideOutput(outputTag1);
-        dataStream1.addSink(new FlinkKafkaProducer011<>(distribute.tarTopic1, new SimpleStringSchema(),prop2));
+        dataStream1.addSink(new FlinkKafkaProducer011<>(distribute.getTarTopic1(), new SimpleStringSchema(),prop2));
         dataStream1.print();
 
         //DataStream<String> dataStream2=stringSplitStream.select(FlightPlan);
         DataStream<String> dataStream2=streamOperator.getSideOutput(outputTag2);
-        dataStream2.addSink(new FlinkKafkaProducer011<>(distribute.tarTopic2, new SimpleStringSchema(),prop2));
+        dataStream2.addSink(new FlinkKafkaProducer011<>(distribute.getTarTopic2(), new SimpleStringSchema(),prop2));
         dataStream2.print();
 
         DataStream<String> dataStream3=streamOperator.getSideOutput(outputTag3);
-        dataStream3.addSink(new FlinkKafkaProducer011<>(distribute.tarTopic3, new SimpleStringSchema(),prop2));
+        dataStream3.addSink(new FlinkKafkaProducer011<>(distribute.getTarTopic3(), new SimpleStringSchema(),prop2));
         dataStream3.print();
 
 

@@ -3,73 +3,65 @@ package myflink;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.ctrip.framework.apollo.Config;
-import com.ctrip.framework.apollo.ConfigService;
+import com.sun.istack.internal.NotNull;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
 
-public class Distribute {
-    Config config = ConfigService.getAppConfig();
+import java.io.Serializable;
 
-    String key1="key1";
-    String defaultValue1="ZGGG,ZHHH,CSN,ZGGGACC/ZGHAACC/ZHHHACC";//default value if not set
-    String value1=config.getProperty(key1,defaultValue1);
+public class Distribute implements Serializable {
+    private String srcTopic = "";
+    private String tarTopic1 = "";
+    private String tarTopic2 = "";
+    private String tarTopic3 = "";
 
-    String key2="key2";
-    String defaultValue2="ZGGG,ZGHA,CSN,ZGGGACC/ZGHAACC";
-    String value2=config.getProperty(key2,defaultValue2);
+    private String[] tunnels = {};
 
-    String key3="key2";
-    String defaultValue3="ZGGG,ZHCC,CSN,ZGGGACC/ZGHAACC/ZHCCACC/ZHHHACC";
-    String value3=config.getProperty(key2,defaultValue3);
-
-    String[] tunnels={value1,value2,value3};
-
-    String SrcTopic="SrcTopic";
-    String defaultValue4="fixm";
-    String srcTopic=config.getProperty(SrcTopic,defaultValue4);
-
-    String TarTopic1="TarTopic1";
-    String defaultValue5="zgha_fimx";
-    String tarTopic1=config.getProperty(TarTopic1,defaultValue5);
-
-    String TarTopic2="TarTopic2";
-    String defaultValue6="zhhh_fimx";
-    String tarTopic2=config.getProperty(TarTopic2,defaultValue6);
-
-    String TarTopic3="TarTopic3";
-    String defaultValue7="zhcc_fimx";
-    String tarTopic3=config.getProperty(TarTopic3,defaultValue7);
-
-    public String getValue1() {
-        return value1;
+    public void setSrcTopic(String srcTopic) {
+        this.srcTopic = srcTopic;
     }
 
-    public String getValue2() {
-        return value2;
+    public void setTarTopic1(String tarTopic1) {
+        this.tarTopic1 = tarTopic1;
     }
 
-    public String getValue3() {
-        return value3;
+    public void setTarTopic2(String tarTopic2) {
+        this.tarTopic2 = tarTopic2;
     }
+
+    public void setTarTopic3(String tarTopic3) {
+        this.tarTopic3 = tarTopic3;
+    }
+
+    public void setTunnels(String[] tunnels) {
+        this.tunnels = tunnels;
+    }
+
+
 
     public String getSrcTopic() {
+
         return srcTopic;
     }
 
     public String getTarTopic1() {
+
         return tarTopic1;
     }
 
     public String getTarTopic2() {
+
         return tarTopic2;
     }
 
     public String getTarTopic3() {
+
         return tarTopic3;
     }
+
+
 
     /*compare input and return tag num*/
     public int SelectTunnel(String input) throws DocumentException {
@@ -108,13 +100,21 @@ public class Distribute {
 
     }
 
-    /*compare input message with config value*/
-    private boolean compareMessage(String input, String config) throws DocumentException {
+    private static String strToXmltuple(String xmlstr,String Xpath,String attributeName) throws DocumentException {
+        Document document=DocumentHelper.parseText(xmlstr);
+        Node type= document.selectSingleNode(Xpath);
+        StringBuilder str=new StringBuilder("@");
+        str.append(attributeName);
+        return type.valueOf(str.toString());
+    }
 
-        String ADEP=strToXmltuple(input,"");
-        String ADES=strToXmltuple(input,"");
-        String Company=strToXmltuple(input,"");
-        String ControlArea=strToXmltuple(input,"");
+    /*compare input message with config value*/
+    private boolean compareMessage(String input,@NotNull String config) throws DocumentException {
+
+        String ADEP=strToXmltuple(input,"//mesg:Message/mesg:flight/fx:departure/fx:aerodrome","locationIndicator");
+        String ADES=strToXmltuple(input,"//mesg:Message/mesg:flight/fx:arrival/fx:destinationAerodrome","locationIndicator");
+        String Company=strToXmltuple(input,"//mesg:Message/mesg:flight/fx:flightIdentification","aircraftIdentification").substring(0,3);
+        String ControlArea=strToXmltuple(input,"//mesg:Message/mesg:flight/fb:extension/atmb:atmbFipsInfo","controlArea");
 
         String[] strings={ADEP,ADES,Company,ControlArea};
         String[] configs=config.split(",");
