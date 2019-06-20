@@ -51,42 +51,42 @@ public class StreamingJob {
 
     public static void main(String[] args) throws Exception {
 
-        //Config config = ConfigService.getAppConfig();
+        Config config = ConfigService.getAppConfig();
 
         String key1="key1";
         String defaultValue1="ZGGG,ZHHH,CSN,ZGGGACC/ZGHAACC/ZHHHACC";//default value if not set
-        //String value1=config.getProperty(key1,defaultValue1);
+        String value1=config.getProperty(key1,defaultValue1);
 
         String key2="key2";
         String defaultValue2="ZGGG,ZGHA,CSN,ZGGGACC/ZGHAACC";
-        //String value2=config.getProperty(key2,defaultValue2);
+        String value2=config.getProperty(key2,defaultValue2);
 
         String key3="key3";
         String defaultValue3="KDTW,EGLL,DAL,";
-        //String value3=config.getProperty(key3,defaultValue3);
+        String value3=config.getProperty(key3,defaultValue3);
 
         String SrcTopic="SrcTopic";
         String defaultValue4="test";
-        //String srcTopic=config.getProperty(SrcTopic,defaultValue4);
+        String srcTopic=config.getProperty(SrcTopic,defaultValue4);
 
         String TarTopic1="TarTopic1";
         String defaultValue5="topic.quick.tran";
-        //String tarTopic1=config.getProperty(TarTopic1,defaultValue5);
+        String tarTopic1=config.getProperty(TarTopic1,defaultValue5);
 
         String TarTopic2="TarTopic2";
         String defaultValue6="topic.quick.ack";
-        //String tarTopic2=config.getProperty(TarTopic2,defaultValue6);
+        String tarTopic2=config.getProperty(TarTopic2,defaultValue6);
 
         String TarTopic3="TarTopic3";
         String defaultValue7="test111";
-        //String tarTopic3=config.getProperty(TarTopic3,defaultValue7);
+        String tarTopic3=config.getProperty(TarTopic3,defaultValue7);
 
         Distribute distribute=new Distribute();
-        distribute.setSrcTopic(defaultValue4);
-        distribute.setTarTopic1(defaultValue5);
-        distribute.setTarTopic2(defaultValue6);
-        distribute.setTarTopic3(defaultValue7);
-        distribute.setTunnels(new String[]{defaultValue1,defaultValue2,defaultValue3});
+        distribute.setSrcTopic(srcTopic);
+        distribute.setTarTopic1(tarTopic1);
+        distribute.setTarTopic2(tarTopic2);
+        distribute.setTarTopic3(tarTopic3);
+        distribute.setTunnels(new String[]{value1,value2,value3});
 
         final OutputTag<String> outputTag1 = new OutputTag<String>("output1"){};
         final OutputTag<String> outputTag2 = new OutputTag<String>("output2"){};
