@@ -19,7 +19,10 @@
 package myflink;
 
 import com.ctrip.framework.apollo.Config;
+import com.ctrip.framework.apollo.ConfigChangeListener;
 import com.ctrip.framework.apollo.ConfigService;
+import com.ctrip.framework.apollo.model.ConfigChange;
+import com.ctrip.framework.apollo.model.ConfigChangeEvent;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -31,7 +34,8 @@ import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 import org.dom4j.*;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -49,9 +53,26 @@ import java.util.*;
  */
 public class StreamingJob {
 
-    public static void main(String[] args) throws Exception {
+    private static final Logger logger = LoggerFactory.getLogger(StreamingJob.class);
+    private Config config;
+    private static Distribute distribute;
 
-        Config config = ConfigService.getAppConfig();
+    public StreamingJob(){
+        ConfigChangeListener changeListener = new ConfigChangeListener() {
+            @Override
+            public void onChange(ConfigChangeEvent changeEvent) {
+                logger.info("Changes for namespace {}", changeEvent.getNamespace());
+                for (String key : changeEvent.changedKeys()) {
+                    ConfigChange change = changeEvent.getChange(key);
+                    logger.info("Change - key: {}, oldValue: {}, newValue: {}, changeType: {}",
+                            change.getPropertyName(), change.getOldValue(), change.getNewValue(),
+                            change.getChangeType());
+                }
+            }
+        };
+
+        config = ConfigService.getAppConfig();
+        config.addChangeListener(changeListener);
 
         String key1="key1";
         String defaultValue1="ZGGG,ZHHH,CSN,ZGGGACC/ZGHAACC/ZHHHACC";//default value if not set
@@ -65,6 +86,7 @@ public class StreamingJob {
         String defaultValue3="KDTW,EGLL,DAL,";
         String value3=config.getProperty(key3,defaultValue3);
 
+        /*数据源所在的主题*/
         String SrcTopic="SrcTopic";
         String defaultValue4="test";
         String srcTopic=config.getProperty(SrcTopic,defaultValue4);
@@ -81,12 +103,19 @@ public class StreamingJob {
         String defaultValue7="test111";
         String tarTopic3=config.getProperty(TarTopic3,defaultValue7);
 
-        Distribute distribute=new Distribute();
+        distribute=new Distribute();
         distribute.setSrcTopic(srcTopic);
         distribute.setTarTopic1(tarTopic1);
         distribute.setTarTopic2(tarTopic2);
         distribute.setTarTopic3(tarTopic3);
         distribute.setTunnels(new String[]{value1,value2,value3});
+
+    }
+
+    public static void main(String[] args) throws Exception {
+
+
+        StreamingJob streamingJob=new StreamingJob();
 
         final OutputTag<String> outputTag1 = new OutputTag<String>("output1"){};
         final OutputTag<String> outputTag2 = new OutputTag<String>("output2"){};
@@ -104,7 +133,7 @@ public class StreamingJob {
         prop2.setProperty("bootstrap.servers", parameterTool.getRequired("send.servers"));
 
 		DataStream<String> stream = env
-				.addSource(new FlinkKafkaConsumer011<>(distribute.getSrcTopic(), new SimpleStringSchema(), prop1));
+				.addSource(new FlinkKafkaConsumer011<>(streamingJob.distribute.getSrcTopic(), new SimpleStringSchema(), prop1));
 
 //        SplitStream<String> stringSplitStream = stream.split(
 //                new OutputSelector<String>() {
@@ -164,16 +193,16 @@ public class StreamingJob {
 
         //DataStream<String> dataStream1=stringSplitStream.select(FlightDepInfo);
         DataStream<String> dataStream1=streamOperator.getSideOutput(outputTag1);
-        dataStream1.addSink(new FlinkKafkaProducer011<>(distribute.getTarTopic1(), new SimpleStringSchema(),prop2));
+        dataStream1.addSink(new FlinkKafkaProducer011<>(streamingJob.distribute.getTarTopic1(), new SimpleStringSchema(),prop2));
         dataStream1.print();
 
         //DataStream<String> dataStream2=stringSplitStream.select(FlightPlan);
         DataStream<String> dataStream2=streamOperator.getSideOutput(outputTag2);
-        dataStream2.addSink(new FlinkKafkaProducer011<>(distribute.getTarTopic2(), new SimpleStringSchema(),prop2));
+        dataStream2.addSink(new FlinkKafkaProducer011<>(streamingJob.distribute.getTarTopic2(), new SimpleStringSchema(),prop2));
         dataStream2.print();
 
         DataStream<String> dataStream3=streamOperator.getSideOutput(outputTag3);
-        dataStream3.addSink(new FlinkKafkaProducer011<>(distribute.getTarTopic3(), new SimpleStringSchema(),prop2));
+        dataStream3.addSink(new FlinkKafkaProducer011<>(streamingJob.distribute.getTarTopic3(), new SimpleStringSchema(),prop2));
         dataStream3.print();
 
 
@@ -224,6 +253,9 @@ public class StreamingJob {
 
 		// execute program
 		env.execute("Flink Streaming Java API Skeleton");
+
+
+
 	}
 
 
