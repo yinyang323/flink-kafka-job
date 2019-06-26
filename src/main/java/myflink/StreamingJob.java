@@ -53,11 +53,13 @@ import java.util.*;
  */
 public class StreamingJob {
 
-    private static final Logger logger = LoggerFactory.getLogger(StreamingJob.class);
-    private Config config;
-    private static Distribute distribute;
+    public static void main(String[] args) throws Exception {
 
-    public StreamingJob(){
+
+        final Logger logger = LoggerFactory.getLogger(StreamingJob.class);
+        Config config;
+        Distribute distribute=new Distribute();
+
         ConfigChangeListener changeListener = new ConfigChangeListener() {
             @Override
             public void onChange(ConfigChangeEvent changeEvent) {
@@ -103,19 +105,11 @@ public class StreamingJob {
         String defaultValue7="test111";
         String tarTopic3=config.getProperty(TarTopic3,defaultValue7);
 
-        distribute=new Distribute();
         distribute.setSrcTopic(srcTopic);
         distribute.setTarTopic1(tarTopic1);
         distribute.setTarTopic2(tarTopic2);
         distribute.setTarTopic3(tarTopic3);
         distribute.setTunnels(new String[]{value1,value2,value3});
-
-    }
-
-    public static void main(String[] args) throws Exception {
-
-
-        StreamingJob streamingJob=new StreamingJob();
 
         final OutputTag<String> outputTag1 = new OutputTag<String>("output1"){};
         final OutputTag<String> outputTag2 = new OutputTag<String>("output2"){};
@@ -132,8 +126,13 @@ public class StreamingJob {
         Properties prop2 = new Properties();
         prop2.setProperty("bootstrap.servers", parameterTool.getRequired("send.servers"));
 
+        FlinkKafkaConsumer011<String> source = new FlinkKafkaConsumer011<>(distribute.getSrcTopic(), new SimpleStringSchema(), prop1);
+        FlinkKafkaProducer011<String> tar1=new FlinkKafkaProducer011<>(distribute.getTarTopic1(), new SimpleStringSchema(),prop2);
+        FlinkKafkaProducer011<String> tar2=new FlinkKafkaProducer011<>(distribute.getTarTopic2(), new SimpleStringSchema(),prop2);
+        FlinkKafkaProducer011<String> tar3=new FlinkKafkaProducer011<>(distribute.getTarTopic3(), new SimpleStringSchema(),prop2);
+
 		DataStream<String> stream = env
-				.addSource(new FlinkKafkaConsumer011<>(streamingJob.distribute.getSrcTopic(), new SimpleStringSchema(), prop1));
+				.addSource(source);
 
 //        SplitStream<String> stringSplitStream = stream.split(
 //                new OutputSelector<String>() {
@@ -193,16 +192,16 @@ public class StreamingJob {
 
         //DataStream<String> dataStream1=stringSplitStream.select(FlightDepInfo);
         DataStream<String> dataStream1=streamOperator.getSideOutput(outputTag1);
-        dataStream1.addSink(new FlinkKafkaProducer011<>(streamingJob.distribute.getTarTopic1(), new SimpleStringSchema(),prop2));
+        dataStream1.addSink(tar1);
         dataStream1.print();
 
         //DataStream<String> dataStream2=stringSplitStream.select(FlightPlan);
         DataStream<String> dataStream2=streamOperator.getSideOutput(outputTag2);
-        dataStream2.addSink(new FlinkKafkaProducer011<>(streamingJob.distribute.getTarTopic2(), new SimpleStringSchema(),prop2));
+        dataStream2.addSink(tar2);
         dataStream2.print();
 
         DataStream<String> dataStream3=streamOperator.getSideOutput(outputTag3);
-        dataStream3.addSink(new FlinkKafkaProducer011<>(streamingJob.distribute.getTarTopic3(), new SimpleStringSchema(),prop2));
+        dataStream3.addSink(tar3);
         dataStream3.print();
 
 

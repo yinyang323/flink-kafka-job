@@ -3,7 +3,6 @@ package myflink;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.sun.istack.internal.NotNull;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -109,7 +108,7 @@ public class Distribute implements Serializable {
     }
 
     /*compare input message with config value*/
-    private boolean compareMessage(String input,@NotNull String config) throws DocumentException {
+    private boolean compareMessage(String input,String config) throws DocumentException {
 
         String ADEP=strToXmltuple(input,"//mesg:Message/mesg:flight/fx:departure/fx:aerodrome","locationIndicator");
         String ADES=strToXmltuple(input,"//mesg:Message/mesg:flight/fx:arrival/fx:destinationAerodrome","locationIndicator");
