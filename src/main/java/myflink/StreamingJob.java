@@ -60,21 +60,8 @@ public class StreamingJob {
         Config config;
         Distribute distribute=new Distribute();
 
-        ConfigChangeListener changeListener = new ConfigChangeListener() {
-            @Override
-            public void onChange(ConfigChangeEvent changeEvent) {
-                logger.info("Changes for namespace {}", changeEvent.getNamespace());
-                for (String key : changeEvent.changedKeys()) {
-                    ConfigChange change = changeEvent.getChange(key);
-                    logger.info("Change - key: {}, oldValue: {}, newValue: {}, changeType: {}",
-                            change.getPropertyName(), change.getOldValue(), change.getNewValue(),
-                            change.getChangeType());
-                }
-            }
-        };
-
         config = ConfigService.getAppConfig();
-        config.addChangeListener(changeListener);
+
 
         String key1="key1";
         String defaultValue1="ZGGG,ZHHH,CSN,ZGGGACC/ZGHAACC/ZHHHACC";//default value if not set
@@ -126,7 +113,7 @@ public class StreamingJob {
         Properties prop2 = new Properties();
         prop2.setProperty("bootstrap.servers", parameterTool.getRequired("send.servers"));
 
-        FlinkKafkaConsumer011<String> source = new FlinkKafkaConsumer011<>(distribute.getSrcTopic(), new SimpleStringSchema(), prop1);
+        final FlinkKafkaConsumer011<String> source = new FlinkKafkaConsumer011<>(distribute.getSrcTopic(), new SimpleStringSchema(), prop1);
         FlinkKafkaProducer011<String> tar1=new FlinkKafkaProducer011<>(distribute.getTarTopic1(), new SimpleStringSchema(),prop2);
         FlinkKafkaProducer011<String> tar2=new FlinkKafkaProducer011<>(distribute.getTarTopic2(), new SimpleStringSchema(),prop2);
         FlinkKafkaProducer011<String> tar3=new FlinkKafkaProducer011<>(distribute.getTarTopic3(), new SimpleStringSchema(),prop2);
@@ -250,10 +237,35 @@ public class StreamingJob {
 		 *
 		 */
 
+        ConfigChangeListener changeListener = new ConfigChangeListener() {
+            @Override
+            public void onChange(ConfigChangeEvent changeEvent) {
+                logger.info("Changes for namespace {}", changeEvent.getNamespace());
+                for (String key : changeEvent.changedKeys()) {
+                    ConfigChange change = changeEvent.getChange(key);
+                    logger.info("Change - key: {}, oldValue: {}, newValue: {}, changeType: {}",
+                            change.getPropertyName(), change.getOldValue(), change.getNewValue(),
+                            change.getChangeType());
+                    switch (key){
+                        case "SrcTopic":
+                            try {
+                                source.cancel();
+                                source.close();
+                                //source=new FlinkKafkaConsumer011<String>(change.getNewValue(), new SimpleStringSchema(), prop1);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
+                    }
+                }
+            }
+        };
+
+        config.addChangeListener(changeListener);
+
 		// execute program
 		env.execute("Flink Streaming Java API Skeleton");
-
-
 
 	}
 
