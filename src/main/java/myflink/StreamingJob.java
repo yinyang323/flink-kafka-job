@@ -23,12 +23,15 @@ import com.ctrip.framework.apollo.ConfigChangeListener;
 import com.ctrip.framework.apollo.ConfigService;
 import com.ctrip.framework.apollo.model.ConfigChange;
 import com.ctrip.framework.apollo.model.ConfigChangeEvent;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafka011Exception;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer011;
+import org.apache.flink.streaming.connectors.kafka.internals.KafkaTopicPartition;
 import org.apache.flink.streaming.util.serialization.SimpleStringSchema;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.util.Collector;
@@ -113,7 +116,7 @@ public class StreamingJob {
         Properties prop2 = new Properties();
         prop2.setProperty("bootstrap.servers", parameterTool.getRequired("send.servers"));
 
-        final FlinkKafkaConsumer011<String> source = new FlinkKafkaConsumer011<>(distribute.getSrcTopic(), new SimpleStringSchema(), prop1);
+        FlinkKafkaConsumer011<String> source = new FlinkKafkaConsumer011<>(distribute.getSrcTopic(), new SimpleStringSchema(), prop1);
         FlinkKafkaProducer011<String> tar1=new FlinkKafkaProducer011<>(distribute.getTarTopic1(), new SimpleStringSchema(),prop2);
         FlinkKafkaProducer011<String> tar2=new FlinkKafkaProducer011<>(distribute.getTarTopic2(), new SimpleStringSchema(),prop2);
         FlinkKafkaProducer011<String> tar3=new FlinkKafkaProducer011<>(distribute.getTarTopic3(), new SimpleStringSchema(),prop2);
@@ -249,10 +252,22 @@ public class StreamingJob {
                     switch (key){
                         case "SrcTopic":
                             try {
-                                source.cancel();
-                                source.close();
-                                //source=new FlinkKafkaConsumer011<String>(change.getNewValue(), new SimpleStringSchema(), prop1);
+                                KafkaTopicPartition ktp =new KafkaTopicPartition(change.getNewValue(),0);
+                                Map<KafkaTopicPartition,Long> start=new HashMap<>();
+                                start.put(ktp,0L);
+                                source.setStartFromSpecificOffsets(start);
+                                source.setStartFromLatest();/*only receive latest message*/
+
                             } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            break;
+
+                        case  "TarTopic1":
+                            try {
+                                tar1.close();
+
+                            } catch (FlinkKafka011Exception e) {
                                 e.printStackTrace();
                             }
 
