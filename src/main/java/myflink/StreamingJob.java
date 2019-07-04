@@ -23,8 +23,8 @@ import com.ctrip.framework.apollo.ConfigChangeListener;
 import com.ctrip.framework.apollo.ConfigService;
 import com.ctrip.framework.apollo.model.ConfigChange;
 import com.ctrip.framework.apollo.model.ConfigChangeEvent;
-import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
@@ -32,7 +32,6 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafka011Exception;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer011;
 import org.apache.flink.streaming.connectors.kafka.internals.KafkaTopicPartition;
-import org.apache.flink.streaming.util.serialization.SimpleStringSchema;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
@@ -55,6 +54,11 @@ import java.util.*;
  * method, change the respective entry in the POM.xml file (simply search for 'mainClass').
  */
 public class StreamingJob {
+
+    private static FlinkKafkaProducer011 tar1;
+    private static FlinkKafkaProducer011 tar2;
+    private static FlinkKafkaProducer011 tar3;
+    private static FlinkKafkaConsumer011 source;
 
     public static void main(String[] args) throws Exception {
 
@@ -116,12 +120,12 @@ public class StreamingJob {
         Properties prop2 = new Properties();
         prop2.setProperty("bootstrap.servers", parameterTool.getRequired("send.servers"));
 
-        FlinkKafkaConsumer011<String> source = new FlinkKafkaConsumer011<>(distribute.getSrcTopic(), new SimpleStringSchema(), prop1);
-        FlinkKafkaProducer011<String> tar1=new FlinkKafkaProducer011<>(distribute.getTarTopic1(), new SimpleStringSchema(),prop2);
-        FlinkKafkaProducer011<String> tar2=new FlinkKafkaProducer011<>(distribute.getTarTopic2(), new SimpleStringSchema(),prop2);
-        FlinkKafkaProducer011<String> tar3=new FlinkKafkaProducer011<>(distribute.getTarTopic3(), new SimpleStringSchema(),prop2);
+        source = new FlinkKafkaConsumer011<>(distribute.getSrcTopic(), new org.apache.flink.api.common.serialization.SimpleStringSchema(), prop1);
+        tar1=new FlinkKafkaProducer011<>(distribute.getTarTopic1(), new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
+        tar2=new FlinkKafkaProducer011<>(distribute.getTarTopic2(), new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
+        tar3=new FlinkKafkaProducer011<>(distribute.getTarTopic3(), new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
 
-		DataStream<String> stream = env
+		DataStreamSource stream = env
 				.addSource(source);
 
 //        SplitStream<String> stringSplitStream = stream.split(
@@ -149,7 +153,7 @@ public class StreamingJob {
 //                }
 //        );
 
-        SingleOutputStreamOperator<String> streamOperator= stream.process(new ProcessFunction<String, String>() {
+        SingleOutputStreamOperator streamOperator= stream.process(new ProcessFunction<String, String>() {
             @Override
             public void processElement(String s, Context context, Collector<String> out) throws Exception {
                 out.collect(s);
@@ -181,16 +185,16 @@ public class StreamingJob {
         });
 
         //DataStream<String> dataStream1=stringSplitStream.select(FlightDepInfo);
-        DataStream<String> dataStream1=streamOperator.getSideOutput(outputTag1);
+        DataStream dataStream1=streamOperator.getSideOutput(outputTag1);
         dataStream1.addSink(tar1);
         dataStream1.print();
 
         //DataStream<String> dataStream2=stringSplitStream.select(FlightPlan);
-        DataStream<String> dataStream2=streamOperator.getSideOutput(outputTag2);
+        DataStream dataStream2=streamOperator.getSideOutput(outputTag2);
         dataStream2.addSink(tar2);
         dataStream2.print();
 
-        DataStream<String> dataStream3=streamOperator.getSideOutput(outputTag3);
+        DataStream dataStream3=streamOperator.getSideOutput(outputTag3);
         dataStream3.addSink(tar3);
         dataStream3.print();
 
@@ -240,6 +244,9 @@ public class StreamingJob {
 		 *
 		 */
 
+		// execute program
+		env.execute("Flink Streaming Java API Skeleton");
+
         ConfigChangeListener changeListener = new ConfigChangeListener() {
             @Override
             public void onChange(ConfigChangeEvent changeEvent) {
@@ -249,14 +256,20 @@ public class StreamingJob {
                     logger.info("Change - key: {}, oldValue: {}, newValue: {}, changeType: {}",
                             change.getPropertyName(), change.getOldValue(), change.getNewValue(),
                             change.getChangeType());
-                    switch (key){
+                    switch (change.getPropertyName()){
                         case "SrcTopic":
                             try {
-                                KafkaTopicPartition ktp =new KafkaTopicPartition(change.getNewValue(),0);
-                                Map<KafkaTopicPartition,Long> start=new HashMap<>();
-                                start.put(ktp,0L);
-                                source.setStartFromSpecificOffsets(start);
-                                source.setStartFromLatest();/*only receive latest message*/
+                                source.cancel();
+                                source.close();
+
+//                                KafkaTopicPartition ktp =new KafkaTopicPartition(change.getNewValue(),0);
+//                                Map<KafkaTopicPartition,Long> start=new HashMap<>();
+//                                start.put(ktp,0L);
+//                                source.setStartFromSpecificOffsets(start);
+//                                source.setStartFromLatest();/*only receive latest message*/
+//                                source.open(null);
+                                source=new FlinkKafkaConsumer011(change.getNewValue(),new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop1);
+                                env.addSource(source);
 
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -266,21 +279,47 @@ public class StreamingJob {
                         case  "TarTopic1":
                             try {
                                 tar1.close();
-
+                                tar1=new FlinkKafkaProducer011(change.getNewValue(), new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
+                                dataStream1.addSink(tar1);
                             } catch (FlinkKafka011Exception e) {
                                 e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
+                            break;
 
+                        case  "TarTopic2":
+                            try {
+                                tar2.close();
+                                tar2=new FlinkKafkaProducer011(change.getNewValue(),new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
+                                dataStream2.addSink(tar2);
+                            } catch (FlinkKafka011Exception e) {
+                                e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            break;
 
+                        case  "TarTopic3":
+                            try {
+                                tar3.close();
+                                tar3=new FlinkKafkaProducer011(change.getNewValue(), new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
+                                dataStream3.addSink(tar3);
+                            } catch (FlinkKafka011Exception e) {
+                                e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            break;
+
+                        default:
+                            break;
                     }
                 }
             }
         };
 
         config.addChangeListener(changeListener);
-
-		// execute program
-		env.execute("Flink Streaming Java API Skeleton");
 
 	}
 
