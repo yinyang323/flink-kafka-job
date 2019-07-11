@@ -19,25 +19,18 @@
 package myflink;
 
 import com.ctrip.framework.apollo.Config;
-import com.ctrip.framework.apollo.ConfigChangeListener;
 import com.ctrip.framework.apollo.ConfigService;
-import com.ctrip.framework.apollo.model.ConfigChange;
-import com.ctrip.framework.apollo.model.ConfigChangeEvent;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafka011Exception;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer011;
-import org.apache.flink.streaming.connectors.kafka.internals.KafkaTopicPartition;
-import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 import org.dom4j.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -55,75 +48,62 @@ import java.util.*;
  */
 public class StreamingJob {
 
-    private static FlinkKafkaProducer011 tar1;
-    private static FlinkKafkaProducer011 tar2;
-    private static FlinkKafkaProducer011 tar3;
-    private static FlinkKafkaConsumer011 source;
-
     public static void main(String[] args) throws Exception {
 
+        ParameterTool parameterTool = ParameterTool.fromArgs(args);
+        /*指定apollo中所在的集群名称*/
+        System.setProperty("apollo.cluster",parameterTool.get("apollo.cluster","DefaultCluster"));
+        //final Logger logger = LoggerFactory.getLogger(StreamingJob.class);
 
-        final Logger logger = LoggerFactory.getLogger(StreamingJob.class);
-        Config config;
+        Config config,CommonConfig;
         Distribute distribute=new Distribute();
 
         config = ConfigService.getAppConfig();
+        CommonConfig=ConfigService.getConfig("CE.brokers");
 
 
-        String key1="key1";
+        String key1="condition";
         String defaultValue1="ZGGG,ZHHH,CSN,ZGGGACC/ZGHAACC/ZHHHACC";//default value if not set
         String value1=config.getProperty(key1,defaultValue1);
 
-        String key2="key2";
-        String defaultValue2="ZGGG,ZGHA,CSN,ZGGGACC/ZGHAACC";
-        String value2=config.getProperty(key2,defaultValue2);
-
-        String key3="key3";
-        String defaultValue3="KDTW,EGLL,DAL,";
-        String value3=config.getProperty(key3,defaultValue3);
 
         /*数据源所在的主题*/
         String SrcTopic="SrcTopic";
         String defaultValue4="test";
+
         String srcTopic=config.getProperty(SrcTopic,defaultValue4);
 
-        String TarTopic1="TarTopic1";
-        String defaultValue5="topic.quick.tran";
-        String tarTopic1=config.getProperty(TarTopic1,defaultValue5);
-
-        String TarTopic2="TarTopic2";
-        String defaultValue6="topic.quick.ack";
-        String tarTopic2=config.getProperty(TarTopic2,defaultValue6);
-
-        String TarTopic3="TarTopic3";
+        String TarTopic1="target";
         String defaultValue7="test111";
-        String tarTopic3=config.getProperty(TarTopic3,defaultValue7);
+        String tarTopic1=config.getProperty(TarTopic1,defaultValue7);
 
         distribute.setSrcTopic(srcTopic);
-        distribute.setTarTopic1(tarTopic1);
-        distribute.setTarTopic2(tarTopic2);
-        distribute.setTarTopic3(tarTopic3);
-        distribute.setTunnels(new String[]{value1,value2,value3});
+        distribute.setTarTopic(tarTopic1);
+        distribute.setTunnels(new String[]{value1});
+
+        /*公共配置项*/
+        String Recv="recv.server";
+        String defaultValue8="192.168.136.132:9092";
+        String recv=CommonConfig.getProperty(Recv,defaultValue8);
+
+        String Send="send.server";
+        String defaultValue9="192.168.136.132:9092";
+        String send=CommonConfig.getProperty(Send,defaultValue9);
 
         final OutputTag<String> outputTag1 = new OutputTag<String>("output1"){};
-        final OutputTag<String> outputTag2 = new OutputTag<String>("output2"){};
-		final OutputTag<String> outputTag3 = new OutputTag<String>("output3"){};
 
 		// set up the streaming execution environment
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-		ParameterTool parameterTool = ParameterTool.fromArgs(args);
 
 		Properties prop1 = new Properties();
-		prop1.setProperty("bootstrap.servers", parameterTool.getRequired("recv.servers"));
+		prop1.setProperty("bootstrap.servers", recv);
 		prop1.setProperty("group.id", "flink_consumer");
 
         Properties prop2 = new Properties();
-        prop2.setProperty("bootstrap.servers", parameterTool.getRequired("send.servers"));
+        prop2.setProperty("bootstrap.servers", send);
 
-        source = new FlinkKafkaConsumer011<>(distribute.getSrcTopic(), new org.apache.flink.api.common.serialization.SimpleStringSchema(), prop1);
-        tar1=new FlinkKafkaProducer011<>(distribute.getTarTopic1(), new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
-        tar2=new FlinkKafkaProducer011<>(distribute.getTarTopic2(), new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
-        tar3=new FlinkKafkaProducer011<>(distribute.getTarTopic3(), new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
+        FlinkKafkaConsumer011 source = new FlinkKafkaConsumer011<>(distribute.getSrcTopic(), new org.apache.flink.api.common.serialization.SimpleStringSchema(), prop1);
+        FlinkKafkaProducer011 tar1 = new FlinkKafkaProducer011<>(distribute.getTarTopic(), new org.apache.flink.api.common.serialization.SimpleStringSchema(), prop2);
 
 		DataStreamSource stream = env
 				.addSource(source);
@@ -163,12 +143,6 @@ public class StreamingJob {
                         case 0:
                             context.output(outputTag1, s);
                             break;
-                        case 1:
-                            context.output(outputTag2, s);
-                            break;
-                        case 2:
-                            context.output(outputTag3, s);
-                            break;
                         default:
                             break;
                     }
@@ -189,14 +163,6 @@ public class StreamingJob {
         dataStream1.addSink(tar1);
         dataStream1.print();
 
-        //DataStream<String> dataStream2=stringSplitStream.select(FlightPlan);
-        DataStream dataStream2=streamOperator.getSideOutput(outputTag2);
-        dataStream2.addSink(tar2);
-        dataStream2.print();
-
-        DataStream dataStream3=streamOperator.getSideOutput(outputTag3);
-        dataStream3.addSink(tar3);
-        dataStream3.print();
 
 
 //        KeyedStream<String,Tuple> keyedStream1= (Datastream.map(new MapFunction<Tuple2<String,String>, String>() {
@@ -245,81 +211,81 @@ public class StreamingJob {
 		 */
 
 		// execute program
-		env.execute("Flink Streaming Java API Skeleton");
+		env.execute("数据交换平台智能路由");
 
-        ConfigChangeListener changeListener = new ConfigChangeListener() {
-            @Override
-            public void onChange(ConfigChangeEvent changeEvent) {
-                logger.info("Changes for namespace {}", changeEvent.getNamespace());
-                for (String key : changeEvent.changedKeys()) {
-                    ConfigChange change = changeEvent.getChange(key);
-                    logger.info("Change - key: {}, oldValue: {}, newValue: {}, changeType: {}",
-                            change.getPropertyName(), change.getOldValue(), change.getNewValue(),
-                            change.getChangeType());
-                    switch (change.getPropertyName()){
-                        case "SrcTopic":
-                            try {
-                                source.cancel();
-                                source.close();
+//        ConfigChangeListener changeListener = new ConfigChangeListener() {
+//            @Override
+//            public void onChange(ConfigChangeEvent changeEvent) {
+//                logger.info("Changes for namespace {}", changeEvent.getNamespace());
+//                for (String key : changeEvent.changedKeys()) {
+//                    ConfigChange change = changeEvent.getChange(key);
+//                    logger.info("Change - key: {}, oldValue: {}, newValue: {}, changeType: {}",
+//                            change.getPropertyName(), change.getOldValue(), change.getNewValue(),
+//                            change.getChangeType());
+//                    switch (change.getPropertyName()){
+//                        case "SrcTopic":
+//                            try {
+//                                source.cancel();
+//                                source.close();
+//
+////                                KafkaTopicPartition ktp =new KafkaTopicPartition(change.getNewValue(),0);
+////                                Map<KafkaTopicPartition,Long> start=new HashMap<>();
+////                                start.put(ktp,0L);
+////                                source.setStartFromSpecificOffsets(start);
+////                                source.setStartFromLatest();/*only receive latest message*/
+////                                source.open(null);
+//                                source=new FlinkKafkaConsumer011(change.getNewValue(),new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop1);
+//                                env.addSource(source);
+//
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        case  "TarTopic1":
+//                            try {
+//                                tar1.close();
+//                                tar1=new FlinkKafkaProducer011(change.getNewValue(), new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
+//                                dataStream1.addSink(tar1);
+//                            } catch (FlinkKafka011Exception e) {
+//                                e.printStackTrace();
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        case  "TarTopic2":
+//                            try {
+//                                tar2.close();
+//                                tar2=new FlinkKafkaProducer011(change.getNewValue(),new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
+//                                dataStream2.addSink(tar2);
+//                            } catch (FlinkKafka011Exception e) {
+//                                e.printStackTrace();
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        case  "TarTopic3":
+//                            try {
+//                                tar3.close();
+//                                tar3=new FlinkKafkaProducer011(change.getNewValue(), new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
+//                                dataStream3.addSink(tar3);
+//                            } catch (FlinkKafka011Exception e) {
+//                                e.printStackTrace();
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        default:
+//                            break;
+//                    }
+//                }
+//            }
+//        };
 
-//                                KafkaTopicPartition ktp =new KafkaTopicPartition(change.getNewValue(),0);
-//                                Map<KafkaTopicPartition,Long> start=new HashMap<>();
-//                                start.put(ktp,0L);
-//                                source.setStartFromSpecificOffsets(start);
-//                                source.setStartFromLatest();/*only receive latest message*/
-//                                source.open(null);
-                                source=new FlinkKafkaConsumer011(change.getNewValue(),new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop1);
-                                env.addSource(source);
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            break;
-
-                        case  "TarTopic1":
-                            try {
-                                tar1.close();
-                                tar1=new FlinkKafkaProducer011(change.getNewValue(), new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
-                                dataStream1.addSink(tar1);
-                            } catch (FlinkKafka011Exception e) {
-                                e.printStackTrace();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            break;
-
-                        case  "TarTopic2":
-                            try {
-                                tar2.close();
-                                tar2=new FlinkKafkaProducer011(change.getNewValue(),new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
-                                dataStream2.addSink(tar2);
-                            } catch (FlinkKafka011Exception e) {
-                                e.printStackTrace();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            break;
-
-                        case  "TarTopic3":
-                            try {
-                                tar3.close();
-                                tar3=new FlinkKafkaProducer011(change.getNewValue(), new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
-                                dataStream3.addSink(tar3);
-                            } catch (FlinkKafka011Exception e) {
-                                e.printStackTrace();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-            }
-        };
-
-        config.addChangeListener(changeListener);
+        //config.addChangeListener(changeListener);
 
 	}
 

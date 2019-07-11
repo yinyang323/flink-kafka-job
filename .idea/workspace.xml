@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c974dcf5-d92a-4f17-95da-1d3504fe2fc4" name="Default" comment="">
+    <list default="true" id="c974dcf5-d92a-4f17-95da-1d3504fe2fc4" name="Default" comment="active config">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/myflink/Distribute.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/myflink/Distribute.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/app.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/app.properties" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -32,15 +34,12 @@
       <file leaf-file-name="StreamingJob.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
-              <caret line="249" column="8" selection-start-line="249" selection-start-column="8" selection-end-line="249" selection-end-column="28" />
+            <state relative-caret-position="-2384">
+              <caret line="57" column="35" lean-forward="true" selection-start-line="57" selection-start-column="35" selection-end-line="57" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#4388#4396#0" expanded="true" />
-                <element signature="e#4469#4477#0" expanded="true" />
-                <element signature="e#4544#4552#0" expanded="true" />
-                <element signature="e#6883#7868#0" expanded="true" />
-                <element signature="e#7867#7868#0" expanded="true" />
+                <element signature="e#5471#6204#0" expanded="true" />
+                <element signature="e#6203#6204#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -49,8 +48,11 @@
       <file leaf-file-name="Distribute.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/myflink/Distribute.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1691">
-              <caret line="4" column="39" selection-start-line="4" selection-start-column="39" selection-end-line="4" selection-end-column="39" />
+            <state relative-caret-position="-807">
+              <caret line="43" column="43" selection-start-line="43" selection-start-column="43" selection-end-line="43" selection-end-column="43" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -58,8 +60,8 @@
       <file leaf-file-name="app.properties" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/app.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="1" column="7" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="7" />
+            <state relative-caret-position="57">
+              <caret line="3" selection-start-line="3" selection-end-line="3" />
             </state>
           </provider>
         </entry>
@@ -91,8 +93,8 @@
         <option value="$PROJECT_DIR$/.idea/workspace.xml" />
         <option value="$PROJECT_DIR$/src/main/java/myflink/BatchJob.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/resources/META-INF/app.properties" />
         <option value="$PROJECT_DIR$/src/main/java/myflink/Distribute.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/META-INF/app.properties" />
         <option value="$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java" />
       </list>
     </option>
@@ -302,7 +304,13 @@
       <workItem from="1561941610648" duration="5043000" />
       <workItem from="1562035088473" duration="9764000" />
       <workItem from="1562117119112" duration="7171000" />
-      <workItem from="1562221848106" duration="8744000" />
+      <workItem from="1562221848106" duration="8776000" />
+      <workItem from="1562288048552" duration="3004000" />
+      <workItem from="1562567957259" duration="766000" />
+      <workItem from="1562654674659" duration="1719000" />
+      <workItem from="1562746297968" duration="4290000" />
+      <workItem from="1562763850794" duration="1999000" />
+      <workItem from="1562805669902" duration="12167000" />
     </task>
     <task id="LOCAL-00001" summary="Merge branch 'master' of https://github.com/yinyang323/flink-kafka-job&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/myflink/StreamingJob.java">
       <created>1560222974656</created>
@@ -423,11 +431,18 @@
       <option name="project" value="LOCAL" />
       <updated>1562059173660</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="active config">
+      <created>1562232352828</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1562232352828</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="115948000" />
+    <option name="totallyTimeSpent" value="139925000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -452,11 +467,11 @@
       <window_info anchor="right" id="Maven Projects" order="3" weight="0.32980332" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32838285" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32838285" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.31188118" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32838285" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3260212" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21860817" />
       <window_info anchor="right" id="Database" order="3" weight="0.32980332" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -526,20 +541,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/app.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" column="7" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2166">
-          <caret line="114" column="19" selection-start-line="114" selection-start-column="19" selection-end-line="114" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/myflink/Distribute.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1862">
@@ -553,11 +554,8 @@
           <caret line="86" column="43" selection-start-line="86" selection-start-column="43" selection-end-line="86" selection-end-column="43" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4388#4396#0" expanded="true" />
-            <element signature="e#4469#4477#0" expanded="true" />
-            <element signature="e#4544#4552#0" expanded="true" />
-            <element signature="e#6883#7868#0" expanded="true" />
-            <element signature="e#7867#7868#0" expanded="true" />
+            <element signature="e#5471#6204#0" expanded="true" />
+            <element signature="e#6203#6204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -589,11 +587,8 @@
           <caret line="63" column="27" lean-forward="true" selection-start-line="63" selection-start-column="27" selection-end-line="63" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4388#4396#0" expanded="true" />
-            <element signature="e#4469#4477#0" expanded="true" />
-            <element signature="e#4544#4552#0" expanded="true" />
-            <element signature="e#6883#7868#0" expanded="true" />
-            <element signature="e#7867#7868#0" expanded="true" />
+            <element signature="e#5471#6204#0" expanded="true" />
+            <element signature="e#6203#6204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -625,11 +620,8 @@
           <caret line="19" selection-start-line="19" selection-end-line="19" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4388#4396#0" expanded="true" />
-            <element signature="e#4469#4477#0" expanded="true" />
-            <element signature="e#4544#4552#0" expanded="true" />
-            <element signature="e#6883#7868#0" expanded="true" />
-            <element signature="e#7867#7868#0" expanded="true" />
+            <element signature="e#5471#6204#0" expanded="true" />
+            <element signature="e#6203#6204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -661,11 +653,8 @@
           <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4388#4396#0" expanded="true" />
-            <element signature="e#4469#4477#0" expanded="true" />
-            <element signature="e#4544#4552#0" expanded="true" />
-            <element signature="e#6883#7868#0" expanded="true" />
-            <element signature="e#7867#7868#0" expanded="true" />
+            <element signature="e#5471#6204#0" expanded="true" />
+            <element signature="e#6203#6204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -676,11 +665,8 @@
           <caret line="128" column="80" lean-forward="true" selection-start-line="128" selection-start-column="80" selection-end-line="128" selection-end-column="80" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4388#4396#0" expanded="true" />
-            <element signature="e#4469#4477#0" expanded="true" />
-            <element signature="e#4544#4552#0" expanded="true" />
-            <element signature="e#6883#7868#0" expanded="true" />
-            <element signature="e#7867#7868#0" expanded="true" />
+            <element signature="e#5471#6204#0" expanded="true" />
+            <element signature="e#6203#6204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -691,11 +677,8 @@
           <caret line="76" column="48" lean-forward="true" selection-start-line="76" selection-start-column="48" selection-end-line="76" selection-end-column="48" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4388#4396#0" expanded="true" />
-            <element signature="e#4469#4477#0" expanded="true" />
-            <element signature="e#4544#4552#0" expanded="true" />
-            <element signature="e#6883#7868#0" expanded="true" />
-            <element signature="e#7867#7868#0" expanded="true" />
+            <element signature="e#5471#6204#0" expanded="true" />
+            <element signature="e#6203#6204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -727,11 +710,8 @@
           <caret line="81" lean-forward="true" selection-start-line="81" selection-end-line="81" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4388#4396#0" expanded="true" />
-            <element signature="e#4469#4477#0" expanded="true" />
-            <element signature="e#4544#4552#0" expanded="true" />
-            <element signature="e#6883#7868#0" expanded="true" />
-            <element signature="e#7867#7868#0" expanded="true" />
+            <element signature="e#5471#6204#0" expanded="true" />
+            <element signature="e#6203#6204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -763,11 +743,8 @@
           <caret line="141" column="30" lean-forward="true" selection-start-line="141" selection-start-column="30" selection-end-line="141" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4388#4396#0" expanded="true" />
-            <element signature="e#4469#4477#0" expanded="true" />
-            <element signature="e#4544#4552#0" expanded="true" />
-            <element signature="e#6883#7868#0" expanded="true" />
-            <element signature="e#7867#7868#0" expanded="true" />
+            <element signature="e#5471#6204#0" expanded="true" />
+            <element signature="e#6203#6204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -792,11 +769,8 @@
           <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4388#4396#0" expanded="true" />
-            <element signature="e#4469#4477#0" expanded="true" />
-            <element signature="e#4544#4552#0" expanded="true" />
-            <element signature="e#6883#7868#0" expanded="true" />
-            <element signature="e#7867#7868#0" expanded="true" />
+            <element signature="e#5471#6204#0" expanded="true" />
+            <element signature="e#6203#6204#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -913,13 +887,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/app.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" column="7" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-connector-kafka-base_2.11/1.8.0/flink-connector-kafka-base_2.11-1.8.0.jar!/org/apache/flink/streaming/connectors/kafka/FlinkKafkaConsumerBase.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="490">
@@ -941,24 +908,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/ctrip/framework/apollo/apollo-client/1.4.0/apollo-client-1.4.0.jar!/com/ctrip/framework/apollo/ConfigService.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="45" column="25" selection-start-line="45" selection-start-column="25" selection-end-line="45" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-java/1.8.0/flink-java-1.8.0.jar!/org/apache/flink/api/java/utils/ParameterTool.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="127">
+          <caret line="175" selection-start-line="175" selection-end-line="175" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/myflink/Distribute.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1691">
-          <caret line="4" column="39" selection-start-line="4" selection-start-column="39" selection-end-line="4" selection-end-column="39" />
+        <state relative-caret-position="-807">
+          <caret line="43" column="43" selection-start-line="43" selection-start-column="43" selection-end-line="43" selection-end-column="43" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/app.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="249" column="8" selection-start-line="249" selection-start-column="8" selection-end-line="249" selection-end-column="28" />
+        <state relative-caret-position="-2384">
+          <caret line="57" column="35" lean-forward="true" selection-start-line="57" selection-start-column="35" selection-end-line="57" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4388#4396#0" expanded="true" />
-            <element signature="e#4469#4477#0" expanded="true" />
-            <element signature="e#4544#4552#0" expanded="true" />
-            <element signature="e#6883#7868#0" expanded="true" />
-            <element signature="e#7867#7868#0" expanded="true" />
+            <element signature="e#5471#6204#0" expanded="true" />
+            <element signature="e#6203#6204#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -12,9 +12,7 @@ import java.io.Serializable;
 
 public class Distribute implements Serializable {
     private String srcTopic = "";
-    private String tarTopic1 = "";
-    private String tarTopic2 = "";
-    private String tarTopic3 = "";
+    private String tarTopic = "";
 
     private String[] tunnels = {};
 
@@ -22,16 +20,8 @@ public class Distribute implements Serializable {
         this.srcTopic = srcTopic;
     }
 
-    public void setTarTopic1(String tarTopic1) {
-        this.tarTopic1 = tarTopic1;
-    }
-
-    public void setTarTopic2(String tarTopic2) {
-        this.tarTopic2 = tarTopic2;
-    }
-
-    public void setTarTopic3(String tarTopic3) {
-        this.tarTopic3 = tarTopic3;
+    public void setTarTopic(String tarTopic) {
+        this.tarTopic = tarTopic;
     }
 
     public void setTunnels(String[] tunnels) {
@@ -45,22 +35,9 @@ public class Distribute implements Serializable {
         return srcTopic;
     }
 
-    public String getTarTopic1() {
-
-        return tarTopic1;
+    public String getTarTopic(){
+        return tarTopic;
     }
-
-    public String getTarTopic2() {
-
-        return tarTopic2;
-    }
-
-    public String getTarTopic3() {
-
-        return tarTopic3;
-    }
-
-
 
     /*compare input and return tag num*/
     public int SelectTunnel(String input) throws DocumentException {
