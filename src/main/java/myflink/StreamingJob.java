@@ -18,25 +18,19 @@
 
 package myflink;
 
-import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.tuple.Tuple;
+import com.ctrip.framework.apollo.Config;
+import com.ctrip.framework.apollo.ConfigService;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
-import org.apache.flink.streaming.api.datastream.KeyedStream;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer011;
-import org.apache.flink.streaming.util.serialization.SimpleStringSchema;
-import org.apache.flink.api.java.utils.ParameterTool;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import scala.Tuple2;
-
+import org.apache.flink.util.Collector;
+import org.apache.flink.util.OutputTag;
+import org.dom4j.*;
 
 import java.util.*;
 
@@ -54,43 +48,136 @@ import java.util.*;
  */
 public class StreamingJob {
 
-	public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
+
+        ParameterTool parameterTool = ParameterTool.fromArgs(args);
+        /*指定apollo中所在的集群名称*/
+        System.setProperty("apollo.cluster",parameterTool.get("apollo.cluster","DefaultCluster"));
+        //final Logger logger = LoggerFactory.getLogger(StreamingJob.class);
+
+        Config config,CommonConfig;
+        Distribute distribute=new Distribute();
+
+        config = ConfigService.getAppConfig();
+        CommonConfig=ConfigService.getConfig("CE.brokers");
+
+
+        String key1="condition";
+        String defaultValue1="ZGGG,ZHHH,CSN,ZGGGACC/ZGHAACC/ZHHHACC";//default value if not set
+        String value1=config.getProperty(key1,defaultValue1);
+
+
+        /*数据源所在的主题*/
+        String SrcTopic="SrcTopic";
+        String defaultValue4="test";
+
+        String srcTopic=config.getProperty(SrcTopic,defaultValue4);
+
+        String TarTopic1="target";
+        String defaultValue7="test111";
+        String tarTopic1=config.getProperty(TarTopic1,defaultValue7);
+
+        distribute.setSrcTopic(srcTopic);
+        distribute.setTarTopic(tarTopic1);
+        distribute.setTunnels(new String[]{value1});
+
+        /*公共配置项*/
+        String Recv="recv.server";
+        String defaultValue8="192.168.136.132:9092";
+        String recv=CommonConfig.getProperty(Recv,defaultValue8);
+
+        String Send="send.server";
+        String defaultValue9="192.168.136.132:9092";
+        String send=CommonConfig.getProperty(Send,defaultValue9);
+
+        final OutputTag<String> outputTag1 = new OutputTag<String>("output1"){};
+
 		// set up the streaming execution environment
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-		ParameterTool parameterTool = ParameterTool.fromArgs(args);
 
 		Properties prop1 = new Properties();
-		prop1.setProperty("bootstrap.servers", parameterTool.getRequired("recv.servers"));
+		prop1.setProperty("bootstrap.servers", recv);
 		prop1.setProperty("group.id", "flink_consumer");
 
         Properties prop2 = new Properties();
-        prop2.setProperty("bootstrap.servers", parameterTool.getRequired("send.servers"));
+        prop2.setProperty("bootstrap.servers", send);
 
-		DataStream<String> stream = env
-				.addSource(new FlinkKafkaConsumer011<>("test", new SimpleStringSchema(), prop1));
+        FlinkKafkaConsumer011 source = new FlinkKafkaConsumer011<>(distribute.getSrcTopic(), new org.apache.flink.api.common.serialization.SimpleStringSchema(), prop1);
+        FlinkKafkaProducer011 tar1 = new FlinkKafkaProducer011<>(distribute.getTarTopic(), new org.apache.flink.api.common.serialization.SimpleStringSchema(), prop2);
 
-        DataStream<Tuple2<String,String>> Datastream=stream.map(new MapFunction<String, Tuple2<String,String>>() {
-            private static final long serialVersionUID = -6867736771747690202L;
+		DataStreamSource stream = env
+				.addSource(source);
 
+//        SplitStream<String> stringSplitStream = stream.split(
+//                new OutputSelector<String>() {
+//                    @Override
+//                    public Iterable<String> select(String s) {
+//                        List<String> output=new ArrayList<>();
+//                        try {
+//                            String key=strToXmltuple(s);
+//                            switch (key){
+//                                case FlightDepInfo:
+//                                    output.add(FlightDepInfo);
+//                                    break;
+//                                case FlightPlan:
+//                                    output.add(FlightPlan);
+//                                    break;
+//                                    default:
+//                                        break;
+//                            }
+//                        } catch (DocumentException e) {
+//                            e.printStackTrace();
+//                        }
+//                        return output;
+//                    }
+//                }
+//        );
+
+        SingleOutputStreamOperator streamOperator= stream.process(new ProcessFunction<String, String>() {
             @Override
-            public Tuple2<String,String> map(String value) throws Exception {
-            	if(value==null||value.isEmpty())
-            		return null;
-            	else
-                	return strToXmltuple(value);
-            }
+            public void processElement(String s, Context context, Collector<String> out) throws Exception {
+                out.collect(s);
 
+                try {
+                    switch (distribute.SelectTunnel(s)) {
+                        case 0:
+                            context.output(outputTag1, s);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                catch (DocumentException e) {
+                    e.printStackTrace();
+                }
+                catch (Exception ex){
+                    throw ex;
+                }
+
+            }
 
         });
 
-        KeyedStream<String,Tuple> keyedStream1= (Datastream.map(new MapFunction<Tuple2<String,String>, String>() {
-            private static final long serialVersionUID = -6867736771747690202L;
+        //DataStream<String> dataStream1=stringSplitStream.select(FlightDepInfo);
+        DataStream dataStream1=streamOperator.getSideOutput(outputTag1);
+        dataStream1.addSink(tar1);
+        dataStream1.print();
 
-            @Override
-            public String map(Tuple2<String,String> tuple2) throws Exception {
-                return tuple2._2;
-            }
-        }).keyBy("FlightDepInfo"));
+
+
+//        KeyedStream<String,Tuple> keyedStream1= (Datastream.map(new MapFunction<Tuple2<String,String>, String>() {
+////            private static final long serialVersionUID = -6867736771747690201L;
+////
+////            @Override
+////            public String map(Tuple2<String,String> tuple2) throws Exception {
+////                return tuple2._2;
+////            }
+////        }).keyBy(new KeySelector<String, Tuple>() {
+////            @Override
+////            public Tuple getKey(String s) throws Exception {
+////                return null;
+////            }
+////        }));
 
 //        stream.flatMap(new FlatMapFunction<String, String>() {
 //            @Override
@@ -100,7 +187,7 @@ public class StreamingJob {
 //            }
 //        });
 
-        keyedStream1.addSink(new FlinkKafkaProducer011<>("topic.quick.tran", new SimpleStringSchema(),prop2));
+
 
 
 		/*
@@ -124,39 +211,83 @@ public class StreamingJob {
 		 */
 
 		// execute program
-		env.execute("Flink Streaming Java API Skeleton");
+		env.execute("数据交换平台智能路由");
+
+//        ConfigChangeListener changeListener = new ConfigChangeListener() {
+//            @Override
+//            public void onChange(ConfigChangeEvent changeEvent) {
+//                logger.info("Changes for namespace {}", changeEvent.getNamespace());
+//                for (String key : changeEvent.changedKeys()) {
+//                    ConfigChange change = changeEvent.getChange(key);
+//                    logger.info("Change - key: {}, oldValue: {}, newValue: {}, changeType: {}",
+//                            change.getPropertyName(), change.getOldValue(), change.getNewValue(),
+//                            change.getChangeType());
+//                    switch (change.getPropertyName()){
+//                        case "SrcTopic":
+//                            try {
+//                                source.cancel();
+//                                source.close();
+//
+////                                KafkaTopicPartition ktp =new KafkaTopicPartition(change.getNewValue(),0);
+////                                Map<KafkaTopicPartition,Long> start=new HashMap<>();
+////                                start.put(ktp,0L);
+////                                source.setStartFromSpecificOffsets(start);
+////                                source.setStartFromLatest();/*only receive latest message*/
+////                                source.open(null);
+//                                source=new FlinkKafkaConsumer011(change.getNewValue(),new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop1);
+//                                env.addSource(source);
+//
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        case  "TarTopic1":
+//                            try {
+//                                tar1.close();
+//                                tar1=new FlinkKafkaProducer011(change.getNewValue(), new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
+//                                dataStream1.addSink(tar1);
+//                            } catch (FlinkKafka011Exception e) {
+//                                e.printStackTrace();
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        case  "TarTopic2":
+//                            try {
+//                                tar2.close();
+//                                tar2=new FlinkKafkaProducer011(change.getNewValue(),new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
+//                                dataStream2.addSink(tar2);
+//                            } catch (FlinkKafka011Exception e) {
+//                                e.printStackTrace();
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        case  "TarTopic3":
+//                            try {
+//                                tar3.close();
+//                                tar3=new FlinkKafkaProducer011(change.getNewValue(), new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
+//                                dataStream3.addSink(tar3);
+//                            } catch (FlinkKafka011Exception e) {
+//                                e.printStackTrace();
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                            break;
+//
+//                        default:
+//                            break;
+//                    }
+//                }
+//            }
+//        };
+
+        //config.addChangeListener(changeListener);
+
 	}
-
-	private static String strToJSONObj(String jsonstr){
-		JSONObject jsonObject=JSON.parseObject(jsonstr);
-		Object jsonarray = jsonObject.get("FlightDepInfos");
-
-		String str=	jsonarray+"";
-		JSONArray array=JSON.parseArray(str);
-
-		String outstr="";
-        //Collection<String> collection=new ArrayList<>();
-
-		for (int i = 0; i < array.size(); i++) {
-			JSONObject obj = JSON.parseObject(array.get(i)+"");
-			outstr=outstr.concat(obj.getString("DepInfo")+",");
-            //collection.add(obj.getString("DepInfo"));
-			//System.out.println(obj.get("name"));
-			}
-			return outstr;
-	}
-
-	private static Tuple2<String,String> strToXmltuple(String xmlstr) throws DocumentException {
-		Document document=DocumentHelper.parseText(xmlstr);
-		Element type= (Element)document.selectSingleNode("/MSG/HEADINFO/TYPE");
-		String msgtype=type.getText();
-
-        Tuple2<String,String> tuple2=new Tuple2<>(msgtype,xmlstr);
-        return  tuple2;
-
-	}
-
-
 
 
 }
