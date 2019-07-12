@@ -54,7 +54,7 @@ public class StreamingJob {
 
         ParameterTool parameterTool = ParameterTool.fromArgs(args);
         /*指定apollo中所在的集群名称*/
-        System.setProperty("apollo.cluster",parameterTool.get("apollo.cluster","DefaultCluster"));
+        System.setProperty("apollo.cluster",parameterTool.get("apollo.cluster","default"));
         //final Logger logger = LoggerFactory.getLogger(StreamingJob.class);
 
         Config config,CommonConfig;
