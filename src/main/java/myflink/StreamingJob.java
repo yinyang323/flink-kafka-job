@@ -30,6 +30,8 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer011;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.dom4j.*;
 
 import java.util.*;
@@ -58,7 +60,9 @@ public class StreamingJob {
         Config config,CommonConfig;
         Distribute distribute=new Distribute();
 
-        config = ConfigService.getAppConfig();
+
+        String namespace=parameterTool.get("instance.name","application");
+        config = ConfigService.getConfig(namespace);
         CommonConfig=ConfigService.getConfig("CE.brokers");
 
 
@@ -98,10 +102,14 @@ public class StreamingJob {
 		Properties prop1 = new Properties();
 		prop1.setProperty("bootstrap.servers", recv);
 		/*防止消费组名重复*/
-		prop1.setProperty("group.id", parameterTool.get("apollo.cluster","DefaultCluster"));
+		prop1.setProperty("group.id", "group.id-"+namespace);
+		/*防止多作业情况下client.id冲突*/
+		prop1.setProperty(ConsumerConfig.CLIENT_ID_CONFIG,"consumer-"+distribute.getSrcTopic()+System.currentTimeMillis());
 
         Properties prop2 = new Properties();
         prop2.setProperty("bootstrap.servers", send);
+        /*防止多作业情况下client.id冲突*/
+        prop2.setProperty(ProducerConfig.CLIENT_ID_CONFIG, "producer-" + distribute.getTarTopic() + System.currentTimeMillis());
 
         FlinkKafkaConsumer011 source = new FlinkKafkaConsumer011<>(distribute.getSrcTopic(), new org.apache.flink.api.common.serialization.SimpleStringSchema(), prop1);
         FlinkKafkaProducer011 tar1 = new FlinkKafkaProducer011<>(distribute.getTarTopic(), new org.apache.flink.api.common.serialization.SimpleStringSchema(), prop2);
