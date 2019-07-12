@@ -97,7 +97,8 @@ public class StreamingJob {
 
 		Properties prop1 = new Properties();
 		prop1.setProperty("bootstrap.servers", recv);
-		prop1.setProperty("group.id", "flink_consumer");
+		/*防止消费组名重复*/
+		prop1.setProperty("group.id", parameterTool.get("apollo.cluster","DefaultCluster"));
 
         Properties prop2 = new Properties();
         prop2.setProperty("bootstrap.servers", send);
