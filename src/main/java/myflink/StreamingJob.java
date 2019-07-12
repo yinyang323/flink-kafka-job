@@ -61,9 +61,9 @@ public class StreamingJob {
         Distribute distribute=new Distribute();
 
 
-        String namespace=parameterTool.get("instance.name","application");
+        String namespace=parameterTool.get("instance.name","instance1");
         config = ConfigService.getConfig(namespace);
-        CommonConfig=ConfigService.getConfig("CE.brokers");
+        CommonConfig=ConfigService.getAppConfig();
 
 
         String key1="condition";
