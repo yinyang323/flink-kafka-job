@@ -18,14 +18,23 @@
       <file leaf-file-name="StreamingJob.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="99" column="18" selection-start-line="99" selection-start-column="18" selection-end-line="99" selection-end-column="18" />
+            <state relative-caret-position="238">
+              <caret line="222" column="44" selection-start-line="222" selection-start-column="44" selection-end-line="222" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3708#3716#0" expanded="true" />
-                <element signature="e#5707#6440#0" expanded="true" />
-                <element signature="e#6439#6440#0" expanded="true" />
+                <element signature="e#3886#3894#0" expanded="true" />
+                <element signature="e#6174#6907#0" expanded="true" />
+                <element signature="e#6906#6907#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FlinkKafkaProducer011.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-connector-kafka-0.11_2.11/1.8.0/flink-connector-kafka-0.11_2.11-1.8.0.jar!/org/apache/flink/streaming/connectors/kafka/FlinkKafkaProducer011.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="9006">
+              <caret line="549" column="21" selection-start-line="549" selection-start-column="21" selection-end-line="549" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -87,6 +96,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -129,9 +140,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
-      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -220,7 +229,8 @@
       <workItem from="1560214166904" duration="8547000" />
       <workItem from="1560405601868" duration="4173000" />
       <workItem from="1560479270055" duration="2740000" />
-      <workItem from="1562893490848" duration="117000" />
+      <workItem from="1562893490848" duration="7674000" />
+      <workItem from="1563169021661" duration="112000" />
     </task>
     <task id="LOCAL-00001" summary="Merge branch 'master' of https://github.com/yinyang323/flink-kafka-job&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/myflink/StreamingJob.java">
       <created>1560222974656</created>
@@ -250,11 +260,39 @@
       <option name="project" value="LOCAL" />
       <updated>1562836010807</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="prevent consumer group conflict">
+      <created>1562893683561</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1562893683561</updated>
+    </task>
+    <task id="LOCAL-00006" summary="prevent client.id conflict">
+      <created>1562900626668</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1562900626668</updated>
+    </task>
+    <task id="LOCAL-00007" summary="prevent client.id conflict">
+      <created>1562901258321</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1562901258321</updated>
+    </task>
+    <task id="LOCAL-00008" summary="prevent client.id conflict">
+      <created>1562901360052</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1562901360052</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="22750000" />
+    <option name="totallyTimeSpent" value="30419000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -273,7 +311,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2647504" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2685325" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -301,7 +339,9 @@
     <MESSAGE value="Add stream" />
     <MESSAGE value="can process json currently" />
     <MESSAGE value="single job with apollo" />
-    <option name="LAST_COMMIT_MESSAGE" value="single job with apollo" />
+    <MESSAGE value="prevent consumer group conflict" />
+    <MESSAGE value="prevent client.id conflict" />
+    <option name="LAST_COMMIT_MESSAGE" value="prevent client.id conflict" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -319,13 +359,33 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1064">
+          <caret line="56" column="87" selection-start-line="56" selection-start-column="87" selection-end-line="56" selection-end-column="87" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3886#3894#0" expanded="true" />
+            <element signature="e#6174#6907#0" expanded="true" />
+            <element signature="e#6906#6907#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-connector-kafka-0.11_2.11/1.8.0/flink-connector-kafka-0.11_2.11-1.8.0.jar!/org/apache/flink/streaming/connectors/kafka/FlinkKafkaProducer011.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10431">
+          <caret line="549" column="21" selection-start-line="549" selection-start-column="21" selection-end-line="549" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1938">
           <caret line="102" column="20" selection-start-line="102" selection-start-column="20" selection-end-line="102" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3708#3716#0" expanded="true" />
-            <element signature="e#5707#6440#0" expanded="true" />
-            <element signature="e#6439#6440#0" expanded="true" />
+            <element signature="e#3886#3894#0" expanded="true" />
+            <element signature="e#6174#6907#0" expanded="true" />
+            <element signature="e#6906#6907#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -336,9 +396,9 @@
           <caret line="141" column="30" lean-forward="true" selection-start-line="141" selection-start-column="30" selection-end-line="141" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3708#3716#0" expanded="true" />
-            <element signature="e#5707#6440#0" expanded="true" />
-            <element signature="e#6439#6440#0" expanded="true" />
+            <element signature="e#3886#3894#0" expanded="true" />
+            <element signature="e#6174#6907#0" expanded="true" />
+            <element signature="e#6906#6907#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -363,9 +423,9 @@
           <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3708#3716#0" expanded="true" />
-            <element signature="e#5707#6440#0" expanded="true" />
-            <element signature="e#6439#6440#0" expanded="true" />
+            <element signature="e#3886#3894#0" expanded="true" />
+            <element signature="e#6174#6907#0" expanded="true" />
+            <element signature="e#6906#6907#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -433,15 +493,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-connector-kafka-0.11_2.11/1.8.0/flink-connector-kafka-0.11_2.11-1.8.0.jar!/org/apache/flink/streaming/connectors/kafka/FlinkKafkaProducer011.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9006">
+          <caret line="549" column="21" selection-start-line="549" selection-start-column="21" selection-end-line="549" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="99" column="18" selection-start-line="99" selection-start-column="18" selection-end-line="99" selection-end-column="18" />
+        <state relative-caret-position="238">
+          <caret line="222" column="44" selection-start-line="222" selection-start-column="44" selection-end-line="222" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3708#3716#0" expanded="true" />
-            <element signature="e#5707#6440#0" expanded="true" />
-            <element signature="e#6439#6440#0" expanded="true" />
+            <element signature="e#3886#3894#0" expanded="true" />
+            <element signature="e#6174#6907#0" expanded="true" />
+            <element signature="e#6906#6907#0" expanded="true" />
           </folding>
         </state>
       </provider>

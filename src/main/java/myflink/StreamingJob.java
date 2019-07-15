@@ -220,7 +220,7 @@ public class StreamingJob {
 		 */
 
 		// execute program
-		env.execute("数据交换平台智能路由");
+		env.execute("数据交换平台智能路由"+namespace);
 
 //        ConfigChangeListener changeListener = new ConfigChangeListener() {
 //            @Override
