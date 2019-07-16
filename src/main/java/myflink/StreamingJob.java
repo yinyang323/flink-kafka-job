@@ -114,6 +114,9 @@ public class StreamingJob {
         FlinkKafkaConsumer011 source = new FlinkKafkaConsumer011<>(distribute.getSrcTopic(), new org.apache.flink.api.common.serialization.SimpleStringSchema(), prop1);
         FlinkKafkaProducer011 tar1 = new FlinkKafkaProducer011<>(distribute.getTarTopic(), new org.apache.flink.api.common.serialization.SimpleStringSchema(), prop2);
 
+        /*将消费模式设置为earliest，防止消息丢失*/
+        source.setStartFromEarliest();
+
 		DataStreamSource stream = env
 				.addSource(source);
 
