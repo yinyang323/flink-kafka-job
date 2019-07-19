@@ -66,28 +66,43 @@ public class StreamingJob {
         CommonConfig=ConfigService.getAppConfig();
 
 
-        String key1="condition";
-        String defaultValue1="ZGGG,ZHHH,CSN,ZGGGACC/ZGHAACC/ZHHHACC";//default value if not set
+        String key1="ADEP";
+        String defaultValue1="ZGGG";//default value if not set
         String value1=config.getProperty(key1,defaultValue1);
 
-        String key2="xpath";
-        String defaultValue2="//Message/flight/departure/aerodrome,//mesg:Message/mesg:flight/fx:arrival/fx:destinationAerodrome,//mesg:Message/mesg:flight/fx:flightIdentification,//mesg:Message/mesg:flight/fb:extension/atmb:atmbFipsInfo";
+        String key2="ADES";
+        String defaultValue2="ZHHH";//default value if not set
         String value2=config.getProperty(key2,defaultValue2);
+
+        String key3="Company";
+        String defaultValue3="CSN";//default value if not set
+        String value3=config.getProperty(key3,defaultValue3);
+
+        String key4="ControlArea";
+        String defaultValue4="ZGGGACC/ZGHAACC/ZHHHACC";//default value if not set
+        String value4=config.getProperty(key4,defaultValue4);
+
+        String key5="StripState";
+        String defaultValue5="";//default value if not set
+        String value5=config.getProperty(key5,defaultValue5);
+
+        String xpath="xpath";
+        String xpathdefaultValue="//mesg:Message/mesg:flight/fx:departure/fx:aerodrome,//mesg:Message/mesg:flight/fx:arrival/fx:destinationAerodrome,//mesg:Message/mesg:flight/fx:flightIdentification,//mesg:Message/mesg:flight/fb:extension/atmb:atmbFipsInfo";
+        String xpathvalue=config.getProperty(xpath,xpathdefaultValue);
 
         /*数据源所在的主题*/
         String SrcTopic="SrcTopic";
-        String defaultValue4="test";
-
-        String srcTopic=config.getProperty(SrcTopic,defaultValue4);
+        String SrcdefaultValue="test";
+        String srcTopic=config.getProperty(SrcTopic,SrcdefaultValue);
 
         String TarTopic1="target";
-        String defaultValue7="test111";
-        String tarTopic1=config.getProperty(TarTopic1,defaultValue7);
+        String TardefaultValue="test111";
+        String tarTopic1=config.getProperty(TarTopic1,TardefaultValue);
 
         distribute.setSrcTopic(srcTopic);
         distribute.setTarTopic(tarTopic1);
-        distribute.setTunnels(new String[]{value1});
-        distribute.setXpath(value2);
+        distribute.setTunnels(new String[]{value1,value2,value3,value4,value5});
+        distribute.setXpath(xpathvalue);
 
         /*公共配置项*/
         String Recv="recv.server";
@@ -154,12 +169,14 @@ public class StreamingJob {
                 out.collect(s);
 
                 try {
-                    switch (distribute.SelectTunnel(s)) {
-                        case 0:
-                            context.output(outputTag1, s);
-                            break;
-                        default:
-                            break;
+//                    switch (distribute.SelectTunnel(s)) {
+//                        case 0:
+//                            context.output(outputTag1, s);
+//                            break;
+//                        default:
+//                            break;
+                    if(distribute.SelectTunnel(s)){
+                        context.output(outputTag1,s);
                     }
                 }
                 catch (DocumentException e) {

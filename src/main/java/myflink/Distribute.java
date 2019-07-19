@@ -43,12 +43,21 @@ public class Distribute implements Serializable {
     }
 
     /*compare input and return tag num*/
-    public int SelectTunnel(String input) throws DocumentException {
-        for(int i=0;i!=tunnels.length;i++){
-            if(compareMessage(input,tunnels[i],xpath))
-                return i;
+    public boolean SelectTunnel(String input) throws DocumentException {
+        String[] xpaths =xpath.split(",");
+
+        String ADEP=strToXmltuple(input,xpaths[0],"locationIndicator");
+        String ADES=strToXmltuple(input,xpaths[1],"locationIndicator");
+        String Company=strToXmltuple(input,xpaths[2],"aircraftIdentification").substring(0,3);
+        String ControlArea=strToXmltuple(input,xpaths[3],"controlArea");
+
+        String[] strings={ADEP,ADES,Company,ControlArea};
+
+        for(int i=0;i!=strings.length;i++){
+            if(!compareMessage(strings[i],tunnels[i]))
+                return false;
         }
-        return -1;
+        return true;
     }
 
     private static String strToJSONObj(String jsonstr){
@@ -92,26 +101,19 @@ public class Distribute implements Serializable {
     }
 
     /*compare input message with config value*/
-    private boolean compareMessage(String input,String config,String xpath) throws DocumentException {
-
-        String[] xpaths =xpath.split(",");
-
-        String ADEP=strToXmltuple(input,xpaths[0],"locationIndicator");
-        String ADES=strToXmltuple(input,xpaths[1],"locationIndicator");
-        String Company=strToXmltuple(input,xpaths[2],"aircraftIdentification").substring(0,3);
-        String ControlArea=strToXmltuple(input,xpaths[3],"controlArea");
-
-        String[] strings={ADEP,ADES,Company,ControlArea};
+    private boolean compareMessage(String strings,String config) throws DocumentException {
         String[] configs=config.split(",");
-
-        for(int i=0;i!=configs.length;i++){
-            if(strings[i].isEmpty())
-                continue;
-
-            if(!strings[i].equals(configs[i]))
-                return false;
+        if(!(strings.trim().isEmpty())){
+            return isHave(configs,strings.trim());
         }
         return true;
     }
 
+    private boolean isHave(String[] strings,String str){
+        for(int i=0;i!=strings.length;i++){
+            if(strings[i].trim().equals(str))
+                return true;
+        }
+        return false;
+    }
 }
