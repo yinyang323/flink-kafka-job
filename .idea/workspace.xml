@@ -4,7 +4,6 @@
     <list default="true" id="c974dcf5-d92a-4f17-95da-1d3504fe2fc4" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/myflink/Distribute.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/myflink/Distribute.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,11 +29,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Distribute.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Distribute.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/myflink/Distribute.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-133">
-              <caret line="82" selection-start-line="82" selection-end-line="82" />
+            <state relative-caret-position="333">
+              <caret line="110" column="29" selection-start-line="110" selection-start-column="29" selection-end-line="110" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -69,13 +68,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StreamingJob.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="StreamingJob.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-52">
-              <caret line="123" column="62" selection-start-line="123" selection-start-column="62" selection-end-line="123" selection-end-column="62" />
+            <state relative-caret-position="295">
+              <caret line="176" column="36" lean-forward="true" selection-start-line="176" selection-start-column="36" selection-end-line="176" selection-end-column="36" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#7362#8213#0" expanded="true" />
+                <element signature="e#8212#8213#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -91,8 +92,8 @@
       <list>
         <option value="$PROJECT_DIR$/.idea/workspace.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/myflink/Distribute.java" />
         <option value="$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java" />
+        <option value="$PROJECT_DIR$/src/main/java/myflink/Distribute.java" />
       </list>
     </option>
   </component>
@@ -292,7 +293,7 @@
       <workItem from="1563240397497" duration="2949000" />
       <workItem from="1563334731881" duration="16121000" />
       <workItem from="1563411468543" duration="598000" />
-      <workItem from="1563495934265" duration="285000" />
+      <workItem from="1563495934265" duration="7226000" />
     </task>
     <task id="LOCAL-00001" summary="Merge branch 'master' of https://github.com/yinyang323/flink-kafka-job&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/myflink/StreamingJob.java">
       <created>1560222974656</created>
@@ -364,11 +365,25 @@
       <option name="project" value="LOCAL" />
       <updated>1563242849710</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="add xpath configuration">
+      <created>1563496248266</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1563496248266</updated>
+    </task>
+    <task id="LOCAL-00012" summary="change configuration">
+      <created>1563520349550</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1563520349550</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54858000" />
+    <option name="totallyTimeSpent" value="61799000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -379,7 +394,7 @@
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
-      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32838285" />
       <window_info anchor="right" id="Maven Projects" order="3" weight="0.32980332" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" />
@@ -387,7 +402,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28517398" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28517398" />
       <window_info anchor="right" id="Database" order="3" weight="0.32980332" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -418,7 +433,9 @@
     <MESSAGE value="prevent consumer group conflict" />
     <MESSAGE value="prevent client.id conflict" />
     <MESSAGE value="add job name recognise" />
-    <option name="LAST_COMMIT_MESSAGE" value="add job name recognise" />
+    <MESSAGE value="add xpath configuration" />
+    <MESSAGE value="change configuration" />
+    <option name="LAST_COMMIT_MESSAGE" value="change configuration" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -483,6 +500,8 @@
           <caret line="123" column="62" selection-start-line="123" selection-start-column="62" selection-end-line="123" selection-end-column="62" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#7362#8213#0" expanded="true" />
+            <element signature="e#8212#8213#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -531,6 +550,8 @@
           <caret line="123" column="62" selection-start-line="123" selection-start-column="62" selection-end-line="123" selection-end-column="62" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#7362#8213#0" expanded="true" />
+            <element signature="e#8212#8213#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -541,6 +562,8 @@
           <caret line="99" column="100" selection-start-line="99" selection-start-column="100" selection-end-line="99" selection-end-column="100" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#7362#8213#0" expanded="true" />
+            <element signature="e#8212#8213#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -572,6 +595,8 @@
           <caret line="99" column="100" lean-forward="true" selection-start-line="99" selection-start-column="100" selection-end-line="99" selection-end-column="100" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#7362#8213#0" expanded="true" />
+            <element signature="e#8212#8213#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -589,6 +614,8 @@
           <caret line="56" column="87" selection-start-line="56" selection-start-column="87" selection-end-line="56" selection-end-column="87" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#7362#8213#0" expanded="true" />
+            <element signature="e#8212#8213#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -606,6 +633,8 @@
           <caret line="102" column="20" selection-start-line="102" selection-start-column="20" selection-end-line="102" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#7362#8213#0" expanded="true" />
+            <element signature="e#8212#8213#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -616,6 +645,8 @@
           <caret line="141" column="30" lean-forward="true" selection-start-line="141" selection-start-column="30" selection-end-line="141" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#7362#8213#0" expanded="true" />
+            <element signature="e#8212#8213#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -640,6 +671,8 @@
           <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#7362#8213#0" expanded="true" />
+            <element signature="e#8212#8213#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -756,16 +789,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/myflink/Distribute.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-133">
-          <caret line="82" selection-start-line="82" selection-end-line="82" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="518">
@@ -775,8 +798,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/myflink/StreamingJob.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-52">
-          <caret line="123" column="62" selection-start-line="123" selection-start-column="62" selection-end-line="123" selection-end-column="62" />
+        <state relative-caret-position="295">
+          <caret line="176" column="36" lean-forward="true" selection-start-line="176" selection-start-column="36" selection-end-line="176" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#7362#8213#0" expanded="true" />
+            <element signature="e#8212#8213#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/myflink/Distribute.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="333">
+          <caret line="110" column="29" selection-start-line="110" selection-start-column="29" selection-end-line="110" selection-end-column="29" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

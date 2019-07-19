@@ -102,11 +102,16 @@ public class Distribute implements Serializable {
 
     /*compare input message with config value*/
     private boolean compareMessage(String strings,String config) throws DocumentException {
-        String[] configs=config.split(",");
-        if(!(strings.trim().isEmpty())){
-            return isHave(configs,strings.trim());
+        if(!(config.trim().isEmpty())) {
+            String[] configs = config.split(",");
+            if (!(strings.trim().isEmpty())) {
+                return isHave(configs, strings.trim());
+            }
+            else
+                return false;
         }
-        return true;
+        else
+            return true;
     }
 
     private boolean isHave(String[] strings,String str){
