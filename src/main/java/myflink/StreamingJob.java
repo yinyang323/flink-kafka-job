@@ -70,6 +70,9 @@ public class StreamingJob {
         String defaultValue1="ZGGG,ZHHH,CSN,ZGGGACC/ZGHAACC/ZHHHACC";//default value if not set
         String value1=config.getProperty(key1,defaultValue1);
 
+        String key2="xpath";
+        String defaultValue2="//Message/flight/departure/aerodrome,//mesg:Message/mesg:flight/fx:arrival/fx:destinationAerodrome,//mesg:Message/mesg:flight/fx:flightIdentification,//mesg:Message/mesg:flight/fb:extension/atmb:atmbFipsInfo";
+        String value2=config.getProperty(key2,defaultValue2);
 
         /*数据源所在的主题*/
         String SrcTopic="SrcTopic";
@@ -84,6 +87,7 @@ public class StreamingJob {
         distribute.setSrcTopic(srcTopic);
         distribute.setTarTopic(tarTopic1);
         distribute.setTunnels(new String[]{value1});
+        distribute.setXpath(value2);
 
         /*公共配置项*/
         String Recv="recv.server";
@@ -114,11 +118,10 @@ public class StreamingJob {
         FlinkKafkaConsumer011 source = new FlinkKafkaConsumer011<>(distribute.getSrcTopic(), new org.apache.flink.api.common.serialization.SimpleStringSchema(), prop1);
         FlinkKafkaProducer011 tar1 = new FlinkKafkaProducer011<>(distribute.getTarTopic(), new org.apache.flink.api.common.serialization.SimpleStringSchema(), prop2);
 
-        /*将消费模式设置为earliest，防止消息丢失*/
-        source.setStartFromEarliest();
-
+        /*将消费模式设置为从broker记录的位置开始，防止消息丢失*/
+        /*setStartFromEarliest() /setStartFromLatest(): 即从最早的/最新的消息开始消费*/
 		DataStreamSource stream = env
-				.addSource(source);
+				.addSource(source.setStartFromGroupOffsets());
 
 //        SplitStream<String> stringSplitStream = stream.split(
 //                new OutputSelector<String>() {

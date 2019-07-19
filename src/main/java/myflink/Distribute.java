@@ -3,18 +3,19 @@ package myflink;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Node;
+import org.dom4j.*;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Distribute implements Serializable {
     private String srcTopic = "";
     private String tarTopic = "";
 
     private String[] tunnels = {};
+
+    private String xpath="";
 
     public void setSrcTopic(String srcTopic) {
         this.srcTopic = srcTopic;
@@ -27,6 +28,8 @@ public class Distribute implements Serializable {
     public void setTunnels(String[] tunnels) {
         this.tunnels = tunnels;
     }
+
+    public void setXpath(String xpath){this.xpath=xpath;}
 
 
 
@@ -42,7 +45,7 @@ public class Distribute implements Serializable {
     /*compare input and return tag num*/
     public int SelectTunnel(String input) throws DocumentException {
         for(int i=0;i!=tunnels.length;i++){
-            if(compareMessage(input,tunnels[i]))
+            if(compareMessage(input,tunnels[i],xpath))
                 return i;
         }
         return -1;
@@ -76,21 +79,27 @@ public class Distribute implements Serializable {
 
     }
 
-    private static String strToXmltuple(String xmlstr,String Xpath,String attributeName) throws DocumentException {
+    private static String strToXmltuple(String xmlstr,String xpath,String attributeName) throws DocumentException {
         Document document=DocumentHelper.parseText(xmlstr);
-        Node type= document.selectSingleNode(Xpath);
+/*        Map<String, String> map = new HashMap<String, String>();
+        map.put("xsd","http://www.w3.org/2001/XMLSchema");*/
+        //XPath x=document.createXPath(xpath);
+
+        Node type= document.selectSingleNode(xpath);
         StringBuilder str=new StringBuilder("@");
         str.append(attributeName);
         return type.valueOf(str.toString());
     }
 
     /*compare input message with config value*/
-    private boolean compareMessage(String input,String config) throws DocumentException {
+    private boolean compareMessage(String input,String config,String xpath) throws DocumentException {
 
-        String ADEP=strToXmltuple(input,"//mesg:Message/mesg:flight/fx:departure/fx:aerodrome","locationIndicator");
-        String ADES=strToXmltuple(input,"//mesg:Message/mesg:flight/fx:arrival/fx:destinationAerodrome","locationIndicator");
-        String Company=strToXmltuple(input,"//mesg:Message/mesg:flight/fx:flightIdentification","aircraftIdentification").substring(0,3);
-        String ControlArea=strToXmltuple(input,"//mesg:Message/mesg:flight/fb:extension/atmb:atmbFipsInfo","controlArea");
+        String[] xpaths =xpath.split(",");
+
+        String ADEP=strToXmltuple(input,xpaths[0],"locationIndicator");
+        String ADES=strToXmltuple(input,xpaths[1],"locationIndicator");
+        String Company=strToXmltuple(input,xpaths[2],"aircraftIdentification").substring(0,3);
+        String ControlArea=strToXmltuple(input,xpaths[3],"controlArea");
 
         String[] strings={ADEP,ADES,Company,ControlArea};
         String[] configs=config.split(",");
