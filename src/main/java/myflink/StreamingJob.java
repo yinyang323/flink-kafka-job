@@ -58,8 +58,6 @@ public class StreamingJob {
         //final Logger logger = LoggerFactory.getLogger(StreamingJob.class);
 
         Config config,CommonConfig;
-        Distribute distribute=new Distribute();
-
 
         String namespace=parameterTool.get("instance.name","instance1");
         config = ConfigService.getConfig(namespace);
@@ -71,11 +69,11 @@ public class StreamingJob {
         String value1=config.getProperty(key1,defaultValue1);
 
         String key2="ADES";
-        String defaultValue2="ZHHH";//default value if not set
+        String defaultValue2="ZHHH,ZGHA";//default value if not set
         String value2=config.getProperty(key2,defaultValue2);
 
         String key3="Company";
-        String defaultValue3="CSN";//default value if not set
+        String defaultValue3="CSN,CHH,CCA";//default value if not set
         String value3=config.getProperty(key3,defaultValue3);
 
         String key4="ControlArea";
@@ -99,10 +97,12 @@ public class StreamingJob {
         String TardefaultValue="test111";
         String tarTopic1=config.getProperty(TarTopic1,TardefaultValue);
 
+        Distribute distribute=new Distribute(new String[]{value1,value2,value3,value4,value5});
+
         distribute.setSrcTopic(srcTopic);
         distribute.setTarTopic(tarTopic1);
-        distribute.setTunnels(new String[]{value1,value2,value3,value4,value5});
-        distribute.setXpath(xpathvalue);
+
+        distribute.setXpaths(xpathvalue.split(","));
 
         /*公共配置项*/
         String Recv="recv.server";
@@ -136,7 +136,7 @@ public class StreamingJob {
         /*将消费模式设置为从broker记录的位置开始，防止消息丢失*/
         /*setStartFromEarliest() /setStartFromLatest(): 即从最早的/最新的消息开始消费*/
 		DataStreamSource stream = env
-				.addSource(source.setStartFromGroupOffsets());
+				.addSource(source.setStartFromLatest());
 
 //        SplitStream<String> stringSplitStream = stream.split(
 //                new OutputSelector<String>() {

@@ -6,16 +6,14 @@ import com.alibaba.fastjson.JSONObject;
 import org.dom4j.*;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Distribute implements Serializable {
     private String srcTopic = "";
     private String tarTopic = "";
-
     private String[] tunnels = {};
-
-    private String xpath="";
+    private List<String[]> configs=new ArrayList<>();
+    private String[] xpaths= {};
 
     public void setSrcTopic(String srcTopic) {
         this.srcTopic = srcTopic;
@@ -25,27 +23,28 @@ public class Distribute implements Serializable {
         this.tarTopic = tarTopic;
     }
 
-    public void setTunnels(String[] tunnels) {
-        this.tunnels = tunnels;
-    }
-
-    public void setXpath(String xpath){this.xpath=xpath;}
+    public void setXpaths(String[] xpaths){this.xpaths=xpaths;}
 
 
-
-    public String getSrcTopic() {
-
-        return srcTopic;
-    }
+    public String getSrcTopic() { return srcTopic; }
 
     public String getTarTopic(){
         return tarTopic;
     }
 
+    public Distribute(String[] strs){
+        tunnels=strs;
+
+        for (int i=0;i!=tunnels.length;i++){
+            if(tunnels[i].trim().isEmpty())
+                configs.add(new String[] {});
+            else
+                configs.add(tunnels[i].split(","));
+        }
+    }
+
     /*compare input and return tag num*/
     public boolean SelectTunnel(String input) throws DocumentException {
-        String[] xpaths =xpath.split(",");
-
         String ADEP=strToXmltuple(input,xpaths[0],"locationIndicator");
         String ADES=strToXmltuple(input,xpaths[1],"locationIndicator");
         String Company=strToXmltuple(input,xpaths[2],"aircraftIdentification").substring(0,3);
@@ -54,7 +53,7 @@ public class Distribute implements Serializable {
         String[] strings={ADEP,ADES,Company,ControlArea};
 
         for(int i=0;i!=strings.length;i++){
-            if(!compareMessage(strings[i],tunnels[i]))
+            if(!compareMessage(strings[i], configs.get(i)))
                 return false;
         }
         return true;
@@ -101,9 +100,8 @@ public class Distribute implements Serializable {
     }
 
     /*compare input message with config value*/
-    private boolean compareMessage(String strings,String config) throws DocumentException {
-        if(!(config.trim().isEmpty())) {
-            String[] configs = config.split(",");
+    private boolean compareMessage(String strings,String[] configs) throws DocumentException {
+        if(configs.length!=0) {
             if (!(strings.trim().isEmpty())) {
                 return isHave(configs, strings.trim());
             }
