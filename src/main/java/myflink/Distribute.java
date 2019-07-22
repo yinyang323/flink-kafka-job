@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.dom4j.*;
+import scala.Tuple2;
 
 import java.io.Serializable;
 import java.util.*;
@@ -11,8 +12,8 @@ import java.util.*;
 public class Distribute implements Serializable {
     private String srcTopic = "";
     private String tarTopic = "";
-    private String[] tunnels = {};
-    private List<String[]> configs=new ArrayList<>();
+    private List<Tuple2<String,String>> tunnels=new ArrayList<>() ;
+    private List<Tuple2<String[],String>> configs=new ArrayList<>();
     private String[] xpaths= {};
 
     public void setSrcTopic(String srcTopic) {
@@ -32,14 +33,14 @@ public class Distribute implements Serializable {
         return tarTopic;
     }
 
-    public Distribute(String[] strs){
+    public Distribute(List<Tuple2<String,String>> strs){
         tunnels=strs;
 
-        for (int i=0;i!=tunnels.length;i++){
-            if(tunnels[i].trim().isEmpty())
-                configs.add(new String[] {});
+        for (int i=0;i!=tunnels.size();i++){
+            if(tunnels.get(i)._1.trim().isEmpty())
+                configs.add(new Tuple2<>(new String[] {},tunnels.get(i)._2));
             else
-                configs.add(tunnels[i].split(","));
+                configs.add(new Tuple2<>(tunnels.get(i)._1.split(","),tunnels.get(i)._2));
         }
     }
 
@@ -100,16 +101,30 @@ public class Distribute implements Serializable {
     }
 
     /*compare input message with config value*/
-    private boolean compareMessage(String strings,String[] configs) throws DocumentException {
-        if(configs.length!=0) {
-            if (!(strings.trim().isEmpty())) {
-                return isHave(configs, strings.trim());
-            }
-            else
-                return false;
+    private boolean compareMessage(String strings,Tuple2<String[],String> configs) throws DocumentException {
+        switch (configs._2) {
+            case "include":
+                if (configs._1.length != 0) {
+                    if (!(strings.trim().isEmpty()))
+                        return isHave(configs._1, strings.trim());
+                    else
+                        return false;
+                }
+                else
+                    return true;
+            case "exclude":
+                if(configs._1.length!=0){
+                    if(!(strings.trim().isEmpty())) {
+                        return (!isHave(configs._1, strings.trim()));
+                    }
+                    else
+                        return false;
+                }
+                else
+                    return true;
+
+                default: return false;
         }
-        else
-            return true;
     }
 
     private boolean isHave(String[] strings,String str){

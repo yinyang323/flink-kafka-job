@@ -33,6 +33,7 @@ import org.apache.flink.util.OutputTag;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.dom4j.*;
+import scala.Tuple2;
 
 import java.util.*;
 
@@ -64,9 +65,9 @@ public class StreamingJob {
         CommonConfig=ConfigService.getAppConfig();
 
 
-        String key1="ADEP";
-        String defaultValue1="ZGGG";//default value if not set
-        String value1=config.getProperty(key1,defaultValue1);
+        String key_ADEP="ADEP";
+        String defaultValue_ADEP="ZGGG";//default value if not set
+        String value1=config.getProperty(key_ADEP,defaultValue_ADEP);
 
         String key2="ADES";
         String defaultValue2="ZHHH,ZGHA";//default value if not set
@@ -97,7 +98,34 @@ public class StreamingJob {
         String TardefaultValue="test111";
         String tarTopic1=config.getProperty(TarTopic1,TardefaultValue);
 
-        Distribute distribute=new Distribute(new String[]{value1,value2,value3,value4,value5});
+        String key_adepflag="ADEP_FLAG";
+        String defaultValue_ADEP_FLAG="include";
+        String value_ADEP_FLAG=config.getProperty(key_adepflag,defaultValue_ADEP_FLAG);
+
+        String key_adesflag="ADES_FLAG";
+        String defaultValue_ADES_FLAG="include";
+        String value_ADES_FLAG=config.getProperty(key_adesflag,defaultValue_ADES_FLAG);
+
+        String key_cpyflag="Company_FLAG";
+        String defaultValue_cpy_FLAG="include";
+        String value_cpy_FLAG=config.getProperty(key_cpyflag,defaultValue_cpy_FLAG);
+
+        String key_CAflag="ControlArea_FLAG";
+        String defaultValue_CA_FLAG="include";
+        String value_CA_FLAG=config.getProperty(key_CAflag,defaultValue_CA_FLAG);
+
+        String key_STflag="StripState_FLAG";
+        String defaultValue_ST_FLAG="include";
+        String value_ST_FLAG=config.getProperty(key_STflag,defaultValue_ST_FLAG);
+
+        List<Tuple2<String,String>> configdata=new ArrayList<>();
+        configdata.add(new Tuple2<>(value1,value_ADEP_FLAG));
+        configdata.add(new Tuple2<>(value2,value_ADES_FLAG));
+        configdata.add(new Tuple2<>(value3,value_CA_FLAG));
+        configdata.add(new Tuple2<>(value4,value_cpy_FLAG));
+        configdata.add(new Tuple2<>(value5,value_ST_FLAG));
+
+        Distribute distribute=new Distribute(configdata);
 
         distribute.setSrcTopic(srcTopic);
         distribute.setTarTopic(tarTopic1);
