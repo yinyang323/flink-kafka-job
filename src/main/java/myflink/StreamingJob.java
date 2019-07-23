@@ -50,6 +50,7 @@ import java.util.*;
  * method, change the respective entry in the POM.xml file (simply search for 'mainClass').
  */
 public class StreamingJob {
+    enum condition{include,exclude;}
 
     public static void main(String[] args) throws Exception {
 
@@ -66,19 +67,19 @@ public class StreamingJob {
 
 
         String key_ADEP="ADEP";
-        String defaultValue_ADEP="ZGGG";//default value if not set
+        String defaultValue_ADEP="";//default value if not set
         String value1=config.getProperty(key_ADEP,defaultValue_ADEP);
 
         String key2="ADES";
-        String defaultValue2="ZHHH,ZGHA";//default value if not set
+        String defaultValue2="";//default value if not set
         String value2=config.getProperty(key2,defaultValue2);
 
         String key3="Company";
-        String defaultValue3="CSN,CHH,CCA";//default value if not set
+        String defaultValue3="";//default value if not set
         String value3=config.getProperty(key3,defaultValue3);
 
         String key4="ControlArea";
-        String defaultValue4="ZGGGACC/ZGHAACC/ZHHHACC";//default value if not set
+        String defaultValue4="";//default value if not set
         String value4=config.getProperty(key4,defaultValue4);
 
         String key5="StripState";
@@ -91,38 +92,38 @@ public class StreamingJob {
 
         /*数据源所在的主题*/
         String SrcTopic="SrcTopic";
-        String SrcdefaultValue="test";
+        String SrcdefaultValue="";
         String srcTopic=config.getProperty(SrcTopic,SrcdefaultValue);
 
         String TarTopic1="target";
-        String TardefaultValue="test111";
+        String TardefaultValue="";
         String tarTopic1=config.getProperty(TarTopic1,TardefaultValue);
 
         String key_adepflag="ADEP_FLAG";
-        String defaultValue_ADEP_FLAG="include";
+        String defaultValue_ADEP_FLAG=condition.exclude.toString();
         String value_ADEP_FLAG=config.getProperty(key_adepflag,defaultValue_ADEP_FLAG);
 
         String key_adesflag="ADES_FLAG";
-        String defaultValue_ADES_FLAG="include";
+        String defaultValue_ADES_FLAG=condition.include.toString();
         String value_ADES_FLAG=config.getProperty(key_adesflag,defaultValue_ADES_FLAG);
 
         String key_cpyflag="Company_FLAG";
-        String defaultValue_cpy_FLAG="include";
+        String defaultValue_cpy_FLAG=condition.include.toString();
         String value_cpy_FLAG=config.getProperty(key_cpyflag,defaultValue_cpy_FLAG);
 
         String key_CAflag="ControlArea_FLAG";
-        String defaultValue_CA_FLAG="include";
+        String defaultValue_CA_FLAG=condition.include.toString();
         String value_CA_FLAG=config.getProperty(key_CAflag,defaultValue_CA_FLAG);
 
         String key_STflag="StripState_FLAG";
-        String defaultValue_ST_FLAG="include";
+        String defaultValue_ST_FLAG=condition.exclude.toString();
         String value_ST_FLAG=config.getProperty(key_STflag,defaultValue_ST_FLAG);
 
         List<Tuple2<String,String>> configdata=new ArrayList<>();
         configdata.add(new Tuple2<>(value1,value_ADEP_FLAG));
         configdata.add(new Tuple2<>(value2,value_ADES_FLAG));
-        configdata.add(new Tuple2<>(value3,value_CA_FLAG));
-        configdata.add(new Tuple2<>(value4,value_cpy_FLAG));
+        configdata.add(new Tuple2<>(value3,value_cpy_FLAG));
+        configdata.add(new Tuple2<>(value4,value_CA_FLAG));
         configdata.add(new Tuple2<>(value5,value_ST_FLAG));
 
         Distribute distribute=new Distribute(configdata);
