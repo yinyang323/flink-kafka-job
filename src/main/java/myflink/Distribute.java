@@ -12,7 +12,6 @@ import java.util.*;
 public class Distribute implements Serializable {
     private String srcTopic = "";
     private String tarTopic = "";
-    private List<Tuple2<String,String>> tunnels=new ArrayList<>() ;
     private List<Tuple2<String[],String>> configs=new ArrayList<>();
     private String[] xpaths= {};
 
@@ -34,13 +33,12 @@ public class Distribute implements Serializable {
     }
 
     public Distribute(List<Tuple2<String,String>> strs){
-        tunnels=strs;
 
-        for (int i=0;i!=tunnels.size();i++){
-            if(tunnels.get(i)._1.trim().isEmpty())
-                configs.add(new Tuple2<>(new String[] {},tunnels.get(i)._2));
+        for (int i=0;i!=strs.size();i++){
+            if(strs.get(i)._1.trim().isEmpty())
+                configs.add(new Tuple2<>(new String[] {},strs.get(i)._2));
             else
-                configs.add(new Tuple2<>(tunnels.get(i)._1.split(","),tunnels.get(i)._2));
+                configs.add(new Tuple2<>(strs.get(i)._1.split(","),strs.get(i)._2));
         }
     }
 
@@ -82,9 +80,8 @@ public class Distribute implements Serializable {
     private static String strToXmltuple(String xmlstr,String Xpath) throws DocumentException {
         Document document=DocumentHelper.parseText(xmlstr);
         Node type= document.selectSingleNode(Xpath);
-        String msgtype=type.getText();
         //Tuple2<String,String> tuple2=new Tuple2<>(msgtype,xmlstr);
-        return  msgtype;
+        return  type.getText();
 
     }
 
@@ -95,7 +92,7 @@ public class Distribute implements Serializable {
         //XPath x=document.createXPath(xpath);
 
         Node type= document.selectSingleNode(xpath);
-        StringBuilder str=new StringBuilder("@");
+        StringBuilder str = new StringBuilder("@");
         str.append(attributeName);
         return type.valueOf(str.toString());
     }
