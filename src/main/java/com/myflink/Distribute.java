@@ -1,4 +1,4 @@
-package myflink;
+package com.myflink;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;

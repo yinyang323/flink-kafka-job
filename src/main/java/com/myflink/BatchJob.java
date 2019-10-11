@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package myflink;
+package com.myflink;
 
 import org.apache.flink.api.java.ExecutionEnvironment;
 

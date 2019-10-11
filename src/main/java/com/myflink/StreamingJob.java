@@ -16,25 +16,26 @@
  * limitations under the License.
  */
 
-package myflink;
+package com.myflink;
 
 import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.ConfigService;
+import com.myflink.data.restfulSink;
+import com.myflink.data.restfulSource;
+import kong.unirest.Unirest;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer011;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.producer.ProducerConfig;
 import org.dom4j.*;
 import scala.Tuple2;
 
+import java.net.Proxy;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -50,7 +51,7 @@ import java.util.*;
  * method, change the respective entry in the POM.xml file (simply search for 'mainClass').
  */
 public class StreamingJob {
-    enum condition{include,exclude;}
+    enum condition{include,exclude}
 
     public static void main(String[] args) throws Exception {
 
@@ -65,21 +66,28 @@ public class StreamingJob {
         config = ConfigService.getConfig(namespace);
         CommonConfig=ConfigService.getAppConfig();
 
+        Unirest.config()
+                .socketTimeout(500)
+                .connectTimeout(1000)
+                .concurrency(10, 5)
+                .setDefaultHeader("Accept", "application/json")
+                .followRedirects(false)
+                .enableCookieManagement(false);
 
         String key_ADEP="ADEP";
-        String defaultValue_ADEP="";//default value if not set
+        String defaultValue_ADEP="ZGGG";//default value if not set
         String value1=config.getProperty(key_ADEP,defaultValue_ADEP);
 
         String key2="ADES";
-        String defaultValue2="";//default value if not set
+        String defaultValue2="ZGHA";//default value if not set
         String value2=config.getProperty(key2,defaultValue2);
 
         String key3="Company";
-        String defaultValue3="";//default value if not set
+        String defaultValue3="CSN";//default value if not set
         String value3=config.getProperty(key3,defaultValue3);
 
         String key4="ControlArea";
-        String defaultValue4="";//default value if not set
+        String defaultValue4="ZGGGACC/ZGHAACC/ZHHHACC";//default value if not set
         String value4=config.getProperty(key4,defaultValue4);
 
         String key5="StripState";
@@ -87,20 +95,21 @@ public class StreamingJob {
         String value5=config.getProperty(key5,defaultValue5);
 
         String xpath="xpath";
-        String xpathdefaultValue="//mesg:Message/mesg:flight/fx:departure/fx:aerodrome,//mesg:Message/mesg:flight/fx:arrival/fx:destinationAerodrome,//mesg:Message/mesg:flight/fx:flightIdentification,//mesg:Message/mesg:flight/fb:extension/atmb:atmbFipsInfo";
+        String xpathdefaultValue="//mesg:Message/mesg:flight/fx:departure/fx:aerodrome,//mesg:Message/mesg:flight/fx:arrival/fx:destinationAerodrome," +
+                "//mesg:Message/mesg:flight/fx:flightIdentification,//mesg:Message/mesg:flight/fb:extension/atmb:atmbFipsInfo";
         String xpathvalue=config.getProperty(xpath,xpathdefaultValue);
 
         /*数据源所在的主题*/
         String SrcTopic="SrcTopic";
-        String SrcdefaultValue="";
+        String SrcdefaultValue="source1";
         String srcTopic=config.getProperty(SrcTopic,SrcdefaultValue);
 
         String TarTopic1="target";
-        String TardefaultValue="";
+        String TardefaultValue="output1";
         String tarTopic1=config.getProperty(TarTopic1,TardefaultValue);
 
         String key_adepflag="ADEP_FLAG";
-        String defaultValue_ADEP_FLAG=condition.exclude.toString();
+        String defaultValue_ADEP_FLAG=condition.include.toString();
         String value_ADEP_FLAG=config.getProperty(key_adepflag,defaultValue_ADEP_FLAG);
 
         String key_adesflag="ADES_FLAG";
@@ -135,37 +144,29 @@ public class StreamingJob {
 
         /*公共配置项*/
         String Recv="recv.server";
-        String defaultValue8="192.168.136.132:9092";
-        String recv=CommonConfig.getProperty(Recv,defaultValue8);
+        String defaultValue8="http://192.168.191.130:8081";
+        URL recv=new URL(CommonConfig.getProperty(Recv,defaultValue8));
 
         String Send="send.server";
-        String defaultValue9="192.168.136.132:9092";
-        String send=CommonConfig.getProperty(Send,defaultValue9);
+        String defaultValue9="http://192.168.191.130:8081";
+        URL send=new URL(CommonConfig.getProperty(Send,defaultValue9));
 
         final OutputTag<String> outputTag1 = new OutputTag<String>("output1"){};
+
+        /*此配置若不设置默认值，则可能根据当前机器的cpu线程数设置并发数*/
+        StreamExecutionEnvironment.setDefaultLocalParallelism(1);
 
 		// set up the streaming execution environment
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-		Properties prop1 = new Properties();
-		prop1.setProperty("bootstrap.servers", recv);
-		/*防止消费组名重复*/
-		prop1.setProperty("group.id", "group.id-"+namespace);
-		/*防止多作业情况下client.id冲突*/
-		prop1.setProperty(ConsumerConfig.CLIENT_ID_CONFIG,"consumer-"+distribute.getSrcTopic()+System.currentTimeMillis());
-
-        Properties prop2 = new Properties();
-        prop2.setProperty("bootstrap.servers", send);
-        /*防止多作业情况下client.id冲突*/
-        prop2.setProperty(ProducerConfig.CLIENT_ID_CONFIG, "producer-" + distribute.getTarTopic() + System.currentTimeMillis());
-
-        FlinkKafkaConsumer011 source = new FlinkKafkaConsumer011<>(distribute.getSrcTopic(), new org.apache.flink.api.common.serialization.SimpleStringSchema(), prop1);
-        FlinkKafkaProducer011 tar1 = new FlinkKafkaProducer011<>(distribute.getTarTopic(), new org.apache.flink.api.common.serialization.SimpleStringSchema(), prop2);
+        restfulSource source = new restfulSource(recv.getHost(),recv.getPort(),"group.id-"+namespace,srcTopic);
+        restfulSink tar1 = new restfulSink(send.getHost(),send.getPort(),tarTopic1);
 
         /*将消费模式设置为从broker记录的位置开始，防止消息丢失*/
         /*setStartFromEarliest() /setStartFromLatest(): 即从最早的/最新的消息开始消费*/
 		DataStreamSource stream = env
-				.addSource(source.setStartFromLatest());
+				.addSource(source);
+
 
 //        SplitStream<String> stringSplitStream = stream.split(
 //                new OutputSelector<String>() {
@@ -217,7 +218,7 @@ public class StreamingJob {
 
             }
 
-        });
+        }).setParallelism(1);
 
         //DataStream<String> dataStream1=stringSplitStream.select(FlightDepInfo);
         DataStream dataStream1=streamOperator.getSideOutput(outputTag1);
