@@ -112,6 +112,17 @@ under the License.
 			<artifactId>apollo-client</artifactId>
 			<version>1.4.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.58</version>
+		</dependency>
+		<!-- Pull in as a traditional dependency -->
+		<dependency>
+			<groupId>com.konghq</groupId>
+			<artifactId>unirest-java</artifactId>
+			<version>3.1.00</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -245,17 +256,7 @@ under the License.
 					<version>${flink.version}</version>
 					<scope>compile</scope>
 				</dependency>
-				<dependency>
-					<groupId>com.alibaba</groupId>
-					<artifactId>fastjson</artifactId>
-					<version>1.2.58</version>
-				</dependency>
-				<!-- Pull in as a traditional dependency -->
-				<dependency>
-					<groupId>com.konghq</groupId>
-					<artifactId>unirest-java</artifactId>
-					<version>3.1.00</version>
-				</dependency>
+
 			</dependencies>
 		</profile>
 	</profiles>

@@ -34,7 +34,6 @@ import org.apache.flink.util.OutputTag;
 import org.dom4j.*;
 import scala.Tuple2;
 
-import java.net.Proxy;
 import java.net.URL;
 import java.util.*;
 
@@ -144,11 +143,11 @@ public class StreamingJob {
 
         /*公共配置项*/
         String Recv="recv.server";
-        String defaultValue8="http://192.168.191.130:8081";
+        String defaultValue8="http://188.2.72.114:8081";
         URL recv=new URL(CommonConfig.getProperty(Recv,defaultValue8));
 
         String Send="send.server";
-        String defaultValue9="http://192.168.191.130:8081";
+        String defaultValue9="http://188.2.72.114:8081";
         URL send=new URL(CommonConfig.getProperty(Send,defaultValue9));
 
         final OutputTag<String> outputTag1 = new OutputTag<String>("output1"){};

@@ -2,7 +2,6 @@ package com.myflink.data;
 
 import com.alibaba.fastjson.JSON;
 import com.myflink.messages.record;
-import com.myflink.messages.response;
 import kong.unirest.Unirest;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
