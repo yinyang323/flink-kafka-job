@@ -22,7 +22,7 @@ import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.ConfigService;
 import com.myflink.data.restfulSink;
 import com.myflink.data.restfulSource;
-import kong.unirest.Unirest;
+import okhttp3.OkHttpClient;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -34,8 +34,11 @@ import org.apache.flink.util.OutputTag;
 import org.dom4j.*;
 import scala.Tuple2;
 
+import javax.net.ssl.*;
 import java.net.URL;
+import java.security.cert.X509Certificate;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Skeleton for a Flink Streaming Job.
@@ -65,13 +68,42 @@ public class StreamingJob {
         config = ConfigService.getConfig(namespace);
         CommonConfig=ConfigService.getAppConfig();
 
-        Unirest.config()
+
+
+        TrustManager[] trustAllCerts = new TrustManager[] {
+                new X509TrustManager() {
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
+
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
+
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
+                }
+        };
+
+
+
+
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, new java.security.SecureRandom());
+
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+            @Override
+            public boolean verify(String s, SSLSession sslSession) {
+                return true;
+            }
+        });
+
+        /*Unirest.config()
                 .socketTimeout(500)
                 .connectTimeout(1000)
                 .concurrency(10, 5)
                 .setDefaultHeader("Accept", "application/json")
                 .followRedirects(false)
-                .enableCookieManagement(false);
+                .enableCookieManagement(false);*/
 
         String key_ADEP="ADEP";
         String defaultValue_ADEP="ZGGG";//default value if not set
@@ -143,11 +175,11 @@ public class StreamingJob {
 
         /*公共配置项*/
         String Recv="recv.server";
-        String defaultValue8="http://188.2.72.114:8081";
+        String defaultValue8="http://192.168.191.130:8081";
         URL recv=new URL(CommonConfig.getProperty(Recv,defaultValue8));
 
         String Send="send.server";
-        String defaultValue9="http://188.2.72.114:8081";
+        String defaultValue9="http://192.168.191.130:8081";
         URL send=new URL(CommonConfig.getProperty(Send,defaultValue9));
 
         final OutputTag<String> outputTag1 = new OutputTag<String>("output1"){};
@@ -157,6 +189,7 @@ public class StreamingJob {
 
 		// set up the streaming execution environment
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+		env.setParallelism(2);
 
         restfulSource source = new restfulSource(recv.getHost(),recv.getPort(),"group.id-"+namespace,srcTopic);
         restfulSink tar1 = new restfulSink(send.getHost(),send.getPort(),tarTopic1);
@@ -165,7 +198,6 @@ public class StreamingJob {
         /*setStartFromEarliest() /setStartFromLatest(): 即从最早的/最新的消息开始消费*/
 		DataStreamSource stream = env
 				.addSource(source);
-
 
 //        SplitStream<String> stringSplitStream = stream.split(
 //                new OutputSelector<String>() {
@@ -218,6 +250,7 @@ public class StreamingJob {
             }
 
         }).setParallelism(1);
+
 
         //DataStream<String> dataStream1=stringSplitStream.select(FlightDepInfo);
         DataStream dataStream1=streamOperator.getSideOutput(outputTag1);

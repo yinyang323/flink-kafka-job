@@ -117,11 +117,10 @@ under the License.
 			<artifactId>fastjson</artifactId>
 			<version>1.2.58</version>
 		</dependency>
-		<!-- Pull in as a traditional dependency -->
 		<dependency>
-			<groupId>com.konghq</groupId>
-			<artifactId>unirest-java</artifactId>
-			<version>3.1.00</version>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>3.3.0</version>
 		</dependency>
 	</dependencies>
 

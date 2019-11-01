@@ -1,42 +1,73 @@
 package com.myflink.data;
 
-import kong.unirest.Unirest;
+import com.myflink.StreamingJob;
+import com.myflink.common.OkHttpHelper;
+import okhttp3.*;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction;
+import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
+
+import java.io.IOException;
+
+public class restfulSource extends RichSourceFunction<String> {
+    private volatile Boolean isRunning;
+    private static final long serialVersionUID=2L;
+
+    private String _url;
+    private String _topic;
+    private String _groupid1;
+    private String _host;
+    private String url_create;
+    //private String result;
+    private int _port;
 
 
-public class restfulSource extends RichParallelSourceFunction<String> {
-    static private Boolean isRunning;
-    static private String _url;
-    static private String _topic;
-    static private int _interval;
-    static private String _groupid;
-    static private String _host;
-    static private int _port;
-    static private String result;
-
-    public restfulSource(String host,int port,String groupid,String topic,int interval){
+    public restfulSource(String host,int port,String group,String topic){
         _host=host;
         _port=port;
-        _groupid=groupid;
-        _interval=interval;
+        _groupid1=group;
         _topic=topic;
-        _url="http://"+_host+":"+_port+"/ICE/consumer/"+_groupid+"/"+_topic;
+        _url="http://"+_host+":"+_port+"/ICE/consumer/"+_groupid1+"/"+_topic;
+
+
         isRunning=true;
-    }
 
-    public restfulSource(String host,int port,String groupid,String topic){
-        new restfulSource(host,port,groupid,topic,1000);
-    }
+        url_create = "http://" + _host + ":" + _port + "/ICE/consumer/" + _topic + "/create";
 
+    }
 
     @Override
     public void run(SourceContext sourceContext) throws Exception {
 
         while (isRunning){
-            Unirest.get(_url)
+
+        /*    result=conn.get(_url);
+            result=result.replace("[\"","");
+            result=result.replace("\"]","");
+            result=result.replace("\\","");
+            if(result.contains(">"))
+                sourceContext.collect(result);
+            else
+                System.out.println("Illegal result: "+result);*/
+
+            Thread.sleep(100);
+
+            OkHttpHelper.Comsume(_url,sourceContext);
+
+            /*result=Unirest.get(_url)
                     .asString()
-                    .ifSuccess(response-> {
+                    .getBody();
+
+            result=result.replace("[\"","");
+            result=result.replace("\"]","");
+            result=result.replace("\\","");
+            if(result.contains(">")) {
+                sourceContext.collect(result);
+                //System.out.println(result);
+            }
+            else
+                System.out.println("Illegal result: "+result);*/
+
+              /*.ifSuccess(response-> {
                         result=response.getBody();
                         result=result.replace("[\"","");
                         result=result.replace("\"]","");
@@ -57,7 +88,10 @@ public class restfulSource extends RichParallelSourceFunction<String> {
                             e.printStackTrace();
                         }
                     });
+        }*/
         }
+
+
     }
 
     @Override
@@ -68,13 +102,16 @@ public class restfulSource extends RichParallelSourceFunction<String> {
     @Override
     public void open(Configuration parameters) throws Exception {
         super.open(parameters);
-        String url_create="http://"+_host+":"+_port+"/ICE/consumer/"+_topic+"/create";
+
+        OkHttpHelper.createInstancce(_groupid1,url_create);
+
+        /*String url_create="http://"+_host+":"+_port+"/ICE/consumer/"+_topic+"/create";
         String response=Unirest.post(url_create)
                 .header("accept","application/text")
                 .queryString("groupid",_groupid)
                 .queryString("num","1")
                 .asString()
-                .getBody();
-        System.out.println(response);
+                .getBody();*/
+
     }
 }
