@@ -1,14 +1,9 @@
 package com.myflink.data;
 
-import com.alibaba.fastjson.JSON;
-import com.myflink.StreamingJob;
 import com.myflink.common.OkHttpHelper;
-import com.myflink.messages.record;
-import okhttp3.*;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 
-import java.io.IOException;
 
 
 public class restfulSink extends RichSinkFunction<String> {

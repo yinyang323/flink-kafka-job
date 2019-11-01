@@ -1,12 +1,9 @@
 package com.myflink.data;
 
-import com.myflink.StreamingJob;
 import com.myflink.common.OkHttpHelper;
-import okhttp3.*;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 
-import java.io.IOException;
 
 public class restfulSource extends RichSourceFunction<String> {
     private volatile Boolean isRunning;

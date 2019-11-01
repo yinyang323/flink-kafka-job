@@ -22,7 +22,6 @@ import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.ConfigService;
 import com.myflink.data.restfulSink;
 import com.myflink.data.restfulSource;
-import okhttp3.OkHttpClient;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -38,7 +37,6 @@ import javax.net.ssl.*;
 import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Skeleton for a Flink Streaming Job.
