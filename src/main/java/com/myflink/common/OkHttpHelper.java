@@ -40,14 +40,15 @@ public class OkHttpHelper {
 
     }
 
-    static public void Comsume(String _url, SourceFunction.SourceContext sc){
+    static public void Comsume(String _url, SourceFunction.SourceContext sc) {
 
         Request request = new Request.Builder()
                 .url(_url)
                 .get()
                 .build();
-    try {
-        _client.newCall(request).enqueue(new Callback() {
+        try {
+            //region 异步发送消费请求
+        /*_client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 System.out.println(call.toString());
@@ -75,15 +76,29 @@ public class OkHttpHelper {
                 }
                 response.close();
             }
-        });
-    }
-    catch (Exception ex){
-        System.out.println(ex.toString());
-    }
+        });*/
+        //endregion
+
+        //region 同步发送消费请求
+            Response response = _client.newCall(request).execute();
+            String _result = response.body().string();
+            _result = _result.replace("[\"", "");
+            _result = _result.replace("\"]", "");
+            _result = _result.replace("\\", "");
+            if (_result.contains(">")) {
+                sc.collect(_result);
+            } else {
+                System.out.println("Illegal result: " + _result);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //endregion
+
 
     }
 
-    public static void product(String _url,String value){
+        public static void product(String _url,String value){
         RequestBody body=RequestBody
                 .create(MediaType.parse("application/json;charset=utf-8"),JSON.toJSON(toObj(value)).toString());
         Request request = new Request.Builder()

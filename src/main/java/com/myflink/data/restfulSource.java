@@ -37,7 +37,7 @@ public class restfulSource extends RichSourceFunction<String> {
 
         while (isRunning){
 
-            Thread.sleep(100);
+            //Thread.sleep(100);
 
             OkHttpHelper.Comsume(_url,sourceContext);
 
