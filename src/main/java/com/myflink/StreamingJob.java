@@ -67,7 +67,7 @@ public class StreamingJob {
         CommonConfig=ConfigService.getAppConfig();
 
 
-
+        /*cancel ssl secure*/
         TrustManager[] trustAllCerts = new TrustManager[] {
                 new X509TrustManager() {
                     public java.security.cert.X509Certificate[] getAcceptedIssuers() {
@@ -80,9 +80,6 @@ public class StreamingJob {
                 }
         };
 
-
-
-
         SSLContext sc = SSLContext.getInstance("SSL");
         sc.init(null, trustAllCerts, new java.security.SecureRandom());
 
@@ -94,14 +91,6 @@ public class StreamingJob {
                 return true;
             }
         });
-
-        /*Unirest.config()
-                .socketTimeout(500)
-                .connectTimeout(1000)
-                .concurrency(10, 5)
-                .setDefaultHeader("Accept", "application/json")
-                .followRedirects(false)
-                .enableCookieManagement(false);*/
 
         String key_ADEP="ADEP";
         String defaultValue_ADEP="ZGGG";//default value if not set

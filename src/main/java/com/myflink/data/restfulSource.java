@@ -37,55 +37,11 @@ public class restfulSource extends RichSourceFunction<String> {
 
         while (isRunning){
 
-        /*    result=conn.get(_url);
-            result=result.replace("[\"","");
-            result=result.replace("\"]","");
-            result=result.replace("\\","");
-            if(result.contains(">"))
-                sourceContext.collect(result);
-            else
-                System.out.println("Illegal result: "+result);*/
-
             Thread.sleep(100);
 
             OkHttpHelper.Comsume(_url,sourceContext);
 
-            /*result=Unirest.get(_url)
-                    .asString()
-                    .getBody();
 
-            result=result.replace("[\"","");
-            result=result.replace("\"]","");
-            result=result.replace("\\","");
-            if(result.contains(">")) {
-                sourceContext.collect(result);
-                //System.out.println(result);
-            }
-            else
-                System.out.println("Illegal result: "+result);*/
-
-              /*.ifSuccess(response-> {
-                        result=response.getBody();
-                        result=result.replace("[\"","");
-                        result=result.replace("\"]","");
-                        result=result.replace("\\","");
-                        if(result.contains(">")) {
-                            sourceContext.collect(result);
-                            //System.out.println(result);
-                        }
-                        else
-                            System.out.println("Illegal result: "+result);
-                    })
-                    .ifFailure(response->{
-                        result="";
-                        System.out.println("Request source topic failed: "+response.getBody());
-                        try {
-                            Thread.sleep(_interval);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    });
-        }*/
         }
 
 
@@ -101,14 +57,6 @@ public class restfulSource extends RichSourceFunction<String> {
         super.open(parameters);
 
         OkHttpHelper.createInstancce(_groupid1,url_create);
-
-        /*String url_create="http://"+_host+":"+_port+"/ICE/consumer/"+_topic+"/create";
-        String response=Unirest.post(url_create)
-                .header("accept","application/text")
-                .queryString("groupid",_groupid)
-                .queryString("num","1")
-                .asString()
-                .getBody();*/
 
     }
 }

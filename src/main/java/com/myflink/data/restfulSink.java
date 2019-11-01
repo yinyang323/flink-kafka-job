@@ -28,54 +28,9 @@ public class restfulSink extends RichSinkFunction<String> {
     @Override
     public void invoke (String value,Context context)throws Exception{
 
-
-     /*   String body=JSON.toJSON(_record).toString();
-        _response=conn.post(_url,body);*/
-        //System.out.println(_response);
-
-
-        /*Request request = new Request.Builder()
-                .url(_url)
-                .post(RequestBody.create(MediaType
-                        .parse("application/json;charset=utf-8"),JSON.toJSON(tojson(value)).toString()))
-                .build();
-
-        _client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                System.out.println("fail: "+call.toString());
-                System.out.println(e.getMessage());
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    _response= response.body().string();
-                }
-                System.out.println(_response);
-                response.close();
-            }
-        });*/
-
         OkHttpHelper.product(_url,value);
     }
 
-
-
-       /* _response=Unirest.post(_url)
-               .header("Content-Type","application/json")
-               .body(JSON.toJSON(_record).toString())
-               .asString()
-               .getBody();
-
-        //response res= JSON.parseObject(_response,response.class);
-        System.out.println(JSON.toJSON(_response));*/
-
-              /* .ifSuccess(response->{
-                    _response=response.getBody();
-                    //response res= JSON.parseObject(_response,response.class);
-                    System.out.println(JSON.toJSON(_response));
-               })
-               .ifFailure(response->System.out.println(response.getBody()));*/
     }
 
 
