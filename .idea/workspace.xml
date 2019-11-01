@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c974dcf5-d92a-4f17-95da-1d3504fe2fc4" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSink.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSink.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSource.java" afterDir="false" />
@@ -32,11 +30,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="StreamingJob.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="StreamingJob.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="238" column="43" selection-start-line="238" selection-start-column="43" selection-end-line="238" selection-end-column="43" />
+            <state relative-caret-position="133">
+              <caret line="38" column="19" selection-start-line="38" selection-start-column="19" selection-end-line="38" selection-end-column="19" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -47,8 +45,8 @@
       <file leaf-file-name="restfulSink.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSink.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="64" selection-start-line="64" selection-end-line="64" />
+            <state relative-caret-position="95">
+              <caret line="5" selection-start-line="5" selection-end-line="5" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -59,8 +57,8 @@
       <file leaf-file-name="restfulSource.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSource.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="361">
-              <caret line="19" column="6" selection-start-line="19" selection-start-column="6" selection-end-line="19" selection-end-column="6" />
+            <state relative-caret-position="19">
+              <caret line="1" selection-start-line="1" selection-end-line="1" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -68,11 +66,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="OkHttpHelper.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="OkHttpHelper.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/common/OkHttpHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="81">
-              <caret line="93" column="97" selection-start-line="93" selection-start-column="97" selection-end-line="93" selection-end-column="97" />
+            <state relative-caret-position="1843">
+              <caret line="97" column="25" lean-forward="true" selection-start-line="97" selection-start-column="25" selection-end-line="97" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#239#240#0" expanded="true" />
@@ -127,10 +125,10 @@
         <option value="$PROJECT_DIR$/src/main/java/com/myflink/common/httpRequest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/myflink/common/HttpUrlConnect.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/myflink/common/OkHttpHelper.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSink.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSource.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/myflink/common/OkHttpHelper.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java" />
       </list>
     </option>
   </component>
@@ -412,7 +410,7 @@
       <workItem from="1572222794191" duration="13059000" />
       <workItem from="1572331989884" duration="6545000" />
       <workItem from="1572509463853" duration="4567000" />
-      <workItem from="1572568763568" duration="7647000" />
+      <workItem from="1572568763568" duration="8633000" />
     </task>
     <task id="LOCAL-00001" summary="Merge branch 'master' of https://github.com/yinyang323/flink-kafka-job&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/myflink/StreamingJob.java">
       <created>1560222974656</created>
@@ -540,11 +538,25 @@
       <option name="project" value="LOCAL" />
       <updated>1570867902700</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Changed to restful">
+      <created>1572577930067</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1572577930067</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Changed to restful">
+      <created>1572578004772</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1572578004772</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="240014000" />
+    <option name="totallyTimeSpent" value="241000000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -905,36 +917,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="19" column="6" selection-start-line="19" selection-start-column="6" selection-end-line="19" selection-end-column="6" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="238" column="43" selection-start-line="238" selection-start-column="43" selection-end-line="238" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSink.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="64" selection-start-line="64" selection-end-line="64" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/common/HttpUrlConnect.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1843">
@@ -942,14 +924,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSink.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/common/OkHttpHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="93" column="97" selection-start-line="93" selection-start-column="97" selection-end-line="93" selection-end-column="97" />
+        <state relative-caret-position="1843">
+          <caret line="97" column="25" lean-forward="true" selection-start-line="97" selection-start-column="25" selection-end-line="97" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#239#240#0" expanded="true" />
             <element signature="e#268#269#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="38" column="19" selection-start-line="38" selection-start-column="19" selection-end-line="38" selection-end-column="19" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

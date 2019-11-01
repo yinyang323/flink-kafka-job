@@ -10,12 +10,6 @@ import java.io.IOException;
 public class OkHttpHelper {
     static private OkHttpClient _client=new OkHttpClient();
 
-    public static String getResult() {
-        return result;
-    }
-
-    static private String result;
-
     static public void createInstancce(String _groupid1,String url_create){
 
         RequestBody body = new FormBody.Builder()
