@@ -79,21 +79,21 @@ public class OkHttpHelper {
         });*/
         //endregion
 
-        //region 同步发送消费请求
-            Response response = _client.newCall(request).execute();
-            String _result = response.body().string();
-            _result = _result.replace("[\"", "");
-            _result = _result.replace("\"]", "");
-            _result = _result.replace("\\", "");
-            if (_result.contains(">")) {
-                sc.collect(_result);
-            } else {
-                System.out.println("Illegal result: " + _result);
+            //region 同步发送消费请求
+                Response response = _client.newCall(request).execute();
+                String _result = response.body().string();
+                _result = _result.replace("[\"", "");
+                _result = _result.replace("\"]", "");
+                _result = _result.replace("\\", "");
+                if (_result.contains(">")) {
+                    sc.collect(_result);
+                } else {
+                    System.out.println("Illegal result: " + _result);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //endregion
+            //endregion
 
 
     }

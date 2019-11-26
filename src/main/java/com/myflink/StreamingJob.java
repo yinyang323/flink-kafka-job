@@ -20,6 +20,7 @@ package com.myflink;
 
 import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.ConfigService;
+import com.ctrip.framework.apollo.model.ConfigChange;
 import com.myflink.data.restfulSink;
 import com.myflink.data.restfulSource;
 import org.apache.flink.api.java.utils.ParameterTool;
@@ -31,6 +32,8 @@ import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 import org.dom4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scala.Tuple2;
 
 import javax.net.ssl.*;
@@ -53,18 +56,20 @@ import java.util.*;
 public class StreamingJob {
     enum condition{include,exclude}
 
+    static private Config config;
+
     public static void main(String[] args) throws Exception {
 
+        Logger logger=LoggerFactory.getLogger(StreamingJob.class);
         ParameterTool parameterTool = ParameterTool.fromArgs(args);
         /*指定apollo中所在的集群名称*/
-        System.setProperty("apollo.cluster",parameterTool.get("apollo.cluster","default"));
+        String clustername=parameterTool.get("apollo.cluster","default");
+        System.setProperty("apollo.cluster",clustername);
         //final Logger logger = LoggerFactory.getLogger(StreamingJob.class);
 
-        Config config,CommonConfig;
-
-        String namespace=parameterTool.get("instance.name","instance1");
-        config = ConfigService.getConfig(namespace);
-        CommonConfig=ConfigService.getAppConfig();
+        //String namespace=parameterTool.get("instance.name","instance1");
+        config = ConfigService.getAppConfig();
+        //CommonConfig=ConfigService.getAppConfig();
 
 
         /*cancel ssl secure*/
@@ -85,90 +90,38 @@ public class StreamingJob {
 
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 
-        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-            @Override
-            public boolean verify(String s, SSLSession sslSession) {
-                return true;
-            }
-        });
+        HttpsURLConnection.setDefaultHostnameVerifier((s, sslSession) -> true);
 
-        String key_ADEP="ADEP";
-        String defaultValue_ADEP="ZGGG";//default value if not set
-        String value1=config.getProperty(key_ADEP,defaultValue_ADEP);
-
-        String key2="ADES";
-        String defaultValue2="ZGHA";//default value if not set
-        String value2=config.getProperty(key2,defaultValue2);
-
-        String key3="Company";
-        String defaultValue3="CSN";//default value if not set
-        String value3=config.getProperty(key3,defaultValue3);
-
-        String key4="ControlArea";
-        String defaultValue4="ZGGGACC/ZGHAACC/ZHHHACC";//default value if not set
-        String value4=config.getProperty(key4,defaultValue4);
-
-        String key5="StripState";
-        String defaultValue5="";//default value if not set
-        String value5=config.getProperty(key5,defaultValue5);
-
+        //region 基本配置
         String xpath="xpath";
         String xpathdefaultValue="//mesg:Message/mesg:flight/fx:departure/fx:aerodrome,//mesg:Message/mesg:flight/fx:arrival/fx:destinationAerodrome," +
                 "//mesg:Message/mesg:flight/fx:flightIdentification,//mesg:Message/mesg:flight/fb:extension/atmb:atmbFipsInfo";
         String xpathvalue=config.getProperty(xpath,xpathdefaultValue);
 
         /*数据源所在的主题*/
-        String SrcTopic="SrcTopic";
+        String SrcTopic="Source";
         String SrcdefaultValue="source1";
-        String srcTopic=config.getProperty(SrcTopic,SrcdefaultValue);
+        String srcTopic = config.getProperty(SrcTopic, SrcdefaultValue);
 
-        String TarTopic1="target";
+        String TarTopic="Target";
         String TardefaultValue="output1";
-        String tarTopic1=config.getProperty(TarTopic1,TardefaultValue);
-
-        String key_adepflag="ADEP_FLAG";
-        String defaultValue_ADEP_FLAG=condition.include.toString();
-        String value_ADEP_FLAG=config.getProperty(key_adepflag,defaultValue_ADEP_FLAG);
-
-        String key_adesflag="ADES_FLAG";
-        String defaultValue_ADES_FLAG=condition.include.toString();
-        String value_ADES_FLAG=config.getProperty(key_adesflag,defaultValue_ADES_FLAG);
-
-        String key_cpyflag="Company_FLAG";
-        String defaultValue_cpy_FLAG=condition.include.toString();
-        String value_cpy_FLAG=config.getProperty(key_cpyflag,defaultValue_cpy_FLAG);
-
-        String key_CAflag="ControlArea_FLAG";
-        String defaultValue_CA_FLAG=condition.include.toString();
-        String value_CA_FLAG=config.getProperty(key_CAflag,defaultValue_CA_FLAG);
-
-        String key_STflag="StripState_FLAG";
-        String defaultValue_ST_FLAG=condition.exclude.toString();
-        String value_ST_FLAG=config.getProperty(key_STflag,defaultValue_ST_FLAG);
-
-        List<Tuple2<String,String>> configdata=new ArrayList<>();
-        configdata.add(new Tuple2<>(value1,value_ADEP_FLAG));
-        configdata.add(new Tuple2<>(value2,value_ADES_FLAG));
-        configdata.add(new Tuple2<>(value3,value_cpy_FLAG));
-        configdata.add(new Tuple2<>(value4,value_CA_FLAG));
-        configdata.add(new Tuple2<>(value5,value_ST_FLAG));
-
-        Distribute distribute=new Distribute(configdata);
-
-        distribute.setSrcTopic(srcTopic);
-        distribute.setTarTopic(tarTopic1);
-
-        distribute.setXpaths(xpathvalue.split(","));
+        String tarTopic = config.getProperty(TarTopic, TardefaultValue);
 
         /*公共配置项*/
         String Recv="recv.server";
-        String defaultValue8="http://192.168.191.130:8081";
-        URL recv=new URL(CommonConfig.getProperty(Recv,defaultValue8));
+        String defaultValue8="http://192.168.191.131:8081";
+        URL recv=new URL(config.getProperty(Recv,defaultValue8));
 
         String Send="send.server";
-        String defaultValue9="http://192.168.191.130:8081";
-        URL send=new URL(CommonConfig.getProperty(Send,defaultValue9));
+        String defaultValue9="http://192.168.191.131:8081";
+        URL send=new URL(config.getProperty(Send,defaultValue9));
+        //endregion
 
+        List<Tuple2<String,String>> configdata=new ArrayList<>();
+        configInitial(configdata);
+
+        Distribute distribute=new Distribute(configdata);
+        distribute.setXpaths(xpathvalue.split(","));
         final OutputTag<String> outputTag1 = new OutputTag<String>("output1"){};
 
         /*此配置若不设置默认值，则可能根据当前机器的cpu线程数设置并发数*/
@@ -178,8 +131,8 @@ public class StreamingJob {
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 		env.setParallelism(2);
 
-        restfulSource source = new restfulSource(recv.getHost(),recv.getPort(),"group.id-"+namespace,srcTopic);
-        restfulSink tar1 = new restfulSink(send.getHost(),send.getPort(),tarTopic1);
+        restfulSource source = new restfulSource(recv.getHost(),recv.getPort(),"group.id-"+clustername, srcTopic);
+        restfulSink tar1 = new restfulSink(send.getHost(),send.getPort(), tarTopic);
 
         /*将消费模式设置为从broker记录的位置开始，防止消息丢失*/
         /*setStartFromEarliest() /setStartFromLatest(): 即从最早的/最新的消息开始消费*/
@@ -211,6 +164,21 @@ public class StreamingJob {
 //                }
 //        );
 
+        //region 监听配置中心的配置，并重载配置
+        config.addChangeListener(changeEvent -> {
+            configdata.clear();
+            configInitial(configdata);
+            distribute.Reset(configdata);
+
+            for (String key : changeEvent.changedKeys()) {
+                ConfigChange change = changeEvent.getChange(key);
+                logger.info("Change - key: {}, oldValue: {}, newValue: {}, changeType: {}",
+                        change.getPropertyName(), change.getOldValue(), change.getNewValue(),
+                        change.getChangeType());
+            }
+        });
+        //endregion
+
         SingleOutputStreamOperator streamOperator= stream.process(new ProcessFunction<String, String>() {
             @Override
             public void processElement(String s, Context context, Collector<String> out) throws Exception {
@@ -226,6 +194,8 @@ public class StreamingJob {
                     if(distribute.SelectTunnel(s)){
                         context.output(outputTag1,s);
                     }
+
+
                 }
                 catch (DocumentException e) {
                     e.printStackTrace();
@@ -292,84 +262,59 @@ public class StreamingJob {
 		 */
 
 		// execute program
-		env.execute("数据交换平台智能路由"+namespace);
-
-//        ConfigChangeListener changeListener = new ConfigChangeListener() {
-//            @Override
-//            public void onChange(ConfigChangeEvent changeEvent) {
-//                logger.info("Changes for namespace {}", changeEvent.getNamespace());
-//                for (String key : changeEvent.changedKeys()) {
-//                    ConfigChange change = changeEvent.getChange(key);
-//                    logger.info("Change - key: {}, oldValue: {}, newValue: {}, changeType: {}",
-//                            change.getPropertyName(), change.getOldValue(), change.getNewValue(),
-//                            change.getChangeType());
-//                    switch (change.getPropertyName()){
-//                        case "SrcTopic":
-//                            try {
-//                                source.cancel();
-//                                source.close();
-//
-////                                KafkaTopicPartition ktp =new KafkaTopicPartition(change.getNewValue(),0);
-////                                Map<KafkaTopicPartition,Long> start=new HashMap<>();
-////                                start.put(ktp,0L);
-////                                source.setStartFromSpecificOffsets(start);
-////                                source.setStartFromLatest();/*only receive latest message*/
-////                                source.open(null);
-//                                source=new FlinkKafkaConsumer011(change.getNewValue(),new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop1);
-//                                env.addSource(source);
-//
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-//                            break;
-//
-//                        case  "TarTopic1":
-//                            try {
-//                                tar1.close();
-//                                tar1=new FlinkKafkaProducer011(change.getNewValue(), new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
-//                                dataStream1.addSink(tar1);
-//                            } catch (FlinkKafka011Exception e) {
-//                                e.printStackTrace();
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-//                            break;
-//
-//                        case  "TarTopic2":
-//                            try {
-//                                tar2.close();
-//                                tar2=new FlinkKafkaProducer011(change.getNewValue(),new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
-//                                dataStream2.addSink(tar2);
-//                            } catch (FlinkKafka011Exception e) {
-//                                e.printStackTrace();
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-//                            break;
-//
-//                        case  "TarTopic3":
-//                            try {
-//                                tar3.close();
-//                                tar3=new FlinkKafkaProducer011(change.getNewValue(), new org.apache.flink.api.common.serialization.SimpleStringSchema(),prop2);
-//                                dataStream3.addSink(tar3);
-//                            } catch (FlinkKafka011Exception e) {
-//                                e.printStackTrace();
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-//                            break;
-//
-//                        default:
-//                            break;
-//                    }
-//                }
-//            }
-//        };
-
-        //config.addChangeListener(changeListener);
+		env.execute("数据交换平台智能路由"+clustername);
 
 	}
 
+	static private void configInitial(List<Tuple2<String,String>> configdata){
+        //region 路由规则配置
+        String key_ADEP="ADEP";
+        String defaultValue_ADEP="ZGGG";//default value if not set
+        String value1 = config.getProperty(key_ADEP, defaultValue_ADEP);
+
+        String key2="ADES";
+        String defaultValue2="ZGHA";//default value if not set
+        String value2 = config.getProperty(key2, defaultValue2);
+
+        String key3="Company";
+        String defaultValue3="CSN";//default value if not set
+        String value3 = config.getProperty(key3, defaultValue3);
+
+        String key4="ControlArea";
+        String defaultValue4="ZGGGACC/ZGHAACC/ZHHHACC";//default value if not set
+        String value4 = config.getProperty(key4, defaultValue4);
+
+        String key5="StripState";
+        String defaultValue5="";//default value if not set
+        String value5 = config.getProperty(key5, defaultValue5);
+
+        String key_adepflag="ADEP_Flag";
+        String defaultValue_ADEP_FLAG=condition.include.toString();
+        String value_ADEP_FLAG = config.getProperty(key_adepflag, defaultValue_ADEP_FLAG);
+
+        String key_adesflag="ADES_Flag";
+        String defaultValue_ADES_FLAG=condition.include.toString();
+        String value_ADES_FLAG = config.getProperty(key_adesflag, defaultValue_ADES_FLAG);
+
+        String key_cpyflag="Company_Flag";
+        String defaultValue_cpy_FLAG=condition.include.toString();
+        String value_cpy_FLAG = config.getProperty(key_cpyflag, defaultValue_cpy_FLAG);
+
+        String key_CAflag="ControlArea_Flag";
+        String defaultValue_CA_FLAG=condition.include.toString();
+        String value_CA_FLAG = config.getProperty(key_CAflag, defaultValue_CA_FLAG);
+
+        String key_STflag="StripState_Flag";
+        String defaultValue_ST_FLAG=condition.exclude.toString();
+        String value_ST_FLAG = config.getProperty(key_STflag, defaultValue_ST_FLAG);
+        //endregion
+
+        configdata.add(new Tuple2<>(value1, value_ADEP_FLAG));
+        configdata.add(new Tuple2<>(value2, value_ADES_FLAG));
+        configdata.add(new Tuple2<>(value3, value_cpy_FLAG));
+        configdata.add(new Tuple2<>(value4, value_CA_FLAG));
+        configdata.add(new Tuple2<>(value5, value_ST_FLAG));
+    }
 
 }
 

@@ -5,35 +5,30 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.dom4j.*;
 import scala.Tuple2;
+import sun.java2d.Disposer;
 
 import java.io.Serializable;
 import java.util.*;
 
-public class Distribute implements Serializable {
-    private String srcTopic = "";
-    private String tarTopic = "";
-    private List<Tuple2<String[],String>> configs=new ArrayList<>();
+public class Distribute extends Disposer implements Serializable {
+
+    static private List<Tuple2<String[],String>> configs=new ArrayList<>();
     private String[] xpaths= {};
-
-    public void setSrcTopic(String srcTopic) {
-        this.srcTopic = srcTopic;
-    }
-
-    public void setTarTopic(String tarTopic) {
-        this.tarTopic = tarTopic;
-    }
 
     public void setXpaths(String[] xpaths){this.xpaths=xpaths;}
 
-
-    public String getSrcTopic() { return srcTopic; }
-
-    public String getTarTopic(){
-        return tarTopic;
-    }
-
     public Distribute(List<Tuple2<String,String>> strs){
 
+        for (int i=0;i!=strs.size();i++){
+            if(strs.get(i)._1.trim().isEmpty())
+                configs.add(new Tuple2<>(new String[] {},strs.get(i)._2));
+            else
+                configs.add(new Tuple2<>(strs.get(i)._1.split(","),strs.get(i)._2));
+        }
+    }
+
+    public void Reset(List<Tuple2<String,String>> strs){
+        configs.clear();
         for (int i=0;i!=strs.size();i++){
             if(strs.get(i)._1.trim().isEmpty())
                 configs.add(new Tuple2<>(new String[] {},strs.get(i)._2));
