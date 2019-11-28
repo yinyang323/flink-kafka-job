@@ -20,10 +20,11 @@ package com.myflink;
 
 import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.ConfigService;
-import com.ctrip.framework.apollo.model.ConfigChange;
+import com.myflink.common.ApolloHelper;
 import com.myflink.data.restfulSink;
 import com.myflink.data.restfulSource;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -32,14 +33,10 @@ import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 import org.dom4j.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import scala.Tuple2;
 
 import javax.net.ssl.*;
 import java.net.URL;
 import java.security.cert.X509Certificate;
-import java.util.*;
 
 /**
  * Skeleton for a Flink Streaming Job.
@@ -54,21 +51,22 @@ import java.util.*;
  * method, change the respective entry in the POM.xml file (simply search for 'mainClass').
  */
 public class StreamingJob {
-    enum condition{include,exclude}
 
-    static private Config config;
+
+
+    //static public Distribute distribute;
 
     public static void main(String[] args) throws Exception {
 
-        Logger logger=LoggerFactory.getLogger(StreamingJob.class);
         ParameterTool parameterTool = ParameterTool.fromArgs(args);
         /*指定apollo中所在的集群名称*/
         String clustername=parameterTool.get("apollo.cluster","default");
         System.setProperty("apollo.cluster",clustername);
+        Config config=ConfigService.getAppConfig();
         //final Logger logger = LoggerFactory.getLogger(StreamingJob.class);
 
         //String namespace=parameterTool.get("instance.name","instance1");
-        config = ConfigService.getAppConfig();
+
         //CommonConfig=ConfigService.getAppConfig();
 
 
@@ -117,11 +115,14 @@ public class StreamingJob {
         URL send=new URL(config.getProperty(Send,defaultValue9));
         //endregion
 
-        List<Tuple2<String,String>> configdata=new ArrayList<>();
-        configInitial(configdata);
+        ApolloHelper apollo=new ApolloHelper();
+        apollo.configInitial(config);
 
-        Distribute distribute=new Distribute(configdata);
+        Distribute distribute=new Distribute(apollo.getConfigdata());
         distribute.setXpaths(xpathvalue.split(","));
+
+        apollo.ListenChange(distribute,config);
+
         final OutputTag<String> outputTag1 = new OutputTag<String>("output1"){};
 
         /*此配置若不设置默认值，则可能根据当前机器的cpu线程数设置并发数*/
@@ -130,6 +131,7 @@ public class StreamingJob {
 		// set up the streaming execution environment
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 		env.setParallelism(2);
+
 
         restfulSource source = new restfulSource(recv.getHost(),recv.getPort(),"group.id-"+clustername, srcTopic);
         restfulSink tar1 = new restfulSink(send.getHost(),send.getPort(), tarTopic);
@@ -164,22 +166,15 @@ public class StreamingJob {
 //                }
 //        );
 
-        //region 监听配置中心的配置，并重载配置
-        config.addChangeListener(changeEvent -> {
-            configdata.clear();
-            configInitial(configdata);
-            distribute.Reset(configdata);
-
-            for (String key : changeEvent.changedKeys()) {
-                ConfigChange change = changeEvent.getChange(key);
-                logger.info("Change - key: {}, oldValue: {}, newValue: {}, changeType: {}",
-                        change.getPropertyName(), change.getOldValue(), change.getNewValue(),
-                        change.getChangeType());
-            }
-        });
-        //endregion
-
         SingleOutputStreamOperator streamOperator= stream.process(new ProcessFunction<String, String>() {
+
+            @Override
+            public void open(Configuration parameters) throws Exception {
+                super.open(parameters);
+                Config _config=ConfigService.getAppConfig();
+                apollo.ListenChange(distribute,_config);
+            }
+
             @Override
             public void processElement(String s, Context context, Collector<String> out) throws Exception {
                 out.collect(s);
@@ -194,8 +189,6 @@ public class StreamingJob {
                     if(distribute.SelectTunnel(s)){
                         context.output(outputTag1,s);
                     }
-
-
                 }
                 catch (DocumentException e) {
                     e.printStackTrace();
@@ -205,6 +198,7 @@ public class StreamingJob {
                 }
 
             }
+
 
         }).setParallelism(1);
 
@@ -266,55 +260,7 @@ public class StreamingJob {
 
 	}
 
-	static private void configInitial(List<Tuple2<String,String>> configdata){
-        //region 路由规则配置
-        String key_ADEP="ADEP";
-        String defaultValue_ADEP="ZGGG";//default value if not set
-        String value1 = config.getProperty(key_ADEP, defaultValue_ADEP);
 
-        String key2="ADES";
-        String defaultValue2="ZGHA";//default value if not set
-        String value2 = config.getProperty(key2, defaultValue2);
-
-        String key3="Company";
-        String defaultValue3="CSN";//default value if not set
-        String value3 = config.getProperty(key3, defaultValue3);
-
-        String key4="ControlArea";
-        String defaultValue4="ZGGGACC/ZGHAACC/ZHHHACC";//default value if not set
-        String value4 = config.getProperty(key4, defaultValue4);
-
-        String key5="StripState";
-        String defaultValue5="";//default value if not set
-        String value5 = config.getProperty(key5, defaultValue5);
-
-        String key_adepflag="ADEP_Flag";
-        String defaultValue_ADEP_FLAG=condition.include.toString();
-        String value_ADEP_FLAG = config.getProperty(key_adepflag, defaultValue_ADEP_FLAG);
-
-        String key_adesflag="ADES_Flag";
-        String defaultValue_ADES_FLAG=condition.include.toString();
-        String value_ADES_FLAG = config.getProperty(key_adesflag, defaultValue_ADES_FLAG);
-
-        String key_cpyflag="Company_Flag";
-        String defaultValue_cpy_FLAG=condition.include.toString();
-        String value_cpy_FLAG = config.getProperty(key_cpyflag, defaultValue_cpy_FLAG);
-
-        String key_CAflag="ControlArea_Flag";
-        String defaultValue_CA_FLAG=condition.include.toString();
-        String value_CA_FLAG = config.getProperty(key_CAflag, defaultValue_CA_FLAG);
-
-        String key_STflag="StripState_Flag";
-        String defaultValue_ST_FLAG=condition.exclude.toString();
-        String value_ST_FLAG = config.getProperty(key_STflag, defaultValue_ST_FLAG);
-        //endregion
-
-        configdata.add(new Tuple2<>(value1, value_ADEP_FLAG));
-        configdata.add(new Tuple2<>(value2, value_ADES_FLAG));
-        configdata.add(new Tuple2<>(value3, value_cpy_FLAG));
-        configdata.add(new Tuple2<>(value4, value_CA_FLAG));
-        configdata.add(new Tuple2<>(value5, value_ST_FLAG));
-    }
 
 }
 

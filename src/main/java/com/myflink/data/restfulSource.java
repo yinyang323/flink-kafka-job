@@ -4,7 +4,6 @@ import com.myflink.common.OkHttpHelper;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 
-
 public class restfulSource extends RichSourceFunction<String> {
     private volatile Boolean isRunning;
     private static final long serialVersionUID=2L;
@@ -18,6 +17,7 @@ public class restfulSource extends RichSourceFunction<String> {
     private int _port;
 
 
+
     public restfulSource(String host,int port,String group,String topic){
         _host=host;
         _port=port;
@@ -25,11 +25,9 @@ public class restfulSource extends RichSourceFunction<String> {
         _topic=topic;
         _url="http://"+_host+":"+_port+"/ICE/consumer/"+_groupid1+"/"+_topic;
 
-
         isRunning=true;
 
         url_create = "http://" + _host + ":" + _port + "/ICE/consumer/" + _topic + "/create";
-
     }
 
     @Override
@@ -40,11 +38,7 @@ public class restfulSource extends RichSourceFunction<String> {
             //Thread.sleep(1000);
 
             OkHttpHelper.Comsume(_url,sourceContext);
-
-
         }
-
-
     }
 
     @Override
@@ -57,6 +51,5 @@ public class restfulSource extends RichSourceFunction<String> {
         super.open(parameters);
 
         OkHttpHelper.createInstancce(_groupid1,url_create);
-
     }
 }

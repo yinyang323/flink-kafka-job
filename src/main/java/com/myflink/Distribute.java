@@ -12,7 +12,7 @@ import java.util.*;
 
 public class Distribute extends Disposer implements Serializable {
 
-    static private List<Tuple2<String[],String>> configs=new ArrayList<>();
+    public List<Tuple2<String[],String>> configs=new ArrayList<>();
     private String[] xpaths= {};
 
     public void setXpaths(String[] xpaths){this.xpaths=xpaths;}
@@ -27,15 +27,7 @@ public class Distribute extends Disposer implements Serializable {
         }
     }
 
-    public void Reset(List<Tuple2<String,String>> strs){
-        configs.clear();
-        for (int i=0;i!=strs.size();i++){
-            if(strs.get(i)._1.trim().isEmpty())
-                configs.add(new Tuple2<>(new String[] {},strs.get(i)._2));
-            else
-                configs.add(new Tuple2<>(strs.get(i)._1.split(","),strs.get(i)._2));
-        }
-    }
+
 
     /*compare input and return tag num*/
     public boolean SelectTunnel(String input) throws DocumentException {
@@ -46,6 +38,8 @@ public class Distribute extends Disposer implements Serializable {
 
         String[] strings={ADEP,ADES,Company,ControlArea};
 
+        if(configs.size()==0)
+            return false;
         for(int i=0;i!=strings.length;i++){
             if(!compareMessage(strings[i], configs.get(i)))
                 return false;
