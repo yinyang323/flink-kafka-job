@@ -171,6 +171,7 @@ public class StreamingJob {
             @Override
             public void open(Configuration parameters) throws Exception {
                 super.open(parameters);
+                System.setProperty("apollo.cluster",clustername);
                 Config _config=ConfigService.getAppConfig();
                 apollo.ListenChange(distribute,_config);
             }
