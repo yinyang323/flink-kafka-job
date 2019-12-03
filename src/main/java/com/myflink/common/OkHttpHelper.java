@@ -4,11 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.myflink.messages.record;
 import okhttp3.*;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class OkHttpHelper {
     static private OkHttpClient _client=new OkHttpClient();
+    static private Logger logger=LoggerFactory.getLogger(OkHttpHelper.class);
 
     static public void createInstancce(String _groupid1,String url_create){
 
@@ -25,14 +28,14 @@ public class OkHttpHelper {
         _client.newCall(request1).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                System.out.println(call.toString());
-                System.out.println(e.getMessage());
+                logger.error(call.toString());
+                logger.error(e.getMessage());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    System.out.println(response.body().string());
+                    logger.info(response.body().string());
                 }
                 response.close();
             }
@@ -87,8 +90,13 @@ public class OkHttpHelper {
                 _result = _result.replace("\\", "");
                 if (_result.contains(">")) {
                     sc.collect(_result);
-                } else {
-                    System.out.println("Illegal result: " + _result);
+                    logger.debug("Receive message:");
+                    logger.debug(_result);
+                }
+                else if(_result.equals("[]"))
+                    {}
+                else {
+                    logger.info("Illegal result: " + _result);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -109,13 +117,13 @@ public class OkHttpHelper {
         _client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                System.out.println("fail: "+call.toString());
-                System.out.println(e.getMessage());
+                logger.error("fail: "+call.toString());
+                logger.error(e.getMessage());
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    System.out.println(response.body().string());
+                    logger.info("Send message success,content: "+response.body().string());
                 }
                 response.close();
             }

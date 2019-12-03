@@ -26,7 +26,7 @@ public class ApolloHelper implements Serializable {
         configdata=new ArrayList<>();
     }
 
-    public void ListenChange(Distribute dst,Config config){
+    public void ListenChange(Distribute dst,Config config,String clustername){
         //region 监听配置中心的配置，并重载配置
         config.addChangeListener(changeEvent -> {
             configInitial(config);
@@ -34,8 +34,8 @@ public class ApolloHelper implements Serializable {
 
             for (String key : changeEvent.changedKeys()) {
                 ConfigChange change = changeEvent.getChange(key);
-                logger.info("Change - key: {}, oldValue: {}, newValue: {}, changeType: {}",
-                        change.getPropertyName(), change.getOldValue(), change.getNewValue(),
+                logger.info("{} Change - key: {}, oldValue: {}, newValue: {}, changeType: {}",
+                        clustername,change.getPropertyName(), change.getOldValue(), change.getNewValue(),
                         change.getChangeType());
             }
         });

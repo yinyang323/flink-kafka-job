@@ -33,6 +33,8 @@ import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 import org.dom4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.*;
 import java.net.URL;
@@ -63,7 +65,7 @@ public class StreamingJob {
         String clustername=parameterTool.get("apollo.cluster","default");
         System.setProperty("apollo.cluster",clustername);
         Config config=ConfigService.getAppConfig();
-        //final Logger logger = LoggerFactory.getLogger(StreamingJob.class);
+        final Logger logger = LoggerFactory.getLogger(StreamingJob.class);
 
         //String namespace=parameterTool.get("instance.name","instance1");
 
@@ -121,7 +123,7 @@ public class StreamingJob {
         Distribute distribute=new Distribute(apollo.getConfigdata());
         distribute.setXpaths(xpathvalue.split(","));
 
-        apollo.ListenChange(distribute,config);
+        //apollo.ListenChange(distribute,config,clustername);
 
         final OutputTag<String> outputTag1 = new OutputTag<String>("output1"){};
 
@@ -173,7 +175,7 @@ public class StreamingJob {
                 super.open(parameters);
                 System.setProperty("apollo.cluster",clustername);
                 Config _config=ConfigService.getAppConfig();
-                apollo.ListenChange(distribute,_config);
+                apollo.ListenChange(distribute,_config,clustername);
             }
 
             @Override
@@ -189,6 +191,8 @@ public class StreamingJob {
 //                            break;
                     if(distribute.SelectTunnel(s)){
                         context.output(outputTag1,s);
+                        logger.info("Receive message：");
+                        logger.info(s);
                     }
                 }
                 catch (DocumentException e) {
