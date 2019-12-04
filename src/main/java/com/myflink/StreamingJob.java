@@ -210,8 +210,8 @@ public class StreamingJob {
 
         //DataStream<String> dataStream1=stringSplitStream.select(FlightDepInfo);
         DataStream dataStream1=streamOperator.getSideOutput(outputTag1);
-        dataStream1.addSink(tar1);
-        dataStream1.print();
+        dataStream1.addSink(tar1).setParallelism(1);
+        dataStream1.print().setParallelism(1);
 
 
 
