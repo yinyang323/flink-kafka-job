@@ -55,16 +55,16 @@ import java.security.cert.X509Certificate;
 public class StreamingJob {
 
 
-
     //static public Distribute distribute;
 
     public static void main(String[] args) throws Exception {
 
         ParameterTool parameterTool = ParameterTool.fromArgs(args);
         /*指定apollo中所在的集群名称*/
-        String clustername=parameterTool.get("apollo.cluster","default");
-        System.setProperty("apollo.cluster",clustername);
-        Config config=ConfigService.getAppConfig();
+        String clustername = parameterTool.get("apollo.cluster", "default");
+        System.setProperty("apollo.cluster", clustername);
+
+        Config config = ConfigService.getAppConfig();
         final Logger logger = LoggerFactory.getLogger(StreamingJob.class);
 
         //String namespace=parameterTool.get("instance.name","instance1");
@@ -73,15 +73,17 @@ public class StreamingJob {
 
 
         /*cancel ssl secure*/
-        TrustManager[] trustAllCerts = new TrustManager[] {
+        TrustManager[] trustAllCerts = new TrustManager[]{
                 new X509TrustManager() {
                     public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                         return null;
                     }
 
-                    public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                    }
 
-                    public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                    }
                 }
         };
 
@@ -93,55 +95,56 @@ public class StreamingJob {
         HttpsURLConnection.setDefaultHostnameVerifier((s, sslSession) -> true);
 
         //region 基本配置
-        String xpath="xpath";
-        String xpathdefaultValue="//mesg:Message/mesg:flight/fx:departure/fx:aerodrome,//mesg:Message/mesg:flight/fx:arrival/fx:destinationAerodrome," +
+        String xpath = "xpath";
+        String xpathdefaultValue = "//mesg:Message/mesg:flight/fx:departure/fx:aerodrome,//mesg:Message/mesg:flight/fx:arrival/fx:destinationAerodrome," +
                 "//mesg:Message/mesg:flight/fx:flightIdentification,//mesg:Message/mesg:flight/fb:extension/atmb:atmbFipsInfo";
-        String xpathvalue=config.getProperty(xpath,xpathdefaultValue);
+        String xpathvalue = config.getProperty(xpath, xpathdefaultValue);
 
         /*数据源所在的主题*/
-        String SrcTopic="Source";
-        String SrcdefaultValue="source1";
+        String SrcTopic = "Source";
+        String SrcdefaultValue = "source1";
         String srcTopic = config.getProperty(SrcTopic, SrcdefaultValue);
 
-        String TarTopic="Target";
-        String TardefaultValue="output1";
+        String TarTopic = "Target";
+        String TardefaultValue = "output1";
         String tarTopic = config.getProperty(TarTopic, TardefaultValue);
 
         /*公共配置项*/
-        String Recv="recv.server";
-        String defaultValue8="http://192.168.191.131:8081";
-        URL recv=new URL(config.getProperty(Recv,defaultValue8));
+        String Recv = "recv.server";
+        String defaultValue8 = "http://192.168.191.131:8081";
+        URL recv = new URL(config.getProperty(Recv, defaultValue8));
 
-        String Send="send.server";
-        String defaultValue9="http://192.168.191.131:8081";
-        URL send=new URL(config.getProperty(Send,defaultValue9));
+        String Send = "send.server";
+        String defaultValue9 = "http://192.168.191.131:8081";
+        URL send = new URL(config.getProperty(Send, defaultValue9));
         //endregion
 
-        ApolloHelper apollo=new ApolloHelper();
+        ApolloHelper apollo = new ApolloHelper();
         apollo.configInitial(config);
 
-        Distribute distribute=new Distribute(apollo.getConfigdata());
+        Distribute distribute = new Distribute(apollo.getConfigdata());
         distribute.setXpaths(xpathvalue.split(","));
 
         //apollo.ListenChange(distribute,config,clustername);
 
-        final OutputTag<String> outputTag1 = new OutputTag<String>("output1"){};
+        final OutputTag<String> outputTag1 = new OutputTag<String>("output1") {
+        };
 
         /*此配置若不设置默认值，则可能根据当前机器的cpu线程数设置并发数*/
         StreamExecutionEnvironment.setDefaultLocalParallelism(1);
 
-		// set up the streaming execution environment
-		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-		env.setParallelism(2);
+        // set up the streaming execution environment
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setParallelism(2);
 
 
-        restfulSource source = new restfulSource(recv.getHost(),recv.getPort(),"group.id-"+clustername, srcTopic);
-        restfulSink tar1 = new restfulSink(send.getHost(),send.getPort(), tarTopic);
+        restfulSource source = new restfulSource(recv.getHost(), recv.getPort(), "group.id-" + clustername, srcTopic);
+        restfulSink tar1 = new restfulSink(send.getHost(), send.getPort(), tarTopic);
 
         /*将消费模式设置为从broker记录的位置开始，防止消息丢失*/
         /*setStartFromEarliest() /setStartFromLatest(): 即从最早的/最新的消息开始消费*/
-		DataStreamSource stream = env
-				.addSource(source);
+        DataStreamSource stream = env
+                .addSource(source);
 
 //        SplitStream<String> stringSplitStream = stream.split(
 //                new OutputSelector<String>() {
@@ -168,14 +171,14 @@ public class StreamingJob {
 //                }
 //        );
 
-        SingleOutputStreamOperator streamOperator= stream.process(new ProcessFunction<String, String>() {
+        SingleOutputStreamOperator streamOperator = stream.process(new ProcessFunction<String, String>() {
 
             @Override
             public void open(Configuration parameters) throws Exception {
                 super.open(parameters);
-                System.setProperty("apollo.cluster",clustername);
-                Config _config=ConfigService.getAppConfig();
-                apollo.ListenChange(distribute,_config,clustername);
+                System.setProperty("apollo.cluster", clustername);
+                Config _config = ConfigService.getAppConfig();
+                apollo.ListenChange(distribute, _config, clustername);
             }
 
             @Override
@@ -189,31 +192,23 @@ public class StreamingJob {
 //                            break;
 //                        default:
 //                            break;
-                    if(distribute.SelectTunnel(s)){
-                        context.output(outputTag1,s);
+                    if (distribute.SelectTunnel(s)) {
+                        context.output(outputTag1, s);
                         logger.info("Receive message：");
                         logger.info(s);
                     }
-                }
-                catch (DocumentException e) {
+                } catch (DocumentException e) {
                     e.printStackTrace();
-                }
-                catch (Exception ex){
+                } catch (Exception ex) {
                     throw ex;
                 }
-
             }
-
-
         }).setParallelism(1);
 
-
         //DataStream<String> dataStream1=stringSplitStream.select(FlightDepInfo);
-        DataStream dataStream1=streamOperator.getSideOutput(outputTag1);
+        DataStream dataStream1 = streamOperator.getSideOutput(outputTag1);
         dataStream1.addSink(tar1).setParallelism(1);
         dataStream1.print().setParallelism(1);
-
-
 
 //        KeyedStream<String,Tuple> keyedStream1= (Datastream.map(new MapFunction<Tuple2<String,String>, String>() {
 ////            private static final long serialVersionUID = -6867736771747690201L;
@@ -240,33 +235,29 @@ public class StreamingJob {
 
 
 
-		/*
-		 * Here, you can start creating your execution plan for Flink.
-		 *
-		 * Start with getting some data from the environment, like
-		 * 	env.readTextFile(textPath);
-		 *
-		 * then, transform the resulting DataStream<String> using operations
-		 * like
-		 * 	.filter()
-		 * 	.flatMap()
-		 * 	.join()
-		 * 	.coGroup()
-		 *
-		 * and many more.
-		 * Have a look at the programming guide for the Java API:
-		 *
-		 * http://flink.apache.org/docs/latest/apis/streaming/index.html
-		 *
-		 */
+        /*
+         * Here, you can start creating your execution plan for Flink.
+         *
+         * Start with getting some data from the environment, like
+         * 	env.readTextFile(textPath);
+         *
+         * then, transform the resulting DataStream<String> using operations
+         * like
+         * 	.filter()
+         * 	.flatMap()
+         * 	.join()
+         * 	.coGroup()
+         *
+         * and many more.
+         * Have a look at the programming guide for the Java API:
+         *
+         * http://flink.apache.org/docs/latest/apis/streaming/index.html
+         *
+         */
 
-		// execute program
-		env.execute("数据交换平台智能路由"+clustername);
-
-	}
-
-
-
+        // execute program
+        env.execute("数据交换平台智能路由" + clustername);
+    }
 }
 
 
