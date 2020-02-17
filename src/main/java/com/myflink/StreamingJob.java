@@ -135,7 +135,7 @@ public class StreamingJob {
 
         // set up the streaming execution environment
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(2);
+        env.setParallelism(1);
 
 
         restfulSource source = new restfulSource(recv.getHost(), recv.getPort(), "group.id-" + clustername, srcTopic);
