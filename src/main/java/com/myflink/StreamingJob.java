@@ -23,6 +23,9 @@ import com.ctrip.framework.apollo.ConfigService;
 import com.myflink.common.ApolloHelper;
 import com.myflink.data.restfulSink;
 import com.myflink.data.restfulSource;
+import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.tuple.Tuple;
+import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -30,6 +33,8 @@ import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
+import org.apache.flink.table.api.TableEnvironment;
+import org.apache.flink.table.api.java.StreamTableEnvironment;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 import org.dom4j.*;
@@ -137,6 +142,7 @@ public class StreamingJob {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
+        StreamTableEnvironment tableEnv=StreamTableEnvironment.create(env);
 
         restfulSource source = new restfulSource(recv.getHost(), recv.getPort(), "group.id-" + clustername, srcTopic);
         restfulSink tar1 = new restfulSink(send.getHost(), send.getPort(), tarTopic);
@@ -145,6 +151,24 @@ public class StreamingJob {
         /*setStartFromEarliest() /setStartFromLatest(): 即从最早的/最新的消息开始消费*/
         DataStreamSource stream = env
                 .addSource(source);
+
+        DataStream<Tuple4<String,String,String,String>> ds=stream.map(new MapFunction<String,Tuple4<String,String,String,String>>() {
+
+            private static final long serialVersionUID = 1471936326697828381L;
+
+            @Override
+            public Tuple4<String,String,String,String> map(String value) throws Exception {
+                    return distribute.convertToTuple(value);
+            }
+        });
+
+        tableEnv.createTemporaryView("fixm", ds,"ADEP,ADES,Company,ControlArea");
+
+        tableEnv.sqlQuery(
+                "SELECT fixm, " +
+                        "  TUMBLE_START(rowtime, INTERVAL '1' DAY) as wStart,  " +
+                        "  SUM(amount) FROM Orders " +
+                        "GROUP BY TUMBLE(rowtime, INTERVAL '1' DAY), user");
 
 //        SplitStream<String> stringSplitStream = stream.split(
 //                new OutputSelector<String>() {
@@ -258,6 +282,8 @@ public class StreamingJob {
         // execute program
         env.execute("数据交换平台智能路由" + clustername);
     }
+
+
 }
 
 

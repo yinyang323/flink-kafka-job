@@ -3,6 +3,7 @@ package com.myflink;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.flink.api.java.tuple.Tuple4;
 import org.dom4j.*;
 import scala.Tuple2;
 import sun.java2d.Disposer;
@@ -32,7 +33,7 @@ public class Distribute extends Disposer implements Serializable {
 
 
     /*compare input and return tag num*/
-    public boolean SelectTunnel(String input) throws DocumentException, UnsupportedEncodingException {
+    public boolean SelectTunnel(String input) throws Exception {
 
         String ADEP = strToXmltuple(input, xpaths[0], "locationIndicator");
         String ADES = strToXmltuple(input, xpaths[1], "locationIndicator");
@@ -77,17 +78,36 @@ public class Distribute extends Disposer implements Serializable {
 
     }
 
-    private static String strToXmltuple(String xmlstr, String xpath, String attributeName) throws DocumentException, UnsupportedEncodingException {
-        //SAXReader sr=new SAXReader();
-        //Document document=sr.read(new ByteArrayInputStream(xmlstr.getBytes("utf-8")));
-        Document document = DocumentHelper.parseText(xmlstr);
+    private static String strToXmltuple(String xmlstr, String xpath, String attributeName) throws Exception {
+       try {
+           //SAXReader sr=new SAXReader();
+           //Document document=sr.read(new ByteArrayInputStream(xmlstr.getBytes("utf-8")));
+           Document document = DocumentHelper.parseText(xmlstr);
 /*        Map<String, String> map = new HashMap<String, String>();
         map.put("xsd","http://www.w3.org/2001/XMLSchema");*/
-        //XPath x=document.createXPath(xpath);
-        Node type = document.selectSingleNode(xpath);
-        StringBuilder str = new StringBuilder("@");
-        str.append(attributeName);
-        return type.valueOf(str.toString());
+           //XPath x=document.createXPath(xpath);
+           Node type = document.selectSingleNode(xpath);
+           StringBuilder str = new StringBuilder("@");
+           str.append(attributeName);
+           return type.valueOf(str.toString());
+       }
+       catch (Exception e){
+           throw e;
+       }
+    }
+
+    public Tuple4<String,String,String,String> convertToTuple(String input) throws Exception {
+        try {
+            String ADEP = strToXmltuple(input, xpaths[0], "locationIndicator");
+            String ADES = strToXmltuple(input, xpaths[1], "locationIndicator");
+            String Company = strToXmltuple(input, xpaths[2], "aircraftIdentification").substring(0, 3);
+            String ControlArea = strToXmltuple(input, xpaths[3], "controlArea");
+
+            return new Tuple4<>(ADEP,ADES,Company,ControlArea);
+        }
+        catch (Exception e){
+            throw e;
+        }
     }
 
     /*compare input message with config value*/
