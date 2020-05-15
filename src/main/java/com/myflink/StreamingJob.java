@@ -24,8 +24,11 @@ import com.myflink.common.ApolloHelper;
 import com.myflink.data.restfulSink;
 import com.myflink.data.restfulSource;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple;
+import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.java.tuple.Tuple4;
+import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -33,7 +36,7 @@ import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
-import org.apache.flink.table.api.TableEnvironment;
+import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.java.StreamTableEnvironment;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
@@ -152,24 +155,24 @@ public class StreamingJob {
         DataStreamSource stream = env
                 .addSource(source);
 
-        DataStream<Tuple4<String,String,String,String>> ds=stream.map(new MapFunction<String,Tuple4<String,String,String,String>>() {
+        DataStream<Tuple4<String,String,String,String>> ds=stream.map(new MapFunction<String,Tuple5<String,String,String,String,String>>() {
 
             private static final long serialVersionUID = 1471936326697828381L;
 
             @Override
-            public Tuple4<String,String,String,String> map(String value) throws Exception {
+            public Tuple5<String,String,String,String,String> map(String value) throws Exception {
                     return distribute.convertToTuple(value);
             }
         });
 
-        tableEnv.createTemporaryView("fixm", ds,"ADEP,ADES,Company,ControlArea");
+        tableEnv.createTemporaryView("fixm", ds,"ADEP,ADES,Company,ControlArea,content");
 
-        tableEnv.sqlQuery(
-                "SELECT fixm, " +
-                        "  TUMBLE_START(rowtime, INTERVAL '1' DAY) as wStart,  " +
-                        "  SUM(amount) FROM Orders " +
-                        "GROUP BY TUMBLE(rowtime, INTERVAL '1' DAY), user");
+        Table sqlQuery=tableEnv.sqlQuery(
+                "SELECT content FROM fixm WHERE ADEP='ZJSY' AND Company='CHH'");
 
+        DataStream<String> output1=tableEnv.toAppendStream(sqlQuery,Types.STRING);
+
+        output1.addSink(tar1);
 //        SplitStream<String> stringSplitStream = stream.split(
 //                new OutputSelector<String>() {
 //                    @Override
