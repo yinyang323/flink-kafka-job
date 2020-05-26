@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c974dcf5-d92a-4f17-95da-1d3504fe2fc4" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/myflink/Distribute.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/myflink/Distribute.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,15 +28,36 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="StreamingJob.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="StreamingJob.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="309">
-              <caret line="170" column="80" lean-forward="true" selection-start-line="170" selection-start-column="80" selection-end-line="170" selection-end-column="80" />
+            <state relative-caret-position="-323">
+              <caret line="172" column="82" lean-forward="true" selection-start-line="172" selection-start-column="82" selection-end-line="172" selection-end-column="82" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#5451#5459#0" expanded="true" />
+                <element signature="e#5585#5593#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BroadCastStream.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/data/BroadCastStream.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="133">
+              <caret line="7" column="86" selection-start-line="7" selection-start-column="86" selection-end-line="7" selection-end-column="86" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="app.properties" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/app.properties">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="19" selection-start-column="19" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -46,8 +65,8 @@
       <file leaf-file-name="Distribute.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/Distribute.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="108" column="28" lean-forward="true" selection-start-line="108" selection-start-column="28" selection-end-line="108" selection-end-column="28" />
+            <state relative-caret-position="1805">
+              <caret line="108" column="28" selection-start-line="108" selection-start-column="28" selection-end-line="108" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -73,7 +92,7 @@
       <file leaf-file-name="ApolloHelper.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/common/ApolloHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1042">
+            <state relative-caret-position="342">
               <caret line="28" column="16" selection-start-line="28" selection-start-column="16" selection-end-line="28" selection-end-column="16" />
               <folding>
                 <element signature="e#512#513#0" expanded="true" />
@@ -147,6 +166,7 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/myflink/Distribute.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/myflink/data/BroadCastStream.java" />
       </list>
     </option>
   </component>
@@ -206,9 +226,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -269,10 +286,28 @@
               <item name="myflink" type="462c0819:PsiDirectoryNode" />
               <item name="messages" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="flink-kafka-job" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flink-kafka-job" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flink-kafka-job" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flink-kafka-job" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="META-INF" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -439,7 +474,9 @@
       <workItem from="1581557946148" duration="1656000" />
       <workItem from="1581931576332" duration="599000" />
       <workItem from="1589443809662" duration="4538000" />
-      <workItem from="1589502765685" duration="3912000" />
+      <workItem from="1589502765685" duration="6097000" />
+      <workItem from="1590371049441" duration="2294000" />
+      <workItem from="1590482922358" duration="1189000" />
     </task>
     <task id="LOCAL-00001" summary="Merge branch 'master' of https://github.com/yinyang323/flink-kafka-job&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/myflink/StreamingJob.java">
       <created>1560222974656</created>
@@ -658,11 +695,18 @@
       <option name="project" value="LOCAL" />
       <updated>1589448275765</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="table process">
+      <created>1589507822495</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1589507822495</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="362324000" />
+    <option name="totallyTimeSpent" value="367992000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -690,7 +734,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22995952" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23805667" />
       <window_info anchor="right" id="Database" order="3" weight="0.32955465" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -737,7 +781,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="75" />
+      <option name="time" value="77" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -747,7 +791,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-runtime_2.11/1.8.0/flink-runtime_2.11-1.8.0.jar!/org/apache/flink/runtime/taskmanager/Task.class" />
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-streaming-java_2.11/1.8.0/flink-streaming-java_2.11-1.8.0.jar!/org/apache/flink/streaming/runtime/tasks/StreamTask.class" />
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-core/1.8.0/flink-core-1.8.0.jar!/org/apache/flink/api/common/functions/util/FunctionUtils.class" />
     <entry file="jar://$MAVEN_REPOSITORY$/com/konghq/unirest-java/3.1.00/unirest-java-3.1.00.jar!/kong/unirest/HttpResponse.class" />
@@ -813,13 +856,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/app.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="19" selection-start-column="19" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://D:/工作文件/fixm.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/messages/fixm.java" />
     <entry file="file://$PROJECT_DIR$/pom.xml">
@@ -845,14 +881,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/Distribute.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="108" column="28" lean-forward="true" selection-start-line="108" selection-start-column="28" selection-end-line="108" selection-end-column="28" />
+        <state relative-caret-position="1805">
+          <caret line="108" column="28" selection-start-line="108" selection-start-column="28" selection-end-line="108" selection-end-column="28" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/common/ApolloHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1042">
+        <state relative-caret-position="342">
           <caret line="28" column="16" selection-start-line="28" selection-start-column="16" selection-end-line="28" selection-end-column="16" />
           <folding>
             <element signature="e#512#513#0" expanded="true" />
@@ -861,13 +897,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/app.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="19" selection-start-column="19" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="170" column="80" lean-forward="true" selection-start-line="170" selection-start-column="80" selection-end-line="170" selection-end-column="80" />
+        <state relative-caret-position="-323">
+          <caret line="172" column="82" lean-forward="true" selection-start-line="172" selection-start-column="82" selection-end-line="172" selection-end-column="82" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5451#5459#0" expanded="true" />
+            <element signature="e#5585#5593#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/data/BroadCastStream.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="7" column="86" selection-start-line="7" selection-start-column="86" selection-end-line="7" selection-end-column="86" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
