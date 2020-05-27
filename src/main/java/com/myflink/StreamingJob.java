@@ -24,18 +24,21 @@ import com.myflink.common.ApolloHelper;
 import com.myflink.data.restfulSink;
 import com.myflink.data.restfulSource;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.common.state.MapStateDescriptor;
+import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.Types;
-import org.apache.flink.api.java.tuple.Tuple;
-import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
+import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction;
+import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.java.StreamTableEnvironment;
 import org.apache.flink.util.Collector;
@@ -47,6 +50,7 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.*;
 import java.net.URL;
 import java.security.cert.X509Certificate;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Skeleton for a Flink Streaming Job.
@@ -154,6 +158,32 @@ public class StreamingJob {
         /*setStartFromEarliest() /setStartFromLatest(): 即从最早的/最新的消息开始消费*/
         DataStreamSource stream = env
                 .addSource(source);
+
+        final MapStateDescriptor<String, String> CONFIG_KEYWORDS = new MapStateDescriptor<>(
+                "config-keywords",
+                BasicTypeInfo.STRING_TYPE_INFO,
+                BasicTypeInfo.STRING_TYPE_INFO);
+
+        BroadcastStream<String> broadcastStream = env.addSource(new RichSourceFunction<String>() {
+
+            private volatile boolean isRunning = true;
+
+            @Override
+            public void run(SourceContext<String> sourceContext) throws Exception {
+                while (isRunning){
+                    TimeUnit.SECONDS.sleep(30);
+                    Config _config = ConfigService.getAppConfig();
+                    String s=_config.getProperty("sql","");
+                    sourceContext.collect(s);
+                }
+
+            }
+
+            @Override
+            public void cancel() {
+                isRunning=false;
+            }
+        }).setParallelism(1).broadcast(CONFIG_KEYWORDS);
 
         DataStream<Tuple4<String,String,String,String>> ds=stream.map(new MapFunction<String,Tuple5<String,String,String,String,String>>() {
 

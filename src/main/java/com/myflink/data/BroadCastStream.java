@@ -3,6 +3,7 @@ package com.myflink.data;
 
 import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.ConfigService;
+import com.myflink.common.ApolloHelper;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction;
 
@@ -13,6 +14,7 @@ public class BroadCastStream extends RichParallelSourceFunction<String> {
 
     private volatile boolean isRun;
     private volatile int lastUpdateMin = -1;
+    private ApolloHelper apollo;
 
     @Override
     public void open(Configuration parameters) throws Exception {
