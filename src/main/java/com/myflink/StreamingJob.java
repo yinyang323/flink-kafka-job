@@ -37,6 +37,7 @@ import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
+import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 import org.apache.flink.table.api.Table;
@@ -149,7 +150,7 @@ public class StreamingJob {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        StreamTableEnvironment tableEnv=StreamTableEnvironment.create(env);
+        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
 
         restfulSource source = new restfulSource(recv.getHost(), recv.getPort(), "group.id-" + clustername, srcTopic);
         restfulSink tar1 = new restfulSink(send.getHost(), send.getPort(), tarTopic);
@@ -167,42 +168,70 @@ public class StreamingJob {
         BroadcastStream<String> broadcastStream = env.addSource(new RichSourceFunction<String>() {
 
             private volatile boolean isRunning = true;
+            private volatile String sql="";
 
             @Override
             public void run(SourceContext<String> sourceContext) throws Exception {
-                while (isRunning){
+                while (isRunning) {
                     TimeUnit.SECONDS.sleep(30);
                     Config _config = ConfigService.getAppConfig();
-                    String s=_config.getProperty("sql","");
-                    sourceContext.collect(s);
+                    String s = _config.getProperty("sql", "");
+                    if(!s.equals(sql))
+                        sourceContext.collect(s);
+                    else
+                        sql=s;
                 }
-
             }
 
             @Override
             public void cancel() {
-                isRunning=false;
+                isRunning = false;
             }
         }).setParallelism(1).broadcast(CONFIG_KEYWORDS);
 
-        DataStream<Tuple4<String,String,String,String>> ds=stream.map(new MapFunction<String,Tuple5<String,String,String,String,String>>() {
+        DataStream<Tuple4<String, String, String, String>> ds = stream.map(new MapFunction<String, Tuple5<String, String, String, String, String>>() {
 
             private static final long serialVersionUID = 1471936326697828381L;
 
             @Override
-            public Tuple5<String,String,String,String,String> map(String value) throws Exception {
-                    return distribute.convertToTuple(value);
+            public Tuple5<String, String, String, String, String> map(String value) throws Exception {
+                return distribute.convertToTuple(value);
             }
         });
 
-        tableEnv.createTemporaryView("fixm", ds,"ADEP,ADES,Company,ControlArea,content");
+        tableEnv.createTemporaryView("fixm", ds, "ADEP,ADES,Company,ControlArea,content");
 
-        Table sqlQuery=tableEnv.sqlQuery(
+        ds.connect(broadcastStream).process(new BroadcastProcessFunction<Tuple4<String, String, String, String>, String, String>() {
+
+            private String sql = null;
+
+            @Override
+            public void open(Configuration param) throws Exception {
+                super.open(param);
+                sql="SELECT content FROM fixm WHERE ADEP='ZJSY' AND Company='CHH'";
+            }
+
+            @Override
+            public void processElement(Tuple4<String, String, String, String> value, ReadOnlyContext ctx, Collector<String> out) throws Exception {
+                Table sqlQuery = tableEnv.sqlQuery(sql);
+
+            }
+
+            @Override
+            public void processBroadcastElement(String value, Context ctx, Collector<String> out) throws Exception {
+                sql=value;
+                System.out.println("关键字更新成功，更新拦截关键字：" + value);
+            }
+        });
+
+
+
+        Table sqlQuery = tableEnv.sqlQuery(
                 "SELECT content FROM fixm WHERE ADEP='ZJSY' AND Company='CHH'");
 
-        DataStream<String> output1=tableEnv.toAppendStream(sqlQuery,Types.STRING);
+        DataStream<String> output = tableEnv.toAppendStream(sqlQuery, Types.STRING);
 
-        output1.addSink(tar1);
+        output.addSink(tar1);
 //        SplitStream<String> stringSplitStream = stream.split(
 //                new OutputSelector<String>() {
 //                    @Override
