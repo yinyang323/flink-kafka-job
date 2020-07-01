@@ -10,10 +10,10 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 public class OkHttpHelper {
-    static private OkHttpClient _client=new OkHttpClient();
-    static private Logger logger=LoggerFactory.getLogger(OkHttpHelper.class);
+    static private OkHttpClient _client = new OkHttpClient();
+    static private Logger logger = LoggerFactory.getLogger(OkHttpHelper.class);
 
-    static public void createInstancce(String _groupid1,String url_create){
+    static public void createInstancce(String _groupid1, String url_create) {
 
         RequestBody body = new FormBody.Builder()
                 .add("groupid", _groupid1)
@@ -80,10 +80,11 @@ public class OkHttpHelper {
                 response.close();
             }
         });*/
-        //endregion
+            //endregion
 
             //region 同步发送消费请求
-                Response response = _client.newCall(request).execute();
+            Response response = _client.newCall(request).execute();
+            if (response.isSuccessful()) {
                 String _result = response.body().string();
                 _result = _result.replace("[\"", "");
                 _result = _result.replace("\"]", "");
@@ -92,23 +93,22 @@ public class OkHttpHelper {
                     sc.collect(_result);
                     logger.debug("Receive message:");
                     logger.debug(_result);
-                }
-                else if(_result.equals("[]"))
-                    {}
-                else {
+                } else if (_result.equals("[]")) {
+                } else {
                     logger.info("Illegal result: " + _result);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-            //endregion
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //endregion
 
 
     }
 
-        public static void product(String _url,String value){
-        RequestBody body=RequestBody
-                .create(MediaType.parse("application/json;charset=utf-8"),JSON.toJSON(toObj(value)).toString());
+    public static void product(String _url, String value) {
+        RequestBody body = RequestBody
+                .create(MediaType.parse("application/json;charset=utf-8"), JSON.toJSON(toObj(value)).toString());
         Request request = new Request.Builder()
                 .url(_url)
                 .post(body)
@@ -117,28 +117,28 @@ public class OkHttpHelper {
         _client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                logger.error("fail: "+call.toString());
+                logger.error("fail: " + call.toString());
                 logger.error(e.getMessage());
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    logger.info("Send message success,content: "+response.body().string());
+                    logger.info("Send message success,content: " + response.body().string());
                 }
                 response.close();
             }
         });
     }
 
-    private static record toObj(String value){
-        record _record=new record();
+    private static record toObj(String value) {
+        record _record = new record();
         _record.setKey("ICE processed");
         _record.setValue(value);
         _record.setPartition(0);
 
         return _record;
     }
-
 
 
 }
