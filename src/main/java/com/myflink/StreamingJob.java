@@ -24,34 +24,24 @@ import com.myflink.common.ApolloHelper;
 import com.myflink.data.restfulSink;
 import com.myflink.data.restfulSource;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.common.state.MapStateDescriptor;
-import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.api.common.typeinfo.Types;
-import org.apache.flink.api.java.tuple.Tuple4;
+import org.apache.flink.api.common.typeinfo.TypeHint;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.api.java.utils.ParameterTool;
-import org.apache.flink.configuration.Configuration;
-import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.ProcessFunction;
-import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
-import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction;
-import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
+import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.java.StreamTableEnvironment;
-import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
-import org.dom4j.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.*;
 import java.net.URL;
 import java.security.cert.X509Certificate;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Skeleton for a Flink Streaming Job.
@@ -66,7 +56,6 @@ import java.util.concurrent.TimeUnit;
  * method, change the respective entry in the POM.xml file (simply search for 'mainClass').
  */
 public class StreamingJob {
-
 
     //static public Distribute distribute;
 
@@ -130,6 +119,10 @@ public class StreamingJob {
         String Send = "send.server";
         String defaultValue9 = "http://192.168.191.131:8081";
         URL send = new URL(config.getProperty(Send, defaultValue9));
+
+        String key_sql = "sql";
+        String defauletValue10 = "SELECT content FROM fixm";
+        String sql = config.getProperty(key_sql, defauletValue10);
         //endregion
 
         ApolloHelper apollo = new ApolloHelper();
@@ -147,10 +140,12 @@ public class StreamingJob {
         StreamExecutionEnvironment.setDefaultLocalParallelism(1);
 
         // set up the streaming execution environment
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        EnvironmentSettings set=EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
+
+        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env,set);
 
         restfulSource source = new restfulSource(recv.getHost(), recv.getPort(), "group.id-" + clustername, srcTopic);
         restfulSink tar1 = new restfulSink(send.getHost(), send.getPort(), tarTopic);
@@ -160,36 +155,7 @@ public class StreamingJob {
         DataStreamSource stream = env
                 .addSource(source);
 
-        final MapStateDescriptor<String, String> CONFIG_KEYWORDS = new MapStateDescriptor<>(
-                "config-keywords",
-                BasicTypeInfo.STRING_TYPE_INFO,
-                BasicTypeInfo.STRING_TYPE_INFO);
-
-        BroadcastStream<String> broadcastStream = env.addSource(new RichSourceFunction<String>() {
-
-            private volatile boolean isRunning = true;
-            private volatile String sql="";
-
-            @Override
-            public void run(SourceContext<String> sourceContext) throws Exception {
-                while (isRunning) {
-                    TimeUnit.SECONDS.sleep(30);
-                    Config _config = ConfigService.getAppConfig();
-                    String s = _config.getProperty("sql", "");
-                    if(!s.equals(sql))
-                        sourceContext.collect(s);
-                    else
-                        sql=s;
-                }
-            }
-
-            @Override
-            public void cancel() {
-                isRunning = false;
-            }
-        }).setParallelism(1).broadcast(CONFIG_KEYWORDS);
-
-        DataStream<Tuple4<String, String, String, String>> ds = stream.map(new MapFunction<String, Tuple5<String, String, String, String, String>>() {
+        DataStream<Tuple5<String, String, String, String, String>> ds = stream.map(new MapFunction<String,Tuple5<String, String, String, String, String>>() {
 
             private static final long serialVersionUID = 1471936326697828381L;
 
@@ -201,151 +167,26 @@ public class StreamingJob {
 
         tableEnv.createTemporaryView("fixm", ds, "ADEP,ADES,Company,ControlArea,content");
 
-        ds.connect(broadcastStream).process(new BroadcastProcessFunction<Tuple4<String, String, String, String>, String, String>() {
+        Table tb = tableEnv.sqlQuery(sql);
 
-            private String sql = null;
+        DataStream<Tuple5<String, String, String, String, String>> result = tableEnv.toAppendStream(tb, TypeInformation.of(new TypeHint<Tuple5<String, String, String, String, String>>() {
+        }));
 
-            @Override
-            public void open(Configuration param) throws Exception {
-                super.open(param);
-                sql="SELECT content FROM fixm WHERE ADEP='ZJSY' AND Company='CHH'";
-            }
+        final SingleOutputStreamOperator<String> output = result.map(new MapFunction<Tuple5<String, String, String, String, String>, String>() {
 
-            @Override
-            public void processElement(Tuple4<String, String, String, String> value, ReadOnlyContext ctx, Collector<String> out) throws Exception {
-                Table sqlQuery = tableEnv.sqlQuery(sql);
-
-            }
+            private static final long serialVersionUID = 1471936326697828232L;
 
             @Override
-            public void processBroadcastElement(String value, Context ctx, Collector<String> out) throws Exception {
-                sql=value;
-                System.out.println("关键字更新成功，更新拦截关键字：" + value);
+            public String map(Tuple5<String, String, String, String, String> o) throws Exception {
+                return o.f4;
             }
         });
 
+        output.addSink(tar1).setParallelism(1);
+        output.print().setParallelism(1);
 
-
-        Table sqlQuery = tableEnv.sqlQuery(
-                "SELECT content FROM fixm WHERE ADEP='ZJSY' AND Company='CHH'");
-
-        DataStream<String> output = tableEnv.toAppendStream(sqlQuery, Types.STRING);
-
-        output.addSink(tar1);
-//        SplitStream<String> stringSplitStream = stream.split(
-//                new OutputSelector<String>() {
-//                    @Override
-//                    public Iterable<String> select(String s) {
-//                        List<String> output=new ArrayList<>();
-//                        try {
-//                            String key=strToXmltuple(s);
-//                            switch (key){
-//                                case FlightDepInfo:
-//                                    output.add(FlightDepInfo);
-//                                    break;
-//                                case FlightPlan:
-//                                    output.add(FlightPlan);
-//                                    break;
-//                                    default:
-//                                        break;
-//                            }
-//                        } catch (DocumentException e) {
-//                            e.printStackTrace();
-//                        }
-//                        return output;
-//                    }
-//                }
-//        );
-
-        SingleOutputStreamOperator streamOperator = stream.process(new ProcessFunction<String, String>() {
-
-            @Override
-            public void open(Configuration parameters) throws Exception {
-                super.open(parameters);
-                System.setProperty("apollo.cluster", clustername);
-                Config _config = ConfigService.getAppConfig();
-                apollo.ListenChange(distribute, _config, clustername);
-            }
-
-            @Override
-            public void processElement(String s, Context context, Collector<String> out) throws Exception {
-                out.collect(s);
-
-                try {
-//                    switch (distribute.SelectTunnel(s)) {
-//                        case 0:
-//                            context.output(outputTag1, s);
-//                            break;
-//                        default:
-//                            break;
-                    if (distribute.SelectTunnel(s)) {
-                        context.output(outputTag1, s);
-                        logger.info("Receive message：");
-                        logger.info(s);
-                    }
-                } catch (DocumentException e) {
-                    e.printStackTrace();
-                } catch (Exception ex) {
-                    throw ex;
-                }
-            }
-        }).setParallelism(1);
-
-        //DataStream<String> dataStream1=stringSplitStream.select(FlightDepInfo);
-        DataStream dataStream1 = streamOperator.getSideOutput(outputTag1);
-        dataStream1.addSink(tar1).setParallelism(1);
-        dataStream1.print().setParallelism(1);
-
-//        KeyedStream<String,Tuple> keyedStream1= (Datastream.map(new MapFunction<Tuple2<String,String>, String>() {
-////            private static final long serialVersionUID = -6867736771747690201L;
-////
-////            @Override
-////            public String map(Tuple2<String,String> tuple2) throws Exception {
-////                return tuple2._2;
-////            }
-////        }).keyBy(new KeySelector<String, Tuple>() {
-////            @Override
-////            public Tuple getKey(String s) throws Exception {
-////                return null;
-////            }
-////        }));
-
-//        stream.flatMap(new FlatMapFunction<String, String>() {
-//            @Override
-//            public void flatMap(String value, Collector<String> out)
-//            throws Exception {
-//                out = strToJSONObj(value);
-//            }
-//        });
-
-
-
-
-        /*
-         * Here, you can start creating your execution plan for Flink.
-         *
-         * Start with getting some data from the environment, like
-         * 	env.readTextFile(textPath);
-         *
-         * then, transform the resulting DataStream<String> using operations
-         * like
-         * 	.filter()
-         * 	.flatMap()
-         * 	.join()
-         * 	.coGroup()
-         *
-         * and many more.
-         * Have a look at the programming guide for the Java API:
-         *
-         * http://flink.apache.org/docs/latest/apis/streaming/index.html
-         *
-         */
-
-        // execute program
         env.execute("数据交换平台智能路由" + clustername);
     }
-
-
 }
 
 

@@ -26,7 +26,7 @@ public class ApolloHelper implements Serializable {
         configdata = new ArrayList<>();
     }
 
-    public void ListenChange(Distribute dst, Config config, String clustername) {
+   /* public void ListenChange(Distribute dst, Config config, String clustername) {
         //region 监听配置中心的配置，并重载配置
         config.addChangeListener(changeEvent -> {
             ApolloHelper.this.configInitial(config);
@@ -40,7 +40,7 @@ public class ApolloHelper implements Serializable {
             }
         });
         //endregion
-    }
+    }*/
 
     public void configInitial(Config config) {
         configdata.clear();

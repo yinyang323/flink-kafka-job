@@ -86,6 +86,7 @@ public class OkHttpHelper {
             Response response = _client.newCall(request).execute();
             if (response.isSuccessful()) {
                 String _result = response.body().string();
+                _result=_result.replace("\\r\\n","");
                 _result = _result.replace("[\"", "");
                 _result = _result.replace("\"]", "");
                 _result = _result.replace("\\", "");

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c974dcf5-d92a-4f17-95da-1d3504fe2fc4" name="Default" comment="add broadcast">
+    <list default="true" id="c974dcf5-d92a-4f17-95da-1d3504fe2fc4" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/myflink/common/ApolloHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/myflink/common/ApolloHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/myflink/common/OkHttpHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/myflink/common/OkHttpHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/app.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/app.properties" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -29,23 +33,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="StreamingJob.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="StreamingJob.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3097">
-              <caret line="216" selection-start-line="216" selection-end-line="216" />
+            <state relative-caret-position="-35">
+              <caret line="139" column="65" lean-forward="true" selection-start-line="139" selection-start-column="65" selection-end-line="139" selection-end-column="65" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#5546#5554#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StreamTableEnvironment.class" pinned="false" current-in-tab="false">
-        <entry file="jar://D:/maven/apache-maven-3.6.1/repository/org/apache/flink/flink-table-api-java-bridge_2.11/1.10.1/flink-table-api-java-bridge_2.11-1.10.1.jar!/org/apache/flink/table/api/java/StreamTableEnvironment.class">
+      <file leaf-file-name="StreamMap.java" pinned="false" current-in-tab="false">
+        <entry file="jar://D:/maven/apache-maven-3.6.1/repository/org/apache/flink/flink-streaming-java_2.11/1.10.1/flink-streaming-java_2.11-1.10.1-sources.jar!/org/apache/flink/streaming/api/operators/StreamMap.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="798">
-              <caret line="61" column="13" selection-start-line="61" selection-start-column="13" selection-end-line="61" selection-end-column="13" />
+            <state relative-caret-position="416">
+              <caret line="40" selection-start-line="40" selection-end-line="40" />
             </state>
           </provider>
         </entry>
@@ -54,25 +59,34 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSource.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="703">
-              <caret line="39" column="30" selection-start-line="39" selection-start-column="30" selection-end-line="39" selection-end-column="30" />
+              <caret line="39" column="29" selection-start-line="39" selection-start-column="25" selection-end-line="39" selection-end-column="32" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="OkHttpHelper.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="OkHttpHelper.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/common/OkHttpHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="38">
-              <caret line="93" column="53" lean-forward="true" selection-start-line="93" selection-start-column="53" selection-end-line="93" selection-end-column="53" />
+            <state relative-caret-position="722">
+              <caret line="45" column="23" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BroadCastStream.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/data/BroadCastStream.java">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="31" column="49" lean-forward="true" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="49" />
+            <state relative-caret-position="549">
+              <caret line="270" column="29" selection-start-line="270" selection-start-column="29" selection-end-line="270" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ApolloHelper.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/common/ApolloHelper.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="421">
+              <caret line="42" column="7" lean-forward="true" selection-start-line="42" selection-start-column="7" selection-end-line="42" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -120,19 +134,19 @@
         <option value="$PROJECT_DIR$/src/main/java/com/myflink/common/httpRequest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/myflink/common/HttpUrlConnect.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSink.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/META-INF/app.properties" />
         <option value="$PROJECT_DIR$/src/main/java/com/myflink/common/Apollo.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSource.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/myflink/common/DistributePack.java" />
         <option value="$PROJECT_DIR$/src/main/resources/META-INF/application.properties" />
         <option value="D:/工作文件/fixm.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/myflink/messages/fixm.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/myflink/Distribute.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/myflink/common/ApolloHelper.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/myflink/data/BroadCastStream.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/META-INF/app.properties" />
+        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/myflink/common/OkHttpHelper.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/myflink/common/ApolloHelper.java" />
       </list>
     </option>
   </component>
@@ -192,7 +206,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -268,12 +281,17 @@
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="META-INF" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="flink-kafka-job" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -447,7 +465,25 @@
       <workItem from="1590626721449" duration="10186000" />
       <workItem from="1591597360113" duration="1457000" />
       <workItem from="1593421348728" duration="615000" />
-      <workItem from="1593583208760" duration="3175000" />
+      <workItem from="1593583208760" duration="3418000" />
+      <workItem from="1594348343368" duration="610000" />
+      <workItem from="1595407335829" duration="2127000" />
+      <workItem from="1595464252364" duration="2884000" />
+      <workItem from="1598235324541" duration="3053000" />
+      <workItem from="1598601512735" duration="135000" />
+      <workItem from="1599121137044" duration="2274000" />
+      <workItem from="1599443753729" duration="660000" />
+      <workItem from="1599526468509" duration="636000" />
+      <workItem from="1599612397012" duration="1553000" />
+      <workItem from="1600159911822" duration="2607000" />
+      <workItem from="1600217359194" duration="15250000" />
+      <workItem from="1600247484576" duration="779000" />
+      <workItem from="1600248281724" duration="465000" />
+      <workItem from="1600302275176" duration="1821000" />
+      <workItem from="1600304702030" duration="2457000" />
+      <workItem from="1600415469507" duration="4964000" />
+      <workItem from="1600667960004" duration="6520000" />
+      <workItem from="1600736130616" duration="7200000" />
     </task>
     <task id="LOCAL-00001" summary="Merge branch 'master' of https://github.com/yinyang323/flink-kafka-job&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/myflink/StreamingJob.java">
       <created>1560222974656</created>
@@ -708,11 +744,18 @@
       <option name="project" value="LOCAL" />
       <updated>1590659877740</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="sync request">
+      <created>1593595880061</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1593595880061</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="391516000" />
+    <option name="totallyTimeSpent" value="447754000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -729,18 +772,19 @@
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32967034" />
+      <window_info anchor="bottom" id="Messages" order="7" weight="0.32810047" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50039095" side_tool="true" weight="0.3242424" />
       <window_info anchor="right" id="Maven Projects" order="3" weight="0.32955465" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49960908" weight="0.3287879" />
+      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49960908" weight="0.32810047" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.3265306" />
-      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.32967034" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21376519" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28421053" />
       <window_info anchor="right" id="Database" order="3" weight="0.32955465" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -750,7 +794,6 @@
       <window_info anchor="bottom" id="Debug" order="3" weight="0.53846157" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Messages" order="7" weight="0.32810047" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -784,11 +827,12 @@
     <MESSAGE value="set parallelism num to one" />
     <MESSAGE value="table process" />
     <MESSAGE value="add broadcast" />
-    <option name="LAST_COMMIT_MESSAGE" value="add broadcast" />
+    <MESSAGE value="sync request" />
+    <option name="LAST_COMMIT_MESSAGE" value="sync request" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="77" />
+      <option name="time" value="85" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -798,19 +842,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/com/konghq/unirest-java/3.1.00/unirest-java-3.1.00.jar!/kong/unirest/BaseResponse.class" />
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-streaming-java_2.11/1.8.0/flink-streaming-java_2.11-1.8.0.jar!/org/apache/flink/streaming/api/operators/StreamSink.class" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/messages/record.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/mashape/unirest/unirest-java/1.4.9/unirest-java-1.4.9.jar!/com/mashape/unirest/request/HttpRequestWithBody.class" />
-    <entry file="jar://$MAVEN_REPOSITORY$/com/alibaba/fastjson/1.2.58/fastjson-1.2.58.jar!/com/alibaba/fastjson/JSON.class" />
-    <entry file="jar://D:/Program Files/Java/jdk1.8.0_192/src.zip!/java/net/DualStackPlainSocketImpl.java" />
-    <entry file="jar://D:/Program Files/Java/jdk1.8.0_192/src.zip!/java/net/SocketInputStream.java" />
     <entry file="jar://$MAVEN_REPOSITORY$/com/squareup/okhttp/okhttp/2.5.0/okhttp-2.5.0.jar!/com/squareup/okhttp/Request.class" />
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-streaming-java_2.11/1.8.0/flink-streaming-java_2.11-1.8.0.jar!/org/apache/flink/streaming/api/datastream/DataStreamSource.class" />
     <entry file="jar://$MAVEN_REPOSITORY$/com/squareup/okhttp3/okhttp/3.6.0/okhttp-3.6.0.jar!/okhttp3/Dispatcher.class" />
@@ -845,38 +876,11 @@
     </entry>
     <entry file="file://D:/工作文件/fixm.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/messages/fixm.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/app.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="19" selection-start-column="19" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://D:/maven/apache-maven-3.6.1/repository/org/apache/flink/flink-java/1.10.1/flink-java-1.10.1.jar!/org/apache/flink/api/java/utils/ParameterTool.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="32" column="13" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="jar://D:/maven/apache-maven-3.6.1/repository/org/apache/flink/flink-java/1.10.1/flink-java-1.10.1.jar!/org/apache/flink/api/java/utils/ParameterTool.class" />
     <entry file="jar://D:/maven/apache-maven-3.6.1/repository/com/ctrip/framework/apollo/apollo-client/1.4.0/apollo-client-1.4.0.jar!/com/ctrip/framework/apollo/ConfigService.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
           <caret line="45" column="25" selection-start-line="45" selection-start-column="25" selection-end-line="45" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/Distribute.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="36" column="19" selection-start-line="36" selection-start-column="19" selection-end-line="36" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/common/ApolloHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="35" column="65" selection-start-line="35" selection-start-column="65" selection-end-line="35" selection-end-column="65" />
         </state>
       </provider>
     </entry>
@@ -887,34 +891,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSink.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="28" column="52" selection-start-line="28" selection-start-column="45" selection-end-line="28" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="549">
-          <caret line="32" column="29" selection-start-line="32" selection-start-column="29" selection-end-line="32" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="703">
-          <caret line="39" column="30" selection-start-line="39" selection-start-column="30" selection-end-line="39" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://D:/maven/apache-maven-3.6.1/repository/org/apache/flink/flink-table-api-java/1.10.1/flink-table-api-java-1.10.1.jar!/org/apache/flink/table/api/TableEnvironment.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1539">
-          <caret line="100" column="10" selection-start-line="100" selection-start-column="10" selection-end-line="100" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="jar://D:/maven/apache-maven-3.6.1/repository/org/apache/flink/flink-table-api-java/1.10.1/flink-table-api-java-1.10.1.jar!/org/apache/flink/table/api/TableEnvironment.class" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/BatchJob.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-116">
@@ -922,41 +899,235 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://D:/maven/apache-maven-3.6.1/repository/org/apache/flink/flink-table-api-java-bridge_2.11/1.10.1/flink-table-api-java-bridge_2.11-1.10.1.jar!/org/apache/flink/table/api/java/StreamTableEnvironment.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="798">
-          <caret line="61" column="13" selection-start-line="61" selection-start-column="13" selection-end-line="61" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://D:/maven/apache-maven-3.6.1/repository/org/apache/flink/flink-table-api-java/1.10.1/flink-table-api-java-1.10.1.jar!/org/apache/flink/table/api/Table.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="30" column="10" selection-start-line="30" selection-start-column="10" selection-end-line="30" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3097">
-          <caret line="216" selection-start-line="216" selection-end-line="216" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="jar://D:/maven/apache-maven-3.6.1/repository/org/apache/flink/flink-table-api-java/1.10.1/flink-table-api-java-1.10.1.jar!/org/apache/flink/table/api/Table.class" />
+    <entry file="jar://D:/maven/apache-maven-3.6.1/repository/org/apache/flink/flink-table-api-java-bridge_2.11/1.10.1/flink-table-api-java-bridge_2.11-1.10.1.jar!/org/apache/flink/table/api/java/StreamTableEnvironment.class" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/data/BroadCastStream.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="31" column="49" lean-forward="true" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="49" />
+        <state relative-caret-position="456">
+          <caret line="31" column="49" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/maven/apache-maven-3.6.1/repository/org/apache/flink/flink-core/1.10.1/flink-core-1.10.1.jar!/org/apache/flink/api/common/functions/MapFunction.class" />
+    <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/app.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="32" selection-start-line="2" selection-start-column="32" selection-end-line="2" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSink.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="494">
+          <caret line="28" column="52" selection-start-line="28" selection-start-column="45" selection-end-line="28" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="uml://MAVEN/my-flink-project:my-flink-project:0.1">
+      <provider selected="true" editor-type-id="UmlEditorProvider">
+        <state>
+          <ID>MAVEN</ID>
+          <OriginalElement>my-flink-project:my-flink-project:0.1</OriginalElement>
+          <nodes>
+            <node x="" y="">my-flink-project:my-flink-project:0.1</node>
+            <node x="" y="">org.apache.flink:flink-java:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-java:jar:1.10.1/org.apache.flink:flink-core:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-java:jar:1.10.1/org.apache.flink:flink-core:jar:1.10.1/org.apache.flink:flink-annotations:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-java:jar:1.10.1/org.apache.flink:flink-core:jar:1.10.1/org.apache.flink:flink-metrics-core:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-java:jar:1.10.1/org.apache.flink:flink-core:jar:1.10.1/com.esotericsoftware.kryo:kryo:jar:2.24.0</node>
+            <node x="" y="">org.apache.flink:flink-java:jar:1.10.1/org.apache.flink:flink-core:jar:1.10.1/com.esotericsoftware.kryo:kryo:jar:2.24.0/com.esotericsoftware.minlog:minlog:jar:1.2</node>
+            <node x="" y="">org.apache.flink:flink-java:jar:1.10.1/org.apache.flink:flink-core:jar:1.10.1/com.esotericsoftware.kryo:kryo:jar:2.24.0/org.objenesis:objenesis:jar:2.1</node>
+            <node x="" y="">org.apache.flink:flink-java:jar:1.10.1/org.apache.flink:flink-core:jar:1.10.1/commons-collections:commons-collections:jar:3.2.2</node>
+            <node x="" y="">org.apache.flink:flink-java:jar:1.10.1/org.apache.flink:flink-core:jar:1.10.1/org.apache.commons:commons-compress:jar:1.18</node>
+            <node x="" y="">org.apache.flink:flink-java:jar:1.10.1/org.apache.flink:flink-shaded-asm-7:jar:7.1-9.0</node>
+            <node x="" y="">org.apache.flink:flink-java:jar:1.10.1/org.apache.commons:commons-lang3:jar:3.3.2</node>
+            <node x="" y="">org.apache.flink:flink-java:jar:1.10.1/org.apache.commons:commons-math3:jar:3.5</node>
+            <node x="" y="">org.apache.flink:flink-java:jar:1.10.1/org.slf4j:slf4j-api:jar:1.7.15</node>
+            <node x="" y="">org.apache.flink:flink-java:jar:1.10.1/com.google.code.findbugs:jsr305:jar:1.3.9</node>
+            <node x="" y="">org.apache.flink:flink-java:jar:1.10.1/org.apache.flink:force-shading:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/org.apache.flink:flink-queryable-state-client-java:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/org.apache.flink:flink-hadoop-fs:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/commons-io:commons-io:jar:2.4</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/org.apache.flink:flink-shaded-netty:jar:4.1.39.Final-9.0</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/org.apache.flink:flink-shaded-jackson:jar:2.10.1-9.0</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/commons-cli:commons-cli:jar:1.3.1</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/org.javassist:javassist:jar:3.24.0-GA</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/org.scala-lang:scala-library:jar:2.11.12</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/com.typesafe.akka:akka-actor_2.11:jar:2.5.21</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/com.typesafe.akka:akka-actor_2.11:jar:2.5.21/com.typesafe:config:jar:1.3.3</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/com.typesafe.akka:akka-actor_2.11:jar:2.5.21/org.scala-lang.modules:scala-java8-compat_2.11:jar:0.7.0</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/com.typesafe.akka:akka-stream_2.11:jar:2.5.21</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/com.typesafe.akka:akka-stream_2.11:jar:2.5.21/org.reactivestreams:reactive-streams:jar:1.0.2</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/com.typesafe.akka:akka-stream_2.11:jar:2.5.21/com.typesafe:ssl-config-core_2.11:jar:0.3.7</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/com.typesafe.akka:akka-stream_2.11:jar:2.5.21/com.typesafe:ssl-config-core_2.11:jar:0.3.7/org.scala-lang.modules:scala-parser-combinators_2.11:jar:1.1.1</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/com.typesafe.akka:akka-protobuf_2.11:jar:2.5.21</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/com.typesafe.akka:akka-slf4j_2.11:jar:2.5.21</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/com.typesafe.akka:akka-slf4j_2.11:jar:2.5.21/org.slf4j:slf4j-api:jar:1.7.25</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/org.clapper:grizzled-slf4j_2.11:jar:1.3.2</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/org.clapper:grizzled-slf4j_2.11:jar:1.3.2/org.slf4j:slf4j-api:jar:1.7.9</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/com.github.scopt:scopt_2.11:jar:3.5.0</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/org.xerial.snappy:snappy-java:jar:1.1.4</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/com.twitter:chill_2.11:jar:0.7.6</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/com.twitter:chill_2.11:jar:0.7.6/com.twitter:chill-java:jar:0.7.6</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-runtime_2.11:jar:1.10.1/org.lz4:lz4-java:jar:1.5.0</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-clients_2.11:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-clients_2.11:jar:1.10.1/org.apache.flink:flink-optimizer_2.11:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-streaming-java_2.11:jar:1.10.1/org.apache.flink:flink-shaded-guava:jar:18.0-9.0</node>
+            <node x="" y="">org.apache.flink:flink-connector-kafka-0.11_2.11:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-connector-kafka-0.11_2.11:jar:1.10.1/org.apache.flink:flink-connector-kafka-0.10_2.11:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-connector-kafka-0.11_2.11:jar:1.10.1/org.apache.flink:flink-connector-kafka-0.10_2.11:jar:1.10.1/org.apache.flink:flink-connector-kafka-0.9_2.11:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-connector-kafka-0.11_2.11:jar:1.10.1/org.apache.flink:flink-connector-kafka-0.10_2.11:jar:1.10.1/org.apache.flink:flink-connector-kafka-0.9_2.11:jar:1.10.1/org.apache.flink:flink-connector-kafka-base_2.11:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-connector-kafka-0.11_2.11:jar:1.10.1/org.apache.kafka:kafka-clients:jar:0.11.0.2</node>
+            <node x="" y="">org.apache.flink:flink-connector-kafka-0.11_2.11:jar:1.10.1/org.apache.kafka:kafka-clients:jar:0.11.0.2/net.jpountz.lz4:lz4:jar:1.3.0</node>
+            <node x="" y="">org.apache.flink:flink-connector-kafka-0.11_2.11:jar:1.10.1/org.apache.kafka:kafka-clients:jar:0.11.0.2/org.xerial.snappy:snappy-java:jar:1.1.2.6</node>
+            <node x="" y="">org.apache.flink:flink-connector-kafka-0.11_2.11:jar:1.10.1/org.apache.kafka:kafka-clients:jar:0.11.0.2/org.slf4j:slf4j-api:jar:1.7.15</node>
+            <node x="" y="">org.apache.flink:flink-table-api-scala-bridge_2.11:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-table-api-scala-bridge_2.11:jar:1.10.1/org.apache.flink:flink-table-api-scala_2.11:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-table-api-scala-bridge_2.11:jar:1.10.1/org.apache.flink:flink-table-api-scala_2.11:jar:1.10.1/org.scala-lang:scala-reflect:jar:2.11.12</node>
+            <node x="" y="">org.apache.flink:flink-table-api-scala-bridge_2.11:jar:1.10.1/org.apache.flink:flink-table-api-scala_2.11:jar:1.10.1/org.scala-lang:scala-compiler:jar:2.11.12</node>
+            <node x="" y="">org.apache.flink:flink-table-api-scala-bridge_2.11:jar:1.10.1/org.apache.flink:flink-table-api-scala_2.11:jar:1.10.1/org.scala-lang:scala-compiler:jar:2.11.12/org.scala-lang.modules:scala-xml_2.11:jar:1.0.5</node>
+            <node x="" y="">org.apache.flink:flink-table-api-scala-bridge_2.11:jar:1.10.1/org.apache.flink:flink-table-api-scala_2.11:jar:1.10.1/org.scala-lang:scala-compiler:jar:2.11.12/org.scala-lang.modules:scala-xml_2.11:jar:1.0.5/org.scala-lang:scala-library:jar:2.11.7</node>
+            <node x="" y="">org.apache.flink:flink-table-api-scala-bridge_2.11:jar:1.10.1/org.apache.flink:flink-table-api-scala_2.11:jar:1.10.1/org.scala-lang:scala-compiler:jar:2.11.12/org.scala-lang.modules:scala-parser-combinators_2.11:jar:1.0.4</node>
+            <node x="" y="">org.apache.flink:flink-table-api-scala-bridge_2.11:jar:1.10.1/org.apache.flink:flink-table-api-scala_2.11:jar:1.10.1/org.scala-lang:scala-compiler:jar:2.11.12/org.scala-lang.modules:scala-parser-combinators_2.11:jar:1.0.4/org.scala-lang:scala-library:jar:2.11.6</node>
+            <node x="" y="">org.apache.flink:flink-table-api-scala-bridge_2.11:jar:1.10.1/org.apache.flink:flink-scala_2.11:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-table-api-scala-bridge_2.11:jar:1.10.1/org.apache.flink:flink-streaming-scala_2.11:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-table-api-java-bridge_2.11:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-table-api-java-bridge_2.11:jar:1.10.1/org.apache.flink:flink-table-api-java:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-table-planner-blink_2.11:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-table-planner-blink_2.11:jar:1.10.1/org.apache.flink:flink-table-common:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-table-planner-blink_2.11:jar:1.10.1/org.apache.flink:flink-table-runtime-blink_2.11:jar:1.10.1</node>
+            <node x="" y="">org.apache.flink:flink-table-planner-blink_2.11:jar:1.10.1/org.apache.flink:flink-table-runtime-blink_2.11:jar:1.10.1/org.codehaus.janino:janino:jar:3.0.9</node>
+            <node x="" y="">org.apache.flink:flink-table-planner-blink_2.11:jar:1.10.1/org.apache.flink:flink-table-runtime-blink_2.11:jar:1.10.1/org.codehaus.janino:janino:jar:3.0.9/org.codehaus.janino:commons-compiler:jar:3.0.9</node>
+            <node x="" y="">org.apache.flink:flink-table-planner-blink_2.11:jar:1.10.1/org.apache.flink:flink-table-runtime-blink_2.11:jar:1.10.1/org.apache.calcite.avatica:avatica-core:jar:1.15.0</node>
+            <node x="" y="">org.apache.flink:flink-table-planner-blink_2.11:jar:1.10.1/org.apache.flink:flink-table-runtime-blink_2.11:jar:1.10.1/org.apache.calcite.avatica:avatica-core:jar:1.15.0/org.slf4j:slf4j-api:jar:1.7.15</node>
+            <node x="" y="">org.apache.flink:flink-table-planner-blink_2.11:jar:1.10.1/org.reflections:reflections:jar:0.9.10</node>
+            <node x="" y="">org.apache.flink:flink-table-planner-blink_2.11:jar:1.10.1/org.reflections:reflections:jar:0.9.10/org.javassist:javassist:jar:3.19.0-GA</node>
+            <node x="" y="">org.slf4j:slf4j-log4j12:jar:1.7.7</node>
+            <node x="" y="">org.slf4j:slf4j-log4j12:jar:1.7.7/org.slf4j:slf4j-api:jar:1.7.7</node>
+            <node x="" y="">log4j:log4j:jar:1.2.17</node>
+            <node x="" y="">org.dom4j:dom4j:jar:2.1.1</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/dom4j:dom4j:jar:1.5.2</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/dom4j:dom4j:jar:1.5.2/jaxme:jaxme-api:jar:0.3</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/dom4j:dom4j:jar:1.5.2/msv:xsdlib:jar:20030807</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/dom4j:dom4j:jar:1.5.2/msv:relaxngDatatype:jar:20030807</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/dom4j:dom4j:jar:1.5.2/pull-parser:pull-parser:jar:2</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/dom4j:dom4j:jar:1.5.2/xpp3:xpp3:jar:1.1.3.3</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/dom4j:dom4j:jar:1.5.2/stax:stax-api:jar:1.0</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/dom4j:dom4j:jar:1.5.2/xml-apis:xml-apis:jar:1.0.b2</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/jdom:jdom:jar:1.0</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/xerces:xmlParserAPIs:jar:2.6.2</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/xerces:xercesImpl:jar:2.6.2</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/xom:xom:jar:1.0b3</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/xom:xom:jar:1.0b3/xerces:xmlParserAPIs:jar:2.6.1</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/xom:xom:jar:1.0b3/xerces:xercesImpl:jar:2.2.1</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/xom:xom:jar:1.0b3/com.ibm.icu:icu4j:jar:2.6.1</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/xom:xom:jar:1.0b3/xalan:xalan:jar:2.6.0</node>
+            <node x="" y="">jaxen:jaxen:jar:1.1-beta-6/xom:xom:jar:1.0b3/org.ccil.cowan.tagsoup:tagsoup:jar:0.9.7</node>
+            <node x="" y="">com.ctrip.framework.apollo:apollo-client:jar:1.4.0</node>
+            <node x="" y="">com.ctrip.framework.apollo:apollo-client:jar:1.4.0/com.ctrip.framework.apollo:apollo-core:jar:1.4.0</node>
+            <node x="" y="">com.ctrip.framework.apollo:apollo-client:jar:1.4.0/com.ctrip.framework.apollo:apollo-core:jar:1.4.0/com.google.code.gson:gson:jar:2.8.0</node>
+            <node x="" y="">com.ctrip.framework.apollo:apollo-client:jar:1.4.0/com.ctrip.framework.apollo:apollo-core:jar:1.4.0/com.google.guava:guava:jar:19.0</node>
+            <node x="" y="">com.ctrip.framework.apollo:apollo-client:jar:1.4.0/com.ctrip.framework.apollo:apollo-core:jar:1.4.0/org.slf4j:slf4j-api:jar:1.7.21</node>
+            <node x="" y="">com.ctrip.framework.apollo:apollo-client:jar:1.4.0/com.google.inject:guice:jar:4.1.0</node>
+            <node x="" y="">com.ctrip.framework.apollo:apollo-client:jar:1.4.0/com.google.inject:guice:jar:4.1.0/javax.inject:javax.inject:jar:1</node>
+            <node x="" y="">com.ctrip.framework.apollo:apollo-client:jar:1.4.0/com.google.inject:guice:jar:4.1.0/aopalliance:aopalliance:jar:1.0</node>
+            <node x="" y="">com.ctrip.framework.apollo:apollo-client:jar:1.4.0/org.slf4j:slf4j-api:jar:1.7.15</node>
+            <node x="" y="">com.ctrip.framework.apollo:apollo-client:jar:1.4.0/org.yaml:snakeyaml:jar:1.17</node>
+            <node x="" y="">com.alibaba:fastjson:jar:1.2.58</node>
+            <node x="" y="">com.squareup.okhttp3:okhttp:jar:3.3.0</node>
+            <node x="" y="">com.squareup.okhttp3:okhttp:jar:3.3.0/com.squareup.okio:okio:jar:1.8.0</node>
+          </nodes>
+          <notes />
+          <edges />
+          <settings layout="Hierarchic Group" zoom="0.11721049264235445" x="3888.0" y="945.0" />
+          <SelectedNodes />
+          <Categories />
+          <SCOPE>All</SCOPE>
+          <VISIBILITY>All</VISIBILITY>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/messages/record.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/data/restfulSource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="703">
+          <caret line="39" column="29" selection-start-line="39" selection-start-column="25" selection-end-line="39" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/maven/apache-maven-3.6.1/repository/org/apache/flink/flink-streaming-java_2.11/1.10.1/flink-streaming-java_2.11-1.10.1-sources.jar!/org/apache/flink/streaming/api/operators/StreamSourceContexts.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="105" selection-start-line="105" selection-end-line="105" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/maven/apache-maven-3.6.1/repository/org/apache/flink/flink-streaming-java_2.11/1.10.1/flink-streaming-java_2.11-1.10.1-sources.jar!/org/apache/flink/streaming/api/operators/AbstractStreamOperator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="89">
+          <caret line="730" selection-start-line="730" selection-end-line="730" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/maven/apache-maven-3.6.1/repository/org/apache/flink/flink-streaming-java_2.11/1.10.1/flink-streaming-java_2.11-1.10.1-sources.jar!/org/apache/flink/streaming/runtime/tasks/OperatorChain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="81">
+          <caret line="616" selection-start-line="616" selection-end-line="616" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/common/OkHttpHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="93" column="53" lean-forward="true" selection-start-line="93" selection-start-column="53" selection-end-line="93" selection-end-column="53" />
+        <state relative-caret-position="722">
+          <caret line="45" column="23" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/maven/apache-maven-3.6.1/repository/org/apache/flink/flink-streaming-java_2.11/1.10.1/flink-streaming-java_2.11-1.10.1-sources.jar!/org/apache/flink/streaming/api/operators/StreamMap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="416">
+          <caret line="40" selection-start-line="40" selection-end-line="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/Distribute.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="99" column="54" selection-start-line="99" selection-start-column="54" selection-end-line="99" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="549">
+          <caret line="270" column="29" selection-start-line="270" selection-start-column="29" selection-end-line="270" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/common/ApolloHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="421">
+          <caret line="42" column="7" lean-forward="true" selection-start-line="42" selection-start-column="7" selection-end-line="42" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/myflink/StreamingJob.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-35">
+          <caret line="139" column="65" lean-forward="true" selection-start-line="139" selection-start-column="65" selection-end-line="139" selection-end-column="65" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#5546#5554#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
